@@ -382,7 +382,7 @@ include("DateThai.php");
 												<tr>
 													<td><?php  echo $num ?></td>
 													<td><?php echo $row['Name'] ?></td>
-													<td></td>													
+													<td>ยังไม่ได้ทำครับ</td>													
 											
 													<td class="text-right"><?php echo $row['Agencyname'] ?></td>
                                                     <td>

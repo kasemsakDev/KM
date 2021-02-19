@@ -8,9 +8,9 @@ if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
 	header("location: index.php");
 	exit();
 }
-
+$agencyId = $_SESSION["AgencyID"];
 //get ประเด็นยุทธ์
-    $sql_listissue = "SELECT IssueID,Name FROM km_issue WHERE IsActive  = 1";
+    $sql_listissue = "SELECT IssueID,Name,AgencyID FROM km_issue WHERE IsActive  = 1 AND AgencyID =  $agencyId";
     $result_listissue = mysqli_query($link,$sql_listissue);
 
     $list_issue = array();
@@ -20,7 +20,7 @@ if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
     }
 //get purpose
 
-    $agencyId = $_SESSION["AgencyID"];
+
 
     $sql_listpurpose = "SELECT p.*,i.IsActive as i_IsActive , i.AgencyID as i_AgencyID,a.Name as agency_name ,a.AgencyID as a_AgencyID  FROM km_purpose p  
     INNER JOIN km_issue i on p.IssueID = i.IssueID 
@@ -386,9 +386,9 @@ if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
                                             ?>
                                                 <?php foreach($list_purpose as $row){ ?>
 												<tr>
-													<td>ยังไม่ได้ทำ</td>
+													<td>ยังไม่ได้ทำครับ</td>
 													<td><?php echo $row['Name'] ?></td>
-													<td>ยังไม่ได้ทำ</td>													
+													<td>ยังไม่ได้ทำครับ</td>													
 											
 													<td class="text-right"><?php echo $row['agency_name'] ?></td>
                                                     <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" onClick="onclick_issue(<?php echo $row['PurposeID'];  ?>)">
