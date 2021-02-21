@@ -95,7 +95,7 @@ if(empty(trim($_POST["password"]))){
     <link href="Content/template/css/prismjs/prismjs.bundle.css" rel="stylesheet" type="text/css" />
     <link href="Content/template/css/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
     <link href="Content/template/css/css/style.bundle.css" rel="stylesheet" type="text/css" />
-    <link rel="shortcut icon" href="Content/template/css/media/logos/favicon.ico" />
+	<link rel="shortcut icon" href="Content/template/assets/media/k.png" />
 
 	</head>
 	<!--end::Head-->

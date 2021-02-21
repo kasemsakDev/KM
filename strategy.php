@@ -6,6 +6,43 @@ if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
 	header("location: index.php");
 	exit();
 }
+require_once "dblink.php";
+include("DateThai.php");
+
+//get list strategy
+
+$agencyId = $_SESSION["AgencyID"];
+
+$sql_getstrategy = "SELECT s.*,a.Name as Agencyname,a.AgencyID as a_AgencyID,a.IsActive as a_IsActive From km_strategy s
+INNER JOIN  km_agency a on s.AgencyID = a.AgencyID
+INNER JOIN  km_indicator i on i.IndicatorID = s.IndicatorID 
+Where s.IsActive = 1 AND a.IsActive = 1 AND s.AgencyID = $agencyId AND i.IsActive = 1";
+$sql_resultstrategy =  mysqli_query($link,$sql_getstrategy);
+
+$strategy = array();
+while($row = mysqli_fetch_assoc($sql_resultstrategy))
+{
+    $strategy[] = $row;
+}
+
+//get indicator
+$sql_listindicator = "SELECT IndicatorID,Name,AgencyID FROM km_indicator WHERE IsActive  = 1 AND AgencyID = $agencyId";
+$result_lisindicator = mysqli_query($link,$sql_listindicator);
+
+$listindicator = array();
+while($row = mysqli_fetch_assoc($result_lisindicator))
+{
+    $listindicator[] = $row;
+}
+
+//Test 
+/*
+  print_r($strategy);
+echo "<br>";
+print_r($listindicator);
+exit();
+*/
+mysqli_close($link);
 
 ?>
 
@@ -26,7 +63,7 @@ if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
     <link href="Content/template/css/prismjs/prismjs.bundle.css" rel="stylesheet" type="text/css" />
     <link href="Content/template/css/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
     <link href="Content/template/css/css/style.bundle.css" rel="stylesheet" type="text/css" />
-    <link rel="shortcut icon" href="Content/template/css/media/logos/favicon.ico" />
+    <link rel="shortcut icon" href="Content/template/assets/media/k.png" />
     <!--end::Fonts ~/ -->
     <!--begin::Page Vendors Styles(used by this page)-->
 </head>
@@ -42,7 +79,7 @@ if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
                 <div class="d-none d-lg-flex align-items-center mr-3">
                     <!--begin::Logo-->
                     <a href="index.html" class="mr-20">
-                        <img alt="Logo" src="Content/template/css/media/logos/logo-letter-9.png" class="max-h-35px" />
+                    <i class="fab fa-battle-net text-danger mr-5 icon-4x"></i>
                     </a>
                     <!--end::Logo-->
                     <!--begin::Tab Navs(for desktop mode)-->
@@ -119,7 +156,7 @@ if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
                         <!--end::Item-->
                         <!--begin::Item-->
                         <li class="nav-item mr-2">
-                            <a href="#" class="nav-link btn btn-clean" data-toggle="tab" data-target="#kt_header_tab_2" role="tab">Reports</a>
+                        <a href="report.php" class="nav-link py-4 px-6" >Reports</a>
                         </li>
                         <!--end::Item-->
                         <!--begin::Item-->
@@ -314,24 +351,12 @@ if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
 																</span>
 															</div>
 														</div>
-														<div class="col-md-4 my-2 my-md-0">
-															<div class="d-flex align-items-center">
-																<label class="mr-3 mb-0 d-none d-md-block">Agency:</label>
-																<select class="form-control" id="kt_datatable_search_Agency">
-																	<option value="">All</option>
-																	<option value="1">ฐานทัพเรือ สัตหีบ บก</option>
-																	<option value="2">ฐานทัพเรือ กรุงเทพ กองเรือ</option>
-																	<option value="3">หน่วยบัญชาการนาวิกโยธิน ปืนใหญ่</option>
-																</select>
-															</div>
-														</div>
+
                                                         <div class="col-md-4 my-2 my-md-0">
                                                         </div>
 													</div>
 												</div>
-												<div class="col-lg-3 col-xl-4 mt-5 mt-lg-0">
-													<a href="#" class="btn btn-light-primary px-6 font-weight-bold">Search</a>
-												</div>
+
 											</div>
 										</div>
 										<!--end::Search Form-->
@@ -350,31 +375,26 @@ if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
 												</tr>
 											</thead>
 											<tbody>
+
+                                            <?php
+                                                $num = 1;
+                                            ?>
+                                                <?php foreach($strategy as $row){ ?>
 												<tr>
-													<td>01010101</td>
-													<td>วางแผนการจัดจ้าง ค่าแรง</td>
-													<td>8</td>													
+													<td>ยังไม่ได้ทำครับ</td>
+													<td><?php echo $row['Name'] ?></td>
+													<td>ยังไม่ได้ทำครับ</td>													
 											
-													<td class="text-right">1</td>
-                                                    <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-Edit
-</button></td>
-                                                    <td>2016-11-28</td>
+													<td class="text-right"><?php echo $row['Agencyname'] ?></td>
+                                                    <td><button type="button" class="btn btn-primary" 
+                                                    data-toggle="modal" data-target="#exampleModal" 
+                                                    onClick="onclick_Edit(<?php echo $row['StrategyID'];  ?>)">
+                                                    Edit
+                                                    </button></td>
+                                                    <td><?php echo DateThai($row['UpdateOn']) ?></td>
                                                    
 												</tr>
-                                                <tr>
-													<td>01010201</td>
-													<td>วางแผนการจัดจ้าง ค่าบำรุงรักษา</td>
-													<td>8</td>													
-											
-													<td class="text-right">1</td>
-                                                    <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-Edit
-</button></td>
-                                                    <td>2016-11-28</td>
-                                                   
-												</tr>
-												
+                                                <?php  }  ?>
 											</tbody>
 										</table>
 										<!--end: Datatable-->
@@ -413,67 +433,36 @@ Edit
 </div> -->
 
 
+<form action="Manage/upsertstrategy.php" method="POST">
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">แก้ไข กลยุทธ์-เป้าประสงค์</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <i aria-hidden="true" class="ki ki-close"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-            <div class="row">
-                <div class="col-md-3"></div>
-                <div class="form-group row">
-														<label class="col-2 col-form-label">หัวข้อ</label>
-														<div class="col-10">
-															<input class="form-control" type="text" value="การรักษาความมั่นคงของรัฐ" id="example-text-input" />
-														</div>
-													</div>
-                
-                
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary font-weight-bold">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-
-<div class="modal fade" id="exampleModalSizeLg" tabindex="-1" role="dialog" aria-labelledby="exampleModalSizeLg" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
+    <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">สร้าง กลยุทธ์-เป้าประสงค์</h5>
+                <h5 class="modal-title" id="exampleModalLabel">แกไข ตัวชีวัด-เป้าประสงค์</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <i aria-hidden="true" class="ki ki-close"></i>
                 </button>
             </div>
             <div class="modal-body">
-
-
             <div class="form-group row">
-            <label class="col-3 col-form-label">ตัวชีวัด-เป้าประสงค์ : </label>
+            <input type="hidden" name="id" id="ajaxid">
+            <input type="hidden" name="agencyid" value="<?php echo $agencyId;  ?>">     
+            <label class="col-3 col-form-label">เป้าประสงค์ : </label>
             <div class="col-9">
-														<select class="form-control">
-															<option>Select</option>
-                                                            <option>ค่าแรง</option>
-                                                            <option>บำรุงรักษา</option>
+    
+														<select class="form-control" name="indicatorid" id="indicatorID" required>
+															<option value = "">Select</option>
+                                                            <?php foreach($listindicator as $row){ ?>
+                                                            <option value="<?php echo $row["IndicatorID"]  ?>"><?php echo $row["Name"]   ?></option>
+                                                            <?php } ?>
 														</select>
 													</div>
                                                     </div>
-       
-                
+
                 <div class="form-group row">
 				<label class="col-2 col-form-label">หัวข้อ : </label>
 				<div class="col-10">
-				<input class="form-control" type="text" value="" id="example-text-input" />
+				<input class="form-control" type="text" value="" id="editname" name="name" required autocomplete="off"/>
 				</div>
 				</div>
                 
@@ -483,11 +472,59 @@ Edit
    
             <div class="modal-footer">
                 <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary font-weight-bold">Save changes</button>
+                <button type="submit" name="save" class="btn btn-primary font-weight-bold">Save changes</button>
             </div>
         </div>
     </div>
 </div>
+</form> 
+
+<!-- สร้าง -->
+<form action="Manage/upsertstrategy.php" method="POST">
+<div class="modal fade" id="exampleModalSizeLg" tabindex="-1" role="dialog" aria-labelledby="exampleModalSizeLg" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">สร้าง ตัวชีวัด-เป้าประสงค์</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+            <input type="hidden" name="id" id="idcreate" value="0">
+            <input type="hidden" name="agencyid" value="<?php echo $agencyId;  ?>">            
+            <div class="form-group row">
+            <label class="col-3 col-form-label">เป้าประสงค์ : </label>
+            <div class="col-9">
+    
+                                                        <select class="form-control" name="indicatorid" id="indicatorID" required>
+															<option value = "">Select</option>
+                                                            <?php foreach($listindicator as $row){ ?>
+                                                            <option value="<?php echo $row["IndicatorID"]  ?>"><?php echo $row["Name"]   ?></option>
+                                                            <?php } ?>
+														</select>
+													</div>
+                                                    </div>
+
+                <div class="form-group row">
+				<label class="col-2 col-form-label">หัวข้อ : </label>
+				<div class="col-10">
+				<input class="form-control" type="text" value="" id="example-text-input"  name="name" required  autocomplete="off"/>
+				</div>
+				</div>
+                
+                
+                </div>
+                
+   
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>
+                <button type="submit" name="save" class="btn btn-primary font-weight-bold">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+</form> 
 
 
 
@@ -516,7 +553,34 @@ Edit
     <!--begin::Page Scripts(used by this page)-->
     <script src="Content/template/js/pages/html-table.js"></script>
 
+    <script>
+    function onclick_Edit(value)
+    {
+        console.log(value);
+        document.getElementById("indicatorID").value = "";
+        document.getElementById("ajaxid").value = 0;
+    $.ajax({
+        type: 'post',
+        url: 'AjaxManage/_getstrategybyId.php',
+        data: {
+        ajax_id:value
+    },
+ success: function (response) {
+     console.log(response);
+     //ajaxid
+          /*
+    response[0] // first $sup variable
+    response[1] // second $second_var variable
+     */
+    
+     document.getElementById("ajaxid").value = value;
+     document.getElementById("indicatorID").value = response[0];
+     document.getElementById("editname").value = response[1]; 
+    }
+ });
 
+    }
+</script>
 
                     </body>
                     <!--end::Footer-->

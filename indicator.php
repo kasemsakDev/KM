@@ -7,17 +7,9 @@ if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
 	exit();
 }
 require_once "dblink.php";
-
-
 include("DateThai.php");
 
-
 //get list purpose
-
-    
-
-
-
 //get list indicator
 
     $agencyId = $_SESSION["AgencyID"];
@@ -25,11 +17,11 @@ include("DateThai.php");
     $sql_getindicator = "SELECT i.*,a.Name as Agencyname,a.AgencyID as a_AgencyID,a.IsActive as a_IsActive From km_indicator i
     INNER JOIN  km_agency a on i.AgencyID = a.AgencyID
     INNER JOIN  km_purpose p on p.PurposeID = i.PurposeID 
-    Where i.IsActive = 1 AND a.IsActive = 1 AND i.AgencyID = $agencyId AND p.IssueID = 1";
-    $sql_resultndicator =  mysqli_query($link,$sql_getindicator);
+    Where i.IsActive = 1 AND a.IsActive = 1 AND i.AgencyID = $agencyId AND p.IsActive = 1";
+    $sql_resultindicator =  mysqli_query($link,$sql_getindicator);
 
     $indicator = array();
-    while($row = mysqli_fetch_assoc($sql_resultndicator))
+    while($row = mysqli_fetch_assoc($sql_resultindicator))
     {
         $indicator[] = $row;
     }
@@ -71,7 +63,7 @@ include("DateThai.php");
     <link href="Content/template/css/prismjs/prismjs.bundle.css" rel="stylesheet" type="text/css" />
     <link href="Content/template/css/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
     <link href="Content/template/css/css/style.bundle.css" rel="stylesheet" type="text/css" />
-    <link rel="shortcut icon" href="Content/template/css/media/logos/favicon.ico" />
+    <link rel="shortcut icon" href="Content/template/assets/media/k.png" />
     <!--end::Fonts ~/ -->
     <!--begin::Page Vendors Styles(used by this page)-->
 </head>
@@ -87,7 +79,7 @@ include("DateThai.php");
                 <div class="d-none d-lg-flex align-items-center mr-3">
                     <!--begin::Logo-->
                     <a href="index.html" class="mr-20">
-                        <img alt="Logo" src="Content/template/css/media/logos/logo-letter-9.png" class="max-h-35px" />
+                    <i class="fab fa-battle-net text-danger mr-5 icon-4x"></i>
                     </a>
                     <!--end::Logo-->
                     <!--begin::Tab Navs(for desktop mode)-->
@@ -99,7 +91,7 @@ include("DateThai.php");
                         <!--end::Item-->
                         <!--begin::Item-->
                         <li class="nav-item mr-3">
-                            <a href="#" class="nav-link py-4 px-6" data-toggle="tab" data-target="#kt_header_tab_2" role="tab">Reports</a>
+                        <a href="report.php" class="nav-link py-4 px-6" >Reports</a>
                         </li>
                         <!--end::Item-->
                         <!--begin::Item-->

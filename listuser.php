@@ -67,7 +67,7 @@ mysqli_close($link);
     <link href="Content/template/css/prismjs/prismjs.bundle.css" rel="stylesheet" type="text/css" />
     <link href="Content/template/css/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
     <link href="Content/template/css/css/style.bundle.css" rel="stylesheet" type="text/css" />
-    <link rel="shortcut icon" href="Content/template/css/media/logos/favicon.ico" />
+    <link rel="shortcut icon" href="Content/template/assets/media/k.png" />
     <!--end::Fonts ~/ -->
     <!--begin::Page Vendors Styles(used by this page)-->
 </head>
@@ -83,7 +83,7 @@ mysqli_close($link);
                 <div class="d-none d-lg-flex align-items-center mr-3">
                     <!--begin::Logo-->
                     <a href="index.html" class="mr-20">
-                        <img alt="Logo" src="Content/template/css/media/logos/logo-letter-9.png" class="max-h-35px" />
+                    <i class="fab fa-battle-net text-danger mr-5 icon-4x"></i>
                     </a>
                     <!--end::Logo-->
                     <!--begin::Tab Navs(for desktop mode)-->
@@ -95,7 +95,7 @@ mysqli_close($link);
                         <!--end::Item-->
                         <!--begin::Item-->
                         <li class="nav-item mr-3">
-                            <a href="#" class="nav-link py-4 px-6" data-toggle="tab" data-target="#kt_header_tab_2" role="tab">Reports</a>
+                        <a href="report.php" class="nav-link py-4 px-6" >Reports</a>
                         </li>
                         <!--end::Item-->
                         <!--begin::Item-->

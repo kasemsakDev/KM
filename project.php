@@ -7,6 +7,46 @@ if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
 	exit();
 }
 
+
+require_once "dblink.php";
+include("DateThai.php");
+
+//get list Project
+
+$agencyId = $_SESSION["AgencyID"];
+
+$sql_getproject = "SELECT p.*,a.Name as Agencyname,a.AgencyID as a_AgencyID,a.IsActive as a_IsActive From km_project p
+INNER JOIN  km_agency a on p.AgencyID = a.AgencyID
+INNER JOIN  km_strategy s on p.StrategyID = s.StrategyID 
+Where p.IsActive = 1 AND a.IsActive = 1 AND p.AgencyID = $agencyId AND s.IsActive = 1";
+$sql_resultproject =  mysqli_query($link,$sql_getproject);
+
+$projects = array();
+while($row = mysqli_fetch_assoc($sql_resultproject))
+{
+    $projects[] = $row;
+}
+
+//get indicator
+$sql_liststrategy = "SELECT StrategyID,Name,AgencyID FROM km_strategy WHERE IsActive  = 1 AND AgencyID = $agencyId";
+$result_lisstrategy = mysqli_query($link,$sql_liststrategy);
+
+$liststrategy = array();
+while($row = mysqli_fetch_assoc($result_lisstrategy))
+{
+    $liststrategy[] = $row;
+}
+
+//Test 
+/*
+  print_r($projects);
+echo "<br>";
+print_r($liststrategy);
+exit();*/
+
+mysqli_close($link);
+
+
 ?>
 
 <!DOCTYPE html>
@@ -26,7 +66,7 @@ if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
     <link href="Content/template/css/prismjs/prismjs.bundle.css" rel="stylesheet" type="text/css" />
     <link href="Content/template/css/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
     <link href="Content/template/css/css/style.bundle.css" rel="stylesheet" type="text/css" />
-    <link rel="shortcut icon" href="Content/template/css/media/logos/favicon.ico" />
+    <link rel="shortcut icon" href="Content/template/assets/media/k.png" />
     <!--end::Fonts ~/ -->
     <!--begin::Page Vendors Styles(used by this page)-->
 </head>
@@ -42,7 +82,7 @@ if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
                 <div class="d-none d-lg-flex align-items-center mr-3">
                     <!--begin::Logo-->
                     <a href="index.html" class="mr-20">
-                        <img alt="Logo" src="Content/template/css/media/logos/logo-letter-9.png" class="max-h-35px" />
+                    <i class="fab fa-battle-net text-danger mr-5 icon-4x"></i>
                     </a>
                     <!--end::Logo-->
                     <!--begin::Tab Navs(for desktop mode)-->
@@ -54,7 +94,7 @@ if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
                         <!--end::Item-->
                         <!--begin::Item-->
                         <li class="nav-item mr-3">
-                            <a href="#" class="nav-link py-4 px-6" data-toggle="tab" data-target="#kt_header_tab_2" role="tab">Reports</a>
+                        <a href="report.php" class="nav-link py-4 px-6" >Reports</a>
                         </li>
                         <!--end::Item-->
                         <!--begin::Item-->
@@ -149,7 +189,7 @@ if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
                                     </li>                         
                                 </ul>
                                 <ul class="menu-nav">
-                                    <li class="menu-item " aria-haspopup="true">
+                                    <li class="menu-item" aria-haspopup="true">
                                         <a href="purpose.php" class="menu-link">
                                             <span class="menu-text">เป้าประสงค์</span>
                                         </a>
@@ -169,8 +209,8 @@ if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
                                         </a>
                                     </li>                         
                                 </ul>
-                                <ul class="menu-nav">
-                                    <li class="menu-item  menu-item-active" aria-haspopup="true">
+                                <ul class="menu-nav ">
+                                    <li class="menu-item menu-item-active" aria-haspopup="true">
                                         <a href="Project.php" class="menu-link">
                                             <span class="menu-text">โครงการ</span>
                                         </a>
@@ -225,6 +265,8 @@ if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
             </div>
             <!--end::Container-->
         </div>
+        <!--end::Bottom-->
+    </div>
         <!--end::Bottom-->
     </div>
   
@@ -314,24 +356,12 @@ if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
 																</span>
 															</div>
 														</div>
-														<div class="col-md-4 my-2 my-md-0">
-															<div class="d-flex align-items-center">
-																<label class="mr-3 mb-0 d-none d-md-block">Agency:</label>
-																<select class="form-control" id="kt_datatable_search_Agency">
-																	<option value="">All</option>
-																	<option value="1">ฐานทัพเรือ สัตหีบ บก</option>
-																	<option value="2">ฐานทัพเรือ กรุงเทพ กองเรือ</option>
-																	<option value="3">หน่วยบัญชาการนาวิกโยธิน ปืนใหญ่</option>
-																</select>
-															</div>
-														</div>
+
                                                         <div class="col-md-4 my-2 my-md-0">
                                                         </div>
 													</div>
 												</div>
-												<div class="col-lg-3 col-xl-4 mt-5 mt-lg-0">
-													<a href="#" class="btn btn-light-primary px-6 font-weight-bold">Search</a>
-												</div>
+
 											</div>
 										</div>
 										<!--end::Search Form-->
@@ -350,31 +380,24 @@ if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
 												</tr>
 											</thead>
 											<tbody>
+
+                                            <?php
+                                                $num = 1;
+                                            ?>
+                                                <?php foreach($projects as $row){ ?>
 												<tr>
-													<td>0101010101</td>
-													<td>การจัดจ้าง ค่าแรง</td>
-													<td>80%</td>													
-											
-													<td class="text-right">1</td>
-                                                    <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-Edit
-</button></td>
-                                                    <td>2016-11-28</td>
-                                                   
+													<td>ยังไม่ได้ทำครับ</td>
+													<td><?php echo $row['Name'] ?></td>
+													<td>ยังไม่ได้ทำครับ</td>																								
+													<td class="text-right"><?php echo $row['Agencyname'] ?></td>
+                                                    <td><button type="button" class="btn btn-primary" 
+                                                    data-toggle="modal" data-target="#exampleModal" 
+                                                    onClick="onclick_Edit(<?php echo $row['ProjectID'];  ?>)">
+                                                    Edit
+                                                    </button></td>
+                                                    <td><?php echo DateThai($row['UpdateOn']) ?></td>                                                   
 												</tr>
-                                                <tr>
-													<td>0101020101</td>
-													<td>การจัดจ้าง ค่าบำรุงรักษา</td>
-													<td>8</td>													
-											
-													<td class="text-right">1</td>
-                                                    <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-Edit
-</button></td>
-                                                    <td>2016-11-28</td>
-                                                   
-												</tr>
-												
+                                                <?php  }  ?>
 											</tbody>
 										</table>
 										<!--end: Datatable-->
@@ -412,40 +435,54 @@ Edit
     </div>
 </div> -->
 
-
+<!-- Edit -->
+<form action="Manage/upsertproject.php" method="POST">
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">แก้ไข โครงการ</h5>
+                <h5 class="modal-title" id="exampleModalLabel">สร้าง โครงการ</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <i aria-hidden="true" class="ki ki-close"></i>
                 </button>
             </div>
             <div class="modal-body">
-            <div class="row">
-                <div class="col-md-3"></div>
-                <div class="form-group row">
-														<label class="col-2 col-form-label">หัวข้อ</label>
-														<div class="col-10">
-															<input class="form-control" type="text" value="การรักษาความมั่นคงของรัฐ id="example-text-input" />
-														</div>
+            <input type="hidden" name="id" id="ajaxid">
+            <input type="hidden" name="agencyid" value="<?php echo $agencyId;  ?>">   
+            <div class="form-group row">
+            <label class="col-3 col-form-label">กลยุทธ์-เป้าประสงค์ : </label>
+            <div class="col-9">
+            <select class="form-control" name="Strategyid" id="StrategyID" required>
+															<option value = "">Select</option>
+                                                            <?php foreach($liststrategy as $row){ ?>
+                                                            <option value="<?php echo $row["StrategyID"]  ?>"><?php echo $row["Name"]   ?></option>
+                                                            <?php } ?>
+														</select>
 													</div>
+                                                    </div>
+                <div class="form-group row">
+				<label class="col-2 col-form-label">หัวข้อ : </label>
+				<div class="col-10">
+				<input class="form-control" type="text" value="" id="editname" name="name" required autocomplete="off"/>
+				</div>
+				</div>
                 
                 
                 </div>
-            </div>
+                
+   
             <div class="modal-footer">
                 <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary font-weight-bold">Save changes</button>
+                <button type="submit" name="save" class="btn btn-primary font-weight-bold">Save changes</button>
             </div>
         </div>
     </div>
 </div>
+</form>
 
 
-
-
+<!-- create -->
+<form action="Manage/upsertproject.php" method="POST">
 <div class="modal fade" id="exampleModalSizeLg" tabindex="-1" role="dialog" aria-labelledby="exampleModalSizeLg" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
@@ -456,13 +493,16 @@ Edit
                 </button>
             </div>
             <div class="modal-body">
+            <input type="hidden" name="id" id="idcreate" value="0">
+            <input type="hidden" name="agencyid" value="<?php echo $agencyId;  ?>">   
             <div class="form-group row">
             <label class="col-3 col-form-label">กลยุทธ์-เป้าประสงค์ : </label>
             <div class="col-9">
-														<select class="form-control">
-															<option>Select</option>
-                                                            <option>วางแผนการจัดจ้าง ค่าแรง</option>
-                                                            <option>วางแผนการจัดจ้าง ค่าบำรุงรักษา</option>
+                                                        <select class="form-control" name="Strategyid" id="StrategyID" required>
+															<option value = "">Select</option>
+                                                            <?php foreach($liststrategy as $row){ ?>
+                                                            <option value="<?php echo $row["StrategyID"]  ?>"><?php echo $row["Name"]   ?></option>
+                                                            <?php } ?>
 														</select>
 													</div>
                                                     </div>
@@ -470,7 +510,7 @@ Edit
                 <div class="form-group row">
 				<label class="col-2 col-form-label">หัวข้อ : </label>
 				<div class="col-10">
-				<input class="form-control" type="text" value="" id="example-text-input" />
+				<input class="form-control" type="text" value="" id="example-text-input"  name="name" required  autocomplete="off"/>
 				</div>
 				</div>
                 
@@ -480,11 +520,12 @@ Edit
    
             <div class="modal-footer">
                 <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary font-weight-bold">Save changes</button>
+                <button type="submit" name="save" class="btn btn-primary font-weight-bold">Save changes</button>
             </div>
         </div>
     </div>
 </div>
+</form>
 
 
 
@@ -513,7 +554,34 @@ Edit
     <!--begin::Page Scripts(used by this page)-->
     <script src="Content/template/js/pages/html-table.js"></script>
 
+    <script>
+    function onclick_Edit(value)
+    {
+        console.log(value);
+        document.getElementById("StrategyID").value = "";
+        document.getElementById("ajaxid").value = 0;
+    $.ajax({
+        type: 'post',
+        url: 'AjaxManage/_getprojectbyId.php',
+        data: {
+        ajax_id:value
+    },
+ success: function (response) {
+     console.log(response);
+     //ajaxid
+          /*
+    response[0] // first $sup variable
+    response[1] // second $second_var variable
+     */
+    
+     document.getElementById("ajaxid").value = value;
+     document.getElementById("StrategyID").value = response[0];
+     document.getElementById("editname").value = response[1]; 
+    }
+ });
 
+    }
+</script>
 
                     </body>
                     <!--end::Footer-->
