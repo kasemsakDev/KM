@@ -171,7 +171,7 @@ if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
                                 </ul>
                                 <ul class="menu-nav">
                                     <li class="menu-item " aria-haspopup="true">
-                                        <a href="Project.php" class="menu-link">
+                                        <a href="project.php" class="menu-link">
                                             <span class="menu-text">โครงการ</span>
                                         </a>
                                     </li>                         
