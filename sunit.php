@@ -7,6 +7,69 @@ if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
 	exit();
 }
 
+include("dblink.php");
+include("DateThai.php");
+
+$agencyId = $_SESSION["AgencyID"];
+
+//master
+$sql_getsunit = "SELECT s.*,a.Name as Agency_name,a.AgencyID as a_AgencyID,a.IsActive as a_IsActive 
+,p.Name as ProjectName
+From km_sunit s
+INNER JOIN  km_project p on p.ProjectID = s.ProjectID 
+INNER JOIN  km_agency a on p.AgencyID = a.AgencyID
+Where s.IsActive = 1 AND a.IsActive = 1 AND s.AgencyID = $agencyId AND p.IsActive = 1";
+$sql_resultsunit =  mysqli_query($link,$sql_getsunit);
+
+$sunits = array();
+while($row = mysqli_fetch_assoc($sql_resultsunit))
+{
+    $sunits[] = $row;
+}
+
+//get project
+$sql_listproject = "SELECT ProjectID,Name,AgencyID FROM km_project WHERE IsActive  = 1 AND AgencyID = $agencyId";
+$result_listproject = mysqli_query($link,$sql_listproject);
+
+$listproject = array();
+while($row = mysqli_fetch_assoc($result_listproject))
+{
+    $listproject[] = $row;
+}
+
+function subsplit($list,$link){
+    //require_once "dblink.php";
+    $listname_agency = array();
+    $integerIDs = array_map('intval', explode(',', $list));
+   // print_r($integerIDs);exit();
+    foreach($integerIDs as $item)
+    {
+   $agency_nameValue = "SELECT Name FROM km_agency WHERE IsActive  = 1 AND AgencyID = $item";        
+   $result = mysqli_query($link,$agency_nameValue);      
+   while($row = mysqli_fetch_assoc($result))
+    {
+       $listname_agency[] = $row;
+    }
+    }
+   //print_r($listname_agency); exit();
+   $strragency = "";
+   if(count($listname_agency) >  0)
+   {
+       foreach($listname_agency as $item){
+        $strragency .= $item['Name']."<hr>";
+       }
+   }
+    return $strragency; 
+}
+/*
+echo "sunit<br>";
+print_r($sunits);/*
+//echo "sunitDetail<br>";
+//print_r($sunitDetails);
+echo "project<br>";
+print_r($listproject);
+exit();
+*/
 ?>
 
 <!DOCTYPE html>
@@ -314,29 +377,15 @@ if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
 																</span>
 															</div>
 														</div>
-														<div class="col-md-4 my-2 my-md-0">
-															<div class="d-flex align-items-center">
-																<label class="mr-3 mb-0 d-none d-md-block">Agency:</label>
-																<select class="form-control" id="kt_datatable_search_Agency">
-																	<option value="">All</option>
-																	<option value="1">ฐานทัพเรือ สัตหีบ บก</option>
-																	<option value="2">ฐานทัพเรือ กรุงเทพ กองเรือ</option>
-																	<option value="3">หน่วยบัญชาการนาวิกโยธิน ปืนใหญ่</option>
-																</select>
-															</div>
-														</div>
+							
                                                         <div class="col-md-4 my-2 my-md-0">
                                                         </div>
 													</div>
-												</div>
-												<div class="col-lg-3 col-xl-4 mt-5 mt-lg-0">
-													<a href="#" class="btn btn-light-primary px-6 font-weight-bold">Search</a>
-												</div>
+												</div>									
 											</div>
 										</div>
-										<!--end::Search Form-->
-										<!--end: Search Form-->
-										<!--begin: Datatable-->
+
+      
                                         <table class="datatable datatable-bordered datatable-head-custom" id="kt_datatable" width="100%">
 											<thead>
 												<tr>
@@ -344,24 +393,29 @@ if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
                                                     <th width="50%" title="Field #2">โครงการ</th>
 													<th width="50%" title="Field #3">หน่วยที่รับผิดชอบ</th>
 													<th width="5%" title="Field #4">Progressive</th>			                                                   
-                                                    <th width="10%" title="Field #5">Order Date</th> 
-                                                    <th width="10%" title="Field #6">Action</th>   
-                                                    <th width="10%" title="Field #7">หมายเหตุ</th>       
+                                                    <th width="10%" title="Field #5">Name</th> 
+                                                    <th width="10%" title="Field #6">Action</th>  
+                                                    <th width="10%" title="Field #7">Order Date</th>       
                                                                                    
 												</tr>
 											</thead>
 											<tbody>
+                                            <?php foreach($sunits as $master){?>
+                                               
 												<tr style="background-color:#F0FFFE">
-													<td>010101010101</td>
-													<td>การจัดจ้าง ค่าแรง</td>
-                                                    <td>แผนกกรรมวิธีข้อมูล บก.ฐท.สส.<hr>ยก.ฐท.สส.</td>
-													<td>40%</td>																								
-													<td>2016-11-28</td>
-                                                    <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-Update
-</button></td>
-                                                    <td>ทดสอบการทำงาน</td>                                                   
+													<td>ยังไม่ได้ทำ</td>
+													<td><?php  echo $master['ProjectName'] ?></td>
+                                                    <td><?php echo subsplit($master['AgencyList'],$link);   ?></td>
+													<td>เดะใช้ function คำนวณ</td>						
+                                                    <td><?php  echo $master['Name'] ?></td>     																															
+                                                    <td><button type="button" class="btn btn-primary" data-toggle="modal" 
+                                                    
+                                                     data-target="#exampleModal"
+                                                     onClick="onclick_Update(<?php echo $master['SunitID'];  ?>)"
+                                                     >Update</button></td>
+                                                    <td><?php echo DateThai($master['UpdateOn']) ?></td>                                             
 												</tr>
+                                                <?php  } ?>
                                                 <tr>
 													<td>010101010101.1</td>
 													<td>การจัดจ้าง ค่าแรง</td>
@@ -371,7 +425,7 @@ Update
                                                     <td></td>
                                                     <td>updateงานรอบที่1</td>                                                   
 												</tr>
-                                            
+
                                                 <tr>
 													<td>010101010101.2</td>
 													<td>การจัดจ้าง ค่าแรง</td>
@@ -383,13 +437,15 @@ Update
 												</tr>
 											</tbody>
 										</table>
-										<!--end: Datatable-->
+                                                
+
 									</div>
 								</div>
 
 </div>
 </div>
 
+<form action="Manage/upsertsunitDetail.php" method="POST">
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -400,42 +456,43 @@ Update
                 </button>
             </div>
             <div class="modal-body">
-           
+            <input type="hidden" name="Update_id" id="ajaxid">
+            <input type="hidden" name="Update_projectid" id="Update_projectid" >
+            <input type="hidden"  name="Update_agencyid" value="<?php echo $agencyId ?>">
                 <div class="form-group row">
-    
 								<label class="col-2 col-form-label">หัวข้อ</label>
 														<div class="col-10">
-															<input class="form-control" type="text" value="การรักษาความมั่นคงของรัฐ" id="example-text-input" disabled />
+															<input class="form-control" type="text" value="" name="Update_projecttext" id="Update_projecttext" readonly />
 														</div>
 								</div>
-
                 <div class="form-group row">               
                                 <label class="col-3 col-form-label">Progressive: </label>
             <div class="col-9">
-            <input class="form-control" type="text" value="" id="example-text-input"  />
-											
+            <input class="form-control" type="text" value="" name = "Update_Progressive" id="Update_Progressive" onchange="handleChange(this);" onkeypress="return isNumber(event)"
+            autocomplete="off"
+            />										
             </div>               
                 </div>
     <div class="form-group row">
     
     <label class="col-2 col-form-label">หมายเหตุ</label>
                             <div class="col-10">
-                                <input class="form-control" type="text" value="" id="example-text-input"  />
+                                <input class="form-control" type="text" value="" name="Update_Name" id="Update_Name" autocomplete="off"  />
     </div>
     </div>
 
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary font-weight-bold">Save changes</button>
+                <button type="submit" name="save" class="btn btn-primary font-weight-bold">Save changes</button>
             </div>
         </div>
     </div>
 </div>
+</form>
 
 
-
-
+<form action="Manage/upsertsunit.php" method="POST" id="createform">
 <div class="modal fade" id="exampleModalSizeLg" tabindex="-1" role="dialog" aria-labelledby="exampleModalSizeLg" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
@@ -446,51 +503,59 @@ Update
                 </button>
             </div>
             <div class="modal-body">
+            <input type="hidden" name="id" id="id">
+            <input type="hidden" name="agencyid" value="<?php echo $agencyId ?>">
             <div class="form-group row">
             <label class="col-3 col-form-label">โครงการ : </label>
             <div class="col-9">
-														<select class="form-control">
-															<option>Select</option>
-                                                            <option>การจัดจ้าง ค่าแรง</option>
-                                                            <option>การจัดจ้าง ค่าบำรุงรักษา</option>
+														<select class="form-control" name="projectid">
+															<option value="">Select</option>
+                                                            <?php
+                                                            foreach($listproject as $row)
+                                                            { ?>
+                                                            <option value="<?php echo $row['ProjectID'] ?>"><?php echo  $row['Name']?></option>
+                                                     <?php  } ?>
+                                                            
 														</select>
 													</div>
                                                     </div>
-                <div id="idselect">
+        
+        <div id="div0">
         <div class="form-group row">
             <label class="col-3 col-form-label">หน่วยงาน : </label>
             <div class="col-9">
-														<select class="form-control">
+														<select class="form-control evenagency" name="agencylistid[]" id = "stratagency">
 															<option>Select</option>
-                                                            <option>แผนกกรรมวิธีข้อมูล บก.ฐท.สส.</option>
-                                                            <option>ยก.ฐท.สส.</option>
-                                                            <option>กบ.ฐท.สส.</option>
 														</select>
 													</div>
+                                                    </div>
         </div>
                 
                 
-                </div>
+           
                 <div class="form-group row">
                 <div class="col-1"></div>
-                <button type="button" class="btn btn-primary btn-sm" onclick="addCode()">เพิ่มหน่วยงาน</button>
+                <div class="col-2">
+                <button type="button" class="btn btn-primary btn-sm" id="addagency">เพิ่มหน่วยงาน</button>
+                </div>
+               <!-- <button type="button" class="btn btn-danger btn-sm" id="del_agency">ลบหน่วยงาน</button> -->
                 </div>
                 
 
     <div class="form-group row">
             <label class="col-3 col-form-label">หมายเหตุ : </label>
             <div class="col-9">
-            <input class="form-control" type="text" value="" id="example-text-input"  />
+            <input class="form-control" type="text" value="" id="example-text-input" name="name" autocomplete="off" />
         </div>
     </div>   
             <div class="modal-footer">
                 <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary font-weight-bold">Save changes</button>
+                <button type="button" id="save" name="save" class="btn btn-primary font-weight-bold">Save changes</button>
             </div>
         </div>
     </div>
 </div>
-
+</form>
 
 
                         <!--begin::Footer-->
@@ -521,23 +586,146 @@ Update
 
 
                     </body>
-
     <script> 
-        function addCode() { 
-            document.getElementById("idselect").innerHTML +=  
-            `<div class="form-group row">
+$(document).ready(function() {
+    $.ajax({
+        type: 'post',
+        dataType: 'JSON',
+        url: 'AjaxManage/_getallagency.php',
+        success: function (response) {      
+            if(response.length > 0){   
+            AddSelectList_Agency(response,'stratagency');
+            }
+        }    
+});
+
+        var Click_num = 0;
+        var Div_num = 0;
+        $("#addagency").click(function(){
+            $('#addagency').prop('disabled', true);
+            Click_num +=  + 1;
+        var data;
+        $.ajax({
+        type: 'post',
+        dataType: 'JSON',
+        url: 'AjaxManage/_getallagency.php',
+        success: function (response) {
+            data = response;     
+            $('#addagency').prop('disabled', false);
+           // console.log(data);
+            if(data.length > 0)
+            {
+                idtagselect = "agencylist"+Click_num;
+                Div_num = "div"+Click_num;
+             //   console.log(idtagselect);
+                if(Click_num == 1){
+                    // alert("log");
+                    $( "#div0" ).after( $( ` <div id=`+Div_num+`>
+                    <div class="form-group row">
             <label class="col-3 col-form-label">หน่วยงาน : </label>
             <div class="col-9">
-														<select class="form-control">
-															<option>Select</option>
-                                                            <option>แผนกกรรมวิธีข้อมูล บก.ฐท.สส.</option>
-                                                            <option>ยก.ฐท.สส.</option>
-                                                            <option>กบ.ฐท.สส.</option>
+														<select class="form-control evenagency" name="agencylistid[]"id=`+idtagselect+`>
+															<option value="0">Select</option>
 														</select>
 													</div>
-        </div>`; 
-        } 
+              </div>
+              </div>`) );        
+                }else{
+                //prepend() and .after(), .before()  
+                    var log = Click_num - 1;
+                    var div_old = "#div"+log;
+                    console.log(div_old);
+                    $( div_old ).after( $( ` <div id=`+Div_num+`>
+                    <div class="form-group row">
+            <label class="col-3 col-form-label">หน่วยงาน : </label>
+            <div class="col-9">
+														<select class="form-control evenagency" name="agencylistid[]" id=`+idtagselect+`>
+															<option value="0">Select</option>
+														</select>
+													</div>
+              </div>
+              </div>` ) );
+                }             
+              if(data.length > 0){
+              AddSelectList_Agency(data,idtagselect);
+              }
+            }
+        }
+        });
+    });
+
+        $("#save").click(function(){
+   //         alert("test: button");
+            var inp = [];
+            var inps = document.getElementsByName('agencylistid[]');
+            for (var i = 0; i <inps.length; i++) {
+                if(inps[i].value != 0) {
+                inp.push(inps[i].value);
+            }
+        }
+
+          var jsonString = JSON.stringify(inp);
+          console.log(jsonString);
+          $.ajax({
+        type: 'post',
+        url: 'AjaxManage/_createSessionAgencyList.php',
+        data: {
+        data:jsonString
+    },
+            success: function (response) {
+            //alert(response);
+            $("#createform").submit();
+        }
+    });
+           
+        });
+        
+        function AddSelectList_Agency(value,idname)
+        {
+            idname = "#"+idname;
+            for(var i = 0; i< value.length; i++){
+                    $(idname).append('<option value="'+value[i].AgencyID+'">'+value[i].Name+'</option>');
+                }
+        }
+
+    });
+            function onclick_Update(value)
+        {
+     document.getElementById("ajaxid").value = "";
+     document.getElementById("Update_projectid").value = "";
+     document.getElementById("Update_projecttext").value = "";
+     document.getElementById("Update_Progressive").value = ""; 
+     document.getElementById("Update_Name").value = "";
+        $.ajax({
+            type: 'post',
+            url: 'AjaxManage/_getUpdateSunitgybyId.php',
+            data: {
+            ajax_id:value
+        },
+            success: function (response) {
+                console.log(response);
+     document.getElementById("ajaxid").value = response[0].SunitID;
+     document.getElementById("Update_projectid").value = response[0].ProjectID;
+     document.getElementById("Update_projecttext").value = response[0].ProjectName;
+     document.getElementById("Update_Progressive").value = ""; 
+     document.getElementById("Update_Name").value = "";
+                }
+             });
+        }
+
+        function handleChange(input) {
+         if (input.value < 0) input.value = 0;
+         if (input.value > 100) input.value = 100;
+        }
+        function isNumber(evt) {
+           evt = (evt) ? evt : window.event;
+           var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+        }
+    return true;
+}
+
     </script> 
 
-                    <!--end::Footer-->
-    <!--end::Header-->
+         
