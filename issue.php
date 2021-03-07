@@ -35,8 +35,8 @@ include("DateThai.php");
 
 <!DOCTYPE html>
 <html>
-<hea
-    <meta charset="utf-8" />
+<head>
+     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Updates and statistics" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -283,8 +283,9 @@ include("DateThai.php");
         </div>
         <!--end::Bottom-->
     </div>
-  
+
   <br><br><br>
+  <br><br><br> <br><br><br><br><br>
     <div class="d-flex flex-column-fluid">
 							<!--begin::Container-->
 							<div class="container">
@@ -526,6 +527,7 @@ include("DateThai.php");
     </div>
 </div>
 </form>
+
 
 
 
