@@ -10,6 +10,7 @@ if(isset($_POST['ajax_id']))
     $mysql = mysqli_query($link,"SELECT k.SunitID,k.ProjectID,k.Name,p.Name as ProjectName From km_sunit  k
     inner join km_project p on k.ProjectID = p.ProjectID
     where SunitID = $id");
+
     while($row=mysqli_fetch_array($mysql))
     {
       $return_arr[] = $row; 

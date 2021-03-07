@@ -12,7 +12,7 @@ ob_start();
         $_SESSION["agencylistid"] = [];
         $name = $_POST['name'];
 //================Test===============================
-       /* echo "id <br>";
+      /*  echo "id <br>";
         echo $id. "<br>";
         echo "agencyid <br>";
         echo $agencyId. "<br>";
@@ -39,7 +39,7 @@ ob_start();
         { //INSERT
             $sql = "INSERT INTO km_sunit (ProjectID,Name,AgencyID,IsActive,AgencyList,CreateBy,CreateOn,UpdateBy,UpdateOn)
             VALUES ('".$projectid."','".$name."','".$agencyId."','1','".$strAgencyid."','".$userid."','".$datetime."','".$userid."','".$datetime."');";          
-          //  echo $sql; exit();
+            
         }
         mysqli_query($link,$sql);
         mysqli_close($link);

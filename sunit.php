@@ -61,6 +61,35 @@ function subsplit($list,$link){
    }
     return $strragency; 
 }
+
+
+function GetSunitDetail($id,$link){   
+        //Detail
+        $sql = "select * FROM km_sunitdetail
+        where SunitID = $id";
+        $result =  mysqli_query($link,$sql);
+        $sunitDetail = array();
+        while($row = mysqli_fetch_assoc($result))
+        {
+            $sunitDetail[] = $row;
+        }
+        return $sunitDetail;
+}
+
+function GetProgressive($id,$link)
+{
+    $sql = "select Progressive FROM km_sunitdetail
+    where SunitID = $id";
+    $result =  mysqli_query($link,$sql);
+    $_progressive = 0;
+    while($row = mysqli_fetch_assoc($result))
+    {
+        $_progressive =  ((int)$_progressive + (int)$row['Progressive']);
+    }
+    return $_progressive;
+}
+
+
 /*
 echo "sunit<br>";
 print_r($sunits);/*
@@ -401,40 +430,42 @@ exit();
 											</thead>
 											<tbody>
                                             <?php foreach($sunits as $master){?>
-                                               
+                                                <?php $totalProgressive =  GetProgressive($master['SunitID'],$link) ?>
 												<tr style="background-color:#F0FFFE">
 													<td>ยังไม่ได้ทำ</td>
 													<td><?php  echo $master['ProjectName'] ?></td>
                                                     <td><?php echo subsplit($master['AgencyList'],$link);   ?></td>
-													<td>เดะใช้ function คำนวณ</td>						
+													<td><?php echo  $totalProgressive.'%' ?></td>						
                                                     <td><?php  echo $master['Name'] ?></td>     																															
-                                                    <td><button type="button" class="btn btn-primary" data-toggle="modal" 
-                                                    
+                                                    <td>
+                                                    <?php if($totalProgressive != 100){ ?>
+                                                    <button type="button" class="btn btn-primary" data-toggle="modal"                                                    
                                                      data-target="#exampleModal"
                                                      onClick="onclick_Update(<?php echo $master['SunitID'];  ?>)"
-                                                     >Update</button></td>
+                                                     >Update</button>
+                                                     <?php } ?>
+                                                     </td>
                                                     <td><?php echo DateThai($master['UpdateOn']) ?></td>                                             
 												</tr>
-                                                <?php  } ?>
-                                                <tr>
-													<td>010101010101.1</td>
-													<td>การจัดจ้าง ค่าแรง</td>
-                                                    <td>แผนกกรรมวิธีข้อมูล บก.ฐท.สส.<hr>ยก.ฐท.สส.</td>
-													<td>20%</td>																								
-													<td>2016-11-28</td>
-                                                    <td></td>
-                                                    <td>updateงานรอบที่1</td>                                                   
-												</tr>
 
+                                                <?php  $Detail = GetSunitDetail($master['SunitID'],$link);
+                                                    if(count($Detail) > 0){ ?>
+                                                 <?php  
+                                                  foreach($Detail as $detail){
+                                                 ?>   
                                                 <tr>
-													<td>010101010101.2</td>
-													<td>การจัดจ้าง ค่าแรง</td>
-                                                    <td>แผนกกรรมวิธีข้อมูล บก.ฐท.สส.<hr>ยก.ฐท.สส.</td>
-													<td>20%</td>																								
-													<td>2016-11-28</td>
+													<td>ยังไม่ได้ทำ</td>
+													<td><?php  echo $master['ProjectName'] ?></td>
+                                                    <td><?php echo subsplit($master['AgencyList'],$link);   ?></td>
+													<td><?php  echo $detail['Progressive']."%" ?></td>			
+                                                    <td><?php  echo $detail['Name'] ?></td>   																																		
                                                     <td></td>
-                                                    <td>updateงานรอบที่2</td>                                                   
+                                                    <td><?php  echo DateThai($detail['UpdateOn']) ?></td>                                             
 												</tr>
+                                                <?php } ?>
+                                            <?php } ?>
+                                            
+                                         <?php   } ?>
 											</tbody>
 										</table>
                                                 
@@ -469,7 +500,7 @@ exit();
                                 <label class="col-3 col-form-label">Progressive: </label>
             <div class="col-9">
             <input class="form-control" type="text" value="" name = "Update_Progressive" id="Update_Progressive" onchange="handleChange(this);" onkeypress="return isNumber(event)"
-            autocomplete="off"
+            autocomplete="off" required
             />										
             </div>               
                 </div>
@@ -477,14 +508,14 @@ exit();
     
     <label class="col-2 col-form-label">หมายเหตุ</label>
                             <div class="col-10">
-                                <input class="form-control" type="text" value="" name="Update_Name" id="Update_Name" autocomplete="off"  />
+                                <input class="form-control" type="text" value="" name="Update_Name" id="Update_Name" autocomplete="off" required />
     </div>
     </div>
 
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>
-                <button type="submit" name="save" class="btn btn-primary font-weight-bold">Save changes</button>
+                <button type="submit" name="save"  class="btn btn-primary font-weight-bold">Save changes</button>
             </div>
         </div>
     </div>
@@ -492,7 +523,8 @@ exit();
 </form>
 
 
-<form action="Manage/upsertsunit.php" method="POST" id="createform">
+<form action="Manage/upsertsunit.php" method="POST" name="RegForm" 
+id="createform">
 <div class="modal fade" id="exampleModalSizeLg" tabindex="-1" role="dialog" aria-labelledby="exampleModalSizeLg" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
@@ -503,12 +535,12 @@ exit();
                 </button>
             </div>
             <div class="modal-body">
-            <input type="hidden" name="id" id="id">
+            <input type="hidden" name="id" id="id" value = "0">
             <input type="hidden" name="agencyid" value="<?php echo $agencyId ?>">
             <div class="form-group row">
             <label class="col-3 col-form-label">โครงการ : </label>
             <div class="col-9">
-														<select class="form-control" name="projectid">
+														<select class="form-control" name="projectid" id = "projectid">
 															<option value="">Select</option>
                                                             <?php
                                                             foreach($listproject as $row)
@@ -525,7 +557,7 @@ exit();
             <label class="col-3 col-form-label">หน่วยงาน : </label>
             <div class="col-9">
 														<select class="form-control evenagency" name="agencylistid[]" id = "stratagency">
-															<option>Select</option>
+															<option value="">Select</option>
 														</select>
 													</div>
                                                     </div>
@@ -625,7 +657,7 @@ $(document).ready(function() {
             <label class="col-3 col-form-label">หน่วยงาน : </label>
             <div class="col-9">
 														<select class="form-control evenagency" name="agencylistid[]"id=`+idtagselect+`>
-															<option value="0">Select</option>
+															<option value="">Select</option>
 														</select>
 													</div>
               </div>
@@ -640,7 +672,7 @@ $(document).ready(function() {
             <label class="col-3 col-form-label">หน่วยงาน : </label>
             <div class="col-9">
 														<select class="form-control evenagency" name="agencylistid[]" id=`+idtagselect+`>
-															<option value="0">Select</option>
+															<option value="">Select</option>
 														</select>
 													</div>
               </div>
@@ -674,7 +706,10 @@ $(document).ready(function() {
     },
             success: function (response) {
             //alert(response);
+            if(ValidateCreate()){
             $("#createform").submit();
+            }
+            
         }
     });
            
@@ -714,8 +749,34 @@ $(document).ready(function() {
         }
 
         function handleChange(input) {
-         if (input.value < 0) input.value = 0;
-         if (input.value > 100) input.value = 100;
+
+            var id = $("#ajaxid").val();
+
+            $.ajax({
+            type: 'post',
+            url: 'AjaxManage/_getProgressiveById.php',
+            data: {
+            ajax_id:id
+        },
+            success: function (response) {
+                if(response == 0)
+                {
+                if (input.value < 0) input.value = 0;
+                if (input.value > 100) input.value = 100;
+                }else {
+                if(input.value > response) {                
+                    input.value = response;
+                }
+               
+                if(input.value < 0) input.value = 0;                
+                }
+
+                }
+             });
+
+
+
+             //get Update_Progressive
         }
         function isNumber(evt) {
            evt = (evt) ? evt : window.event;
@@ -725,6 +786,36 @@ $(document).ready(function() {
         }
     return true;
 }
+
+function ValidateCreate() { 
+        var project = $("#projectid").val();
+        var agency = $("#stratagency").val();
+        var name = document.forms["RegForm"]["name"]; 
+ 
+    alert(project);
+
+        if (name.value == "") { 
+            window.alert("Please enter your name."); 
+            name.focus(); 
+            return false; 
+        } 
+  
+        if (agency == "" || agency == undefined) { 
+            window.alert("Please enter your agency."); 
+            agency.focus(); 
+            return false; 
+        } 
+  
+        if (project == ""  || project == undefined) { 
+            window.alert( 
+              "Please enter a valid  project."); 
+              project.focus(); 
+            return false; 
+        }  
+    
+        return true; 
+    } 
+
 
     </script> 
 
