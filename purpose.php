@@ -386,7 +386,7 @@ $agencyId = $_SESSION["AgencyID"];
                                             ?>
                                                 <?php foreach($list_purpose as $row){ ?>
 												<tr>
-													<td>ยังไม่ได้ทำครับ</td>
+													<td><?php echo $row['Number']  ?></td>
 													<td><?php echo $row['Name'] ?></td>
 													<td>ยังไม่ได้ทำครับ</td>													
 											

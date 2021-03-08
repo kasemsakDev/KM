@@ -7,6 +7,32 @@ ob_start();
     if(isset($_POST['save']))
     {
         require_once "../dblink.php";
+
+
+      function _getNumber($link)
+      {
+        $number = 0;
+        $sql = "select number FROM km_issue 
+        ORDER BY number DESC 
+        LIMIT 1";
+        $result = mysqli_query($link,$sql);
+
+        while($row = mysqli_fetch_assoc($result))
+        {
+          $number = (float)$row['number'];
+        }
+          if($number == null || $number == 0)
+          {
+            $number = 0;
+          }
+
+          $number = $number + 1;
+          return $resultNumber = (string)$number;
+
+      }
+
+
+
         $id = $_POST['id'];
         $name = $_POST['name'];
         $agencyId = $_POST['agencyid']; 
@@ -15,8 +41,11 @@ ob_start();
         $sql = "";
         if($id == 0)
         { //INSERT
-            $sql = "INSERT INTO km_issue (Name,AgencyID,IsActive,CreateBy,CreateOn,UpdateBy,UpdateOn)
-            VALUES ('".$name."','".$agencyId."','1','".$userid."','".$datetime."','".$userid."','".$datetime."');";
+          
+          $number = _getNumber($link);
+
+            $sql = "INSERT INTO km_issue (Name,AgencyID,IsActive,CreateBy,CreateOn,UpdateBy,UpdateOn,number)
+            VALUES ('".$name."','".$agencyId."','1','".$userid."','".$datetime."','".$userid."','".$datetime."','".$number."');";
            
           //  echo $sql; exit();
         }else{

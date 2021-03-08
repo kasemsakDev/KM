@@ -407,13 +407,11 @@ include("DateThai.php");
 												</tr>
 											</thead>
 											<tbody>
-                                            <?php
-                                                    $num = 1;
-                                            ?>
+                                        
                                             <?php foreach($issues as $row){ ?>
                                            
 												<tr>
-													<td><?php  echo $num ?></td>
+													<td><?php  echo $row['Number']  ?></td>
 													<td><?php echo $row['Name'] ?></td>
 													<td>ยังไม่ได้ทำครับ</td>													
 											
@@ -425,7 +423,7 @@ include("DateThai.php");
                                                 <td><?php echo DateThai($row['UpdateOn']);?></td>
                                                    
 												</tr>
-                                                <?php $num++; } ?>
+                                                <?php  } ?>
 												
 											</tbody>
 										</table>

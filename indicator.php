@@ -382,7 +382,7 @@ include("DateThai.php");
                                             ?>
                                                 <?php foreach($indicator as $row){ ?>
 												<tr>
-													<td>ยังไม่ได้ทำครับ</td>
+													<td><?php echo $row['Number']  ?></td>
 													<td><?php echo $row['Name'] ?></td>
 													<td>ยังไม่ได้ทำครับ</td>													
 											
