@@ -432,7 +432,7 @@ exit();
                                             <?php foreach($sunits as $master){?>
                                                 <?php $totalProgressive =  GetProgressive($master['SunitID'],$link) ?>
 												<tr style="background-color:#F0FFFE">
-													<td>ยังไม่ได้ทำ</td>
+													<td><?php echo $master['Number'] ?></td>
 													<td><?php  echo $master['ProjectName'] ?></td>
                                                     <td><?php echo subsplit($master['AgencyList'],$link);   ?></td>
 													<td><?php echo  $totalProgressive.'%' ?></td>						
@@ -454,7 +454,7 @@ exit();
                                                   foreach($Detail as $detail){
                                                  ?>   
                                                 <tr>
-													<td>ยังไม่ได้ทำ</td>
+													<td><?php echo $detail['Number'] ?></td>
 													<td><?php  echo $master['ProjectName'] ?></td>
                                                     <td><?php echo subsplit($master['AgencyList'],$link);   ?></td>
 													<td><?php  echo $detail['Progressive']."%" ?></td>			
@@ -792,7 +792,7 @@ function ValidateCreate() {
         var agency = $("#stratagency").val();
         var name = document.forms["RegForm"]["name"]; 
  
-    alert(project);
+  //  alert(project);
 
         if (name.value == "") { 
             window.alert("Please enter your name."); 

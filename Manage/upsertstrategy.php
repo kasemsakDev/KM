@@ -3,45 +3,37 @@
 session_start();
 ob_start();
 
-
     if(isset($_POST['save']))
     {
         require_once "../dblink.php";
-
-
-
-        function _getNumber(/*กำลังทำ  */)
+        function _getNumber($indicatorId,$link)
         {
-            $numberindicator= 0;  
-            $sql = "select number FROM km_indicator 
-			Where PurposeID = $purposeId
+            $numberStrategy = 0;  
+            $sql = "select number FROM km_strategy 
+			Where IndicatorID = $indicatorId
             ORDER BY number DESC 
             LIMIT 1";
             $result = mysqli_query($link,$sql);
             while($row = mysqli_fetch_assoc($result))
             {
-              $numberindicator = (string)$row['number'];
+              $numberStrategy = (string)$row['number'];
             }
-
             $number = "";
-            if($numberindicator == null || $numberindicator == 0)
+            if($numberStrategy == null || $numberStrategy == 0)
             {
-
-                $numberPurposeID = 0;
-                $sql = "select number FROM km_purpose where PurposeID = $purposeId";
+                $numberIndicatorID = 0;
+                $sql = "select number FROM km_indicator where IndicatorID = $indicatorId";
                 $result = mysqli_query($link,$sql);
                 while($row = mysqli_fetch_assoc($result))
                 {
-                  $numberPurposeID = (float)$row['number'];
+                  $numberIndicatorID = (string)$row['number'];
                 }       
-
-                $numberindicator = 0;        
-                $numberindicator = $numberindicator + 1;            
-                $str = (string)$numberPurposeID .'.'. (string)$numberindicator;
+                $numberStrategy = $numberStrategy + 1;            
+                $str = (string)$numberIndicatorID .'.'. (string)$numberStrategy;
                 $number = $str;
                 //echo $result_number;
-            }else {     
-                    $integerIDs = array_map('intval', explode('.', $numberindicator));
+            }else {  
+                    $integerIDs = array_map('intval', explode('.', $numberStrategy));
                     $_getindex = (count($integerIDs) - 1);
                     $newData = $integerIDs[$_getindex] + 1;
                     $integerIDs[$_getindex] = $newData;
@@ -51,20 +43,20 @@ ob_start();
                     }
                     $number = substr($number, 0, -1);
             }
+            return $number;
         }
-
         $id = $_POST['id'];
         $name = $_POST['name'];
         $agencyId = $_POST['agencyid']; 
         $userid = $_SESSION["id"];
         $indicatorId = $_POST['indicatorid'];
-
         $datetime = date('Y-m-d H:i:s');
         $sql = "";
         if($id == 0)
         { //INSERT
-            $sql = "INSERT INTO km_strategy (IndicatorID,Name,AgencyID,IsActive,CreateBy,CreateOn,UpdateBy,UpdateOn)
-            VALUES ('".$indicatorId."','".$name."','".$agencyId."','1','".$userid."','".$datetime."','".$userid."','".$datetime."');";          
+           $number = _getNumber($indicatorId,$link);
+            $sql = "INSERT INTO km_strategy (IndicatorID,Name,AgencyID,IsActive,CreateBy,CreateOn,UpdateBy,UpdateOn,Number)
+            VALUES ('".$indicatorId."','".$name."','".$agencyId."','1','".$userid."','".$datetime."','".$userid."','".$datetime."','".$number."');";          
           //  echo $sql; exit();
         }else{
             //Update
@@ -76,7 +68,5 @@ ob_start();
         mysqli_query($link,$sql);
         mysqli_close($link);
         header("location: ../strategy.php");
-
     }
-
 ?>
