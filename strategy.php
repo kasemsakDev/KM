@@ -8,6 +8,7 @@ if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
 }
 require_once "dblink.php";
 include("DateThai.php");
+include("fun_progressive.php");
 
 //get list strategy
 
@@ -42,7 +43,7 @@ echo "<br>";
 print_r($listindicator);
 exit();
 */
-mysqli_close($link);
+
 
 ?>
 
@@ -383,7 +384,7 @@ mysqli_close($link);
 												<tr>
 													<td><?php echo $row['Number']  ?></td>
 													<td><?php echo $row['Name'] ?></td>
-													<td>ยังไม่ได้ทำครับ</td>													
+													<td><?php echo _progressiveStrategy($row['StrategyID'],$link).'%'; ?></td>													
 											
 													<td class="text-right"><?php echo $row['Agencyname'] ?></td>
                                                     <td><button type="button" class="btn btn-primary" 

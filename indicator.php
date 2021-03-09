@@ -8,6 +8,7 @@ if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
 }
 require_once "dblink.php";
 include("DateThai.php");
+include("fun_progressive.php");
 
 //get list purpose
 //get list indicator
@@ -42,7 +43,7 @@ include("DateThai.php");
     print_r($list_purpose);
     exit();*/
 
-    mysqli_close($link);
+
 ?>
 
 
@@ -384,7 +385,7 @@ include("DateThai.php");
 												<tr>
 													<td><?php echo $row['Number']  ?></td>
 													<td><?php echo $row['Name'] ?></td>
-													<td>ยังไม่ได้ทำครับ</td>													
+                                                    <td><?php echo _progressiveIndicator($row['IndicatorID'],$link).'%'; ?></td>															
 											
 													<td class="text-right"><?php echo $row['Agencyname'] ?></td>
                                                     <td><button type="button" class="btn btn-primary" 

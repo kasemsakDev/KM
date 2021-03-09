@@ -4,6 +4,7 @@ ob_start();
 
 require_once "dblink.php";
 include("DateThai.php");
+include("fun_progressive.php");
 if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
 	header("location: index.php");
 	exit();
@@ -388,10 +389,11 @@ $agencyId = $_SESSION["AgencyID"];
 												<tr>
 													<td><?php echo $row['Number']  ?></td>
 													<td><?php echo $row['Name'] ?></td>
-													<td>ยังไม่ได้ทำครับ</td>													
+                                                    <td><?php echo _progressivePurpose($row['PurposeID'],$link).'%'; ?></td>											
 											
 													<td class="text-right"><?php echo $row['agency_name'] ?></td>
-                                                    <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" onClick="onclick_issue(<?php echo $row['PurposeID'];  ?>)">
+                                                    <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" 
+                                                    onClick="onclick_issue(<?php echo $row['PurposeID'];  ?>)">
 Edit
 </button></td>
                                                     <td><?php echo DateThai($row['UpdateOn']) ?></td>

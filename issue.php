@@ -12,6 +12,7 @@ if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
 
 require_once "dblink.php";
 include("DateThai.php");
+include("fun_progressive.php");
 
 //get list ประเด็ดยุทธศาสตร์
 
@@ -19,7 +20,9 @@ include("DateThai.php");
 
     $sql_getIssue = "SELECT i.*,k.Name as Agencyname,k.AgencyID as K_AgencyID,k.IsActive as K_IsActive From km_issue i
     INNER JOIN km_agency k on k.AgencyID = i.AgencyID
-    Where i.IsActive = 1 AND k.IsActive = 1 AND i.AgencyID = $agencyId";
+    Where i.IsActive = 1 AND k.IsActive = 1 AND i.AgencyID = $agencyId
+    ORDER BY i.Number 
+    ";
     $sql_resultIssue =  mysqli_query($link,$sql_getIssue);
 
     $issues = array();
@@ -28,7 +31,7 @@ include("DateThai.php");
         $issues[] = $row;
     }
     
-    mysqli_close($link);
+
 
 ?>
 
@@ -413,11 +416,12 @@ include("DateThai.php");
 												<tr>
 													<td><?php  echo $row['Number']  ?></td>
 													<td><?php echo $row['Name'] ?></td>
-													<td>ยังไม่ได้ทำครับ</td>													
+                                                    <td><?php echo _progressiveIssue($row['IssueID'],$link).'%'; ?></td>															
 											
 													<td class="text-right"><?php echo $row['Agencyname'] ?></td>
                                                     <td>
-                                                    <button type="button"  class="btn btn-primary" onClick="onclick_issue(<?php echo $row['IssueID'];  ?>)" data-toggle="modal" data-target="#exampleModal" >
+                                                    <button type="button"  class="btn btn-primary" 
+                                                    onClick="onclick_issue(<?php echo $row['IssueID'];  ?>)" data-toggle="modal" data-target="#exampleModal" >
                                                         Edit
                                                     </button></td>
                                                 <td><?php echo DateThai($row['UpdateOn']);?></td>

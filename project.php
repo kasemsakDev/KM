@@ -10,6 +10,7 @@ if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
 
 require_once "dblink.php";
 include("DateThai.php");
+include("fun_progressive.php");
 
 //get list Project
 
@@ -44,7 +45,8 @@ echo "<br>";
 print_r($liststrategy);
 exit();*/
 
-mysqli_close($link);
+
+
 
 
 ?>
@@ -383,12 +385,13 @@ mysqli_close($link);
 
                                             <?php
                                                 $num = 1;
+                                                
                                             ?>
                                                 <?php foreach($projects as $row){ ?>
 												<tr>
 													<td><?php echo $row['Number'] ?></td>
 													<td><?php echo $row['Name'] ?></td>
-													<td>ยังไม่ได้ทำครับ</td>																								
+													<td><?php echo _progressiveProject($row['ProjectID'],$link).'%'; ?></td>																								
 													<td class="text-right"><?php echo $row['Agencyname'] ?></td>
                                                     <td><button type="button" class="btn btn-primary" 
                                                     data-toggle="modal" data-target="#exampleModal" 
