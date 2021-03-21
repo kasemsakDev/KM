@@ -62,8 +62,37 @@ ob_start();
 
      $sql = "INSERT INTO km_sunitdetail (SunitID,Name,Progressive,IsActive,CreateBy,CreateOn,UpdateBy,UpdateOn,Number)
     VALUES ('".$id."','".$name."','".$progressive."','1','".$userid."','".$datetime."','".$userid."','".$datetime."','".$number."');";          
+     mysqli_query($link,$sql);
 
-    mysqli_query($link,$sql);
+
+     $get_sunitdetail = "select SunitDetailID from km_sunitdetail
+     WHERE SunitID = $id
+     order by SunitDetailID DESC Limit 1";
+     $resultIdDetail =   mysqli_query($link,$get_sunitdetail);
+    //  echo      $get_sunitdetail; exit();
+     $SunitDetailID = 0;
+     while($row = mysqli_fetch_assoc($resultIdDetail))
+    {
+      $SunitDetailID = intval($row['SunitDetailID']);
+    }
+
+
+
+    for($i=0;$i<count($_FILES["filUpload"]["name"]);$i++)
+{
+    if($_FILES["filUpload"]["name"][$i] != "")
+    {
+    if(move_uploaded_file($_FILES["filUpload"]["tmp_name"][$i],"../Upload/".$_FILES["filUpload"]["name"][$i]))
+    {
+//*** Insert Record ***//
+      $strSQL = "";
+      $strSQL = "INSERT INTO km_upload ";
+      $strSQL .="(SunitDetailID,FileName,FilePath,IsActive,CreateBy,CreateOn,UpdateBy,UpdateOn) VALUES ('".$SunitDetailID."','".$_FILES["filUpload"]["name"][$i]."','"."Upload/".$_FILES["filUpload"]["name"][$i]."','1','".$userid."','".$datetime."','".$userid."','".$datetime."')";
+    //  echo $strSQL; exit();
+      mysqli_query($link,$strSQL);
+    }
+    }
+    } 
     mysqli_close($link);
     header("location: ../sunit.php");
 

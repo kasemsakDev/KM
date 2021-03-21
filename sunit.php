@@ -476,12 +476,12 @@ exit();
 </div>
 </div>
 
-<form action="Manage/upsertsunitDetail.php" method="POST">
+<form action="Manage/upsertsunitDetail.php" method="POST" enctype="multipart/form-data">
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">แก้ไข เจ้าภาพกลยุทธิ์ / หน่วยส่งมอบผลงาน</h5>
+                <h5 class="modal-title" id="exampleModalLabel">อัตเดท เจ้าภาพกลยุทธิ์ / หน่วยส่งมอบผลงาน</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <i aria-hidden="true" class="ki ki-close"></i>
                 </button>
@@ -511,7 +511,27 @@ exit();
                                 <input class="form-control" type="text" value="" name="Update_Name" id="Update_Name" autocomplete="off" required />
     </div>
     </div>
+    <div class="form-group row">
+    <label class="col-4 col-form-label">อัพโหลดไฟล์</label>
+    <div class="col-lg-8 col-md-8 col-xl-8">
+                                <input type="file" id="fileInput" name="filUpload[]" multiple><br /><br />
+                                <button class="btn btn-danger" type="button" id="Remove">Remove</button>
+                            </div>
+    </div>
+    <div class="form-group row">
+    <table class="table table-sm" id="tablePostedFile" width="100%">
 
+<tr>
+    <td>Filename</td>
+</tr>
+    <tr id="myTableFileRow">
+        <td></td>
+    </tr>
+         <tr>
+
+        </tr>
+</table>                                              
+    </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>
@@ -819,4 +839,72 @@ function ValidateCreate() {
 
     </script> 
 
-         
+<script type="text/javascript">
+    $(document).ready(function () {
+        //UploadFile Action
+
+
+
+
+        $("#fileInput").change(function() {
+          //  alert("fileInput");
+            var files = document.getElementById("fileInput").files;
+            var formdata = new FormData();
+            //   validateUpload = document.getElementById("fileInput");
+            var myTable = document.getElementById("tablePostedFile");
+            var rowCount = myTable.rows.length;
+          //  alert(rowCount);
+            for (var x=rowCount-1; x>0; x--) {
+            myTable.deleteRow(x);
+            }
+            
+            for (var i = 0; i < files.length; i++) {
+                formdata.append("fileInput", files[i]);
+
+                var tBody = $("#tablePostedFile")[0];
+
+                //Add Row.
+                var row = tBody.insertRow(-1);
+
+                //Add Number Cell
+                var cell = $(row.insertCell(-1)).attr("hidden", "hidden");
+                cell.html(tblRowCountFile);
+
+                var tblRowCountFile = 0;
+                if (tblRowCountFile == 0) {
+                    $('#myTableFileRow').remove();
+                }
+
+                //Add IsRemove Cell
+                var cell = $(row.insertCell(-1)).attr("hidden", "hidden");
+                var isRemoveCell = "<input id='File" + tblRowCountFile + "__IsRemove' name='KM_[" + tblRowCountFile + "].IsRemove' type='hidden' value='false'>";
+                cell.html(isRemoveCell);
+
+                //Add FileName<td> cell.
+                var cell = $(row.insertCell(-1)).addClass('text-left');
+                var FileName = "<input id='File" + tblRowCountFile + "__FileName' name='KM_[" + tblRowCountFile + "].FileName' type='hidden' value='" + files[i].name + "'><label  id='PR" + tblRowCountFile + "MaterialText' for='" + files[i].name + "' >" + "<i class='flaticon2-file text-info'></i>     "+files[i].name + "</label >";
+                cell.html(FileName);
+                tblRowCountFile++;
+            }
+            /*var xhr = new XMLHttpRequest();
+            xhr.open('POST', "/PurchaseRequest/Upload");
+            xhr.send(formdata);
+            xhr.onreadystatechange = function () {
+
+            }*/
+        });   
+
+        $('#Remove').on('click', function () {
+            $('#fileInput').val('');
+            var myTable = document.getElementById("tablePostedFile");
+            var rowCount = myTable.rows.length;
+        //    alert(rowCount);
+            for (var x=rowCount-1; x>0; x--) {
+            myTable.deleteRow(x);
+            }
+        });
+
+
+    })
+            </script>
+
