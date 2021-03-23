@@ -65,6 +65,7 @@ include("fun_progressive.php");
     <link href="Content/template/css/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
     <link href="Content/template/css/css/style.bundle.css" rel="stylesheet" type="text/css" />
     <link rel="shortcut icon" href="Content/template/assets/media/k.png" />
+    <link href="Content/template/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" />
     <!--end::Fonts ~/ -->
     <!--begin::Page Vendors Styles(used by this page)-->
 </head>
@@ -338,41 +339,17 @@ include("fun_progressive.php");
 										</div>
 									</div>
 									<div class="card-body">
-										<!--begin: Search Form-->
-										<!--begin::Search Form-->
-										<div class="mb-7">
-											<div class="row align-items-center">
-												<div class="col-lg-9 col-xl-8">
-													<div class="row align-items-center">
-														<div class="col-md-4 my-2 my-md-0">
-															<div class="input-icon">
-																<input type="text" class="form-control" placeholder="Search..." id="kt_datatable_search_query" />
-																<span>
-																	<i class="flaticon2-search-1 text-muted"></i>
-																</span>
-															</div>
-														</div>
-               
-													
-                                                        <div class="col-md-4 my-2 my-md-0">
-                                                        </div>
-													</div>
-												</div>
 
-											</div>
-										</div>
-										<!--end::Search Form-->
-										<!--end: Search Form-->
-										<!--begin: Datatable-->
-                                        <table class="datatable datatable-bordered datatable-head-custom" id="kt_datatable" width="100%">
+                                    <table class="table table-separate table-head-custom" id="tbI">
 											<thead>
 												<tr>
-													<th width="5%" title="Field #1">Number</th>
-													<th width="50%" title="Field #2">ประเด็นยุทธศาสตร์</th>
-													<th width="5%" title="Field #3">Progressive</th>			
-													<th  title="Field #4">Agency</th>
-                                                    <th width="10%" title="Field #5">Action</th>
-                                                    <th width="10%" title="Field #6">Order Date</th>
+													<th>Number</th>
+													<th>ประเด็นยุทธศาสตร์</th>
+													<th>Progressive</th>			
+													<th>Agency</th>
+                                                    <th>Date</th>
+                                                    <th>Action</th>
+                                           
                                                    
 												</tr>
 											</thead>
@@ -387,14 +364,13 @@ include("fun_progressive.php");
 													<td><?php echo $row['Name'] ?></td>
                                                     <td><?php echo _progressiveIndicator($row['IndicatorID'],$link).'%'; ?></td>															
 											
-													<td class="text-right"><?php echo $row['Agencyname'] ?></td>
+													<td><?php echo $row['Agencyname'] ?></td>
+                                                    <td><?php echo DateThai($row['UpdateOn']) ?></td>
                                                     <td><button type="button" class="btn btn-primary" 
                                                     data-toggle="modal" data-target="#exampleModal" 
                                                     onClick="onclick_Edit(<?php echo $row['IndicatorID'];  ?>)">
                                                     Edit
-                                                    </button></td>
-                                                    <td><?php echo DateThai($row['UpdateOn']) ?></td>
-                                                   
+                                                    </button></td>                                                                                              
 												</tr>
                                                 <?php  }  ?>
 											</tbody>
@@ -552,7 +528,7 @@ include("fun_progressive.php");
     <script src="Content/template/js/fullcalendar/fullcalendar.bundle.js"></script>
     <!--end::Page Vendors-->
     <!--begin::Page Scripts(used by this page)-->
-    <script src="Content/template/js/pages/html-table.js"></script>
+    <script src="Content/template/plugins/custom/datatables/datatables.bundle.js"></script>
 
 <script>
     function onclick_Edit(value)
@@ -582,7 +558,23 @@ include("fun_progressive.php");
 
     }
 </script>
+<script>
+        $(document).ready(function () {
+            var table = $('#tbI').DataTable({
 
+                columns: [
+                    { data: 'Number' },
+                    { data: 'ประเด็นยุทธศาสตร์' },
+                    { data: 'Progressive' },
+                    { data: 'Agency' },
+                    { data: 'Date' },
+                    { data: 'Action' }
+                ],
+                "Number": [[ 0, "ASC" ]]
+            });
+
+        });
+    </script>  
                     </body>
                     <!--end::Footer-->
     <!--end::Header-->

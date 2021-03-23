@@ -57,6 +57,7 @@ $agencyId = $_SESSION["AgencyID"];
     <link href="Content/template/css/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
     <link href="Content/template/css/css/style.bundle.css" rel="stylesheet" type="text/css" />
     <link rel="shortcut icon" href="Content/template/assets/media/k.png" />
+    <link href="Content/template/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" />
     <!--end::Fonts ~/ -->
     <!--begin::Page Vendors Styles(used by this page)-->
 </head>
@@ -330,53 +331,17 @@ $agencyId = $_SESSION["AgencyID"];
 										</div>
 									</div>
 									<div class="card-body">
-										<!--begin: Search Form-->
-										<!--begin::Search Form-->
-										<div class="mb-7">
-											<div class="row align-items-center">
-												<div class="col-lg-9 col-xl-8">
-													<div class="row align-items-center">
-														<div class="col-md-4 my-2 my-md-0">
-															<div class="input-icon">
-																<input type="text" class="form-control" placeholder="Search..." id="kt_datatable_search_query" />
-																<span>
-																	<i class="flaticon2-search-1 text-muted"></i>
-																</span>
-															</div>
-														</div>
-                   
-														<div class="col-md-4 my-2 my-md-0">
-															<!--<div class="d-flex align-items-center">
-																<label class="mr-3 mb-0 d-none d-md-block">Agency:</label>
-																<select class="form-control" id="kt_datatable_search_Agency">
-																	<option value="">All</option>
-																	<option value="1">ฐานทัพเรือ สัตหีบ บก</option>
-																	<option value="2">ฐานทัพเรือ กรุงเทพ กองเรือ</option>
-																	<option value="3">หน่วยบัญชาการนาวิกโยธิน ปืนใหญ่</option>
-																</select>
-															</div>-->
-														</div>
-                                                        <div class="col-md-4 my-2 my-md-0">
-                                                        </div>
-													</div>
-												</div>
-												<!--<div class="col-lg-3 col-xl-4 mt-5 mt-lg-0">
-													<a href="#" class="btn btn-light-primary px-6 font-weight-bold">Search</a>
-												</div> -->
-											</div>
-										</div>
-										<!--end::Search Form-->
-										<!--end: Search Form-->
-										<!--begin: Datatable-->
-                                        <table class="datatable datatable-bordered datatable-head-custom" id="kt_datatable" width="100%">
+			
+                                    <table class="table table-separate table-head-custom" id="tbI">
 											<thead>
 												<tr>
-													<th width="5%" title="Field #1">Number</th>
-													<th width="50%" title="Field #2">เป้าประสงค์</th>
-													<th width="5%" title="Field #3">Progressive</th>			
-													<th  title="Field #4">Agency</th>
-                                                    <th width="10%" title="Field #5">Action</th>
-                                                    <th width="10%" title="Field #6">Order Date</th>
+													<th>Number</th>
+													<th>เป้าประสงค์</th>
+													<th>Progressive</th>			
+													<th>Agency</th>
+                                                    <th> Date</th>
+                                                    <th>Action</th>
+                                                 
                                                    
 												</tr>
 											</thead>
@@ -391,13 +356,12 @@ $agencyId = $_SESSION["AgencyID"];
 													<td><?php echo $row['Name'] ?></td>
                                                     <td><?php echo _progressivePurpose($row['PurposeID'],$link).'%'; ?></td>											
 											
-													<td class="text-right"><?php echo $row['agency_name'] ?></td>
+													<td><?php echo $row['agency_name'] ?></td>
+                                                    <td><?php echo DateThai($row['UpdateOn']) ?></td>
                                                     <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" 
                                                     onClick="onclick_issue(<?php echo $row['PurposeID'];  ?>)">
 Edit
 </button></td>
-                                                    <td><?php echo DateThai($row['UpdateOn']) ?></td>
-                                                   
 												</tr>
                                                 <?php  }  ?>
 											</tbody>
@@ -544,7 +508,7 @@ Edit
     <script src="Content/template/js/fullcalendar/fullcalendar.bundle.js"></script>
     <!--end::Page Vendors-->
     <!--begin::Page Scripts(used by this page)-->
-    <script src="Content/template/js/pages/html-table.js"></script>
+    <script src="Content/template/plugins/custom/datatables/datatables.bundle.js"></script>
 
     <script>
     function onclick_issue(value)
@@ -574,14 +538,25 @@ Edit
  });
 
     }
+    </script> 
+    <script>
+        $(document).ready(function () {
+            var table = $('#tbI').DataTable({
 
+                columns: [
+                    { data: 'Number' },
+                    { data: 'เป้าประสงค์' },
+                    { data: 'Progressive' },
+                    { data: 'Agency' },
+                    { data: 'Date' },
+                    { data: 'Action' }
+                ],
+                "Number": [[ 0, "ASC" ]]
+            });
 
-
-
-
-
-    </script>                                         
-
+        });
+    </script>   
                     </body>
+                
                     <!--end::Footer-->
     <!--end::Header-->

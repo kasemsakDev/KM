@@ -57,14 +57,10 @@ ob_start();
     $name = $_POST['Update_Name'];
     $userid = $_SESSION["id"];
     $datetime = date('Y-m-d H:i:s');
-
     $number = _getNumber($id,$link);
-
      $sql = "INSERT INTO km_sunitdetail (SunitID,Name,Progressive,IsActive,CreateBy,CreateOn,UpdateBy,UpdateOn,Number)
     VALUES ('".$id."','".$name."','".$progressive."','1','".$userid."','".$datetime."','".$userid."','".$datetime."','".$number."');";          
      mysqli_query($link,$sql);
-
-
      $get_sunitdetail = "select SunitDetailID from km_sunitdetail
      WHERE SunitID = $id
      order by SunitDetailID DESC Limit 1";
@@ -75,9 +71,6 @@ ob_start();
     {
       $SunitDetailID = intval($row['SunitDetailID']);
     }
-
-
-
     for($i=0;$i<count($_FILES["filUpload"]["name"]);$i++)
 {
     if($_FILES["filUpload"]["name"][$i] != "")
@@ -91,8 +84,8 @@ ob_start();
     //  echo $strSQL; exit();
       mysqli_query($link,$strSQL);
     }
-    }
-    } 
+  }
+} 
     mysqli_close($link);
     header("location: ../sunit.php");
 

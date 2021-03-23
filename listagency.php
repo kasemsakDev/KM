@@ -52,10 +52,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     <meta name="description" content="Updates and statistics" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <link rel="canonical" href="https://keenthemes.com/metronic" />
-
+    <link href="Content/template/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" />
     <!--begin::Fonts-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
-
+    
 
     <link href="Content/template/css/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" type="text/css" />
     <link href="Content/template/css/prismjs/prismjs.bundle.css" rel="stylesheet" type="text/css" />
@@ -274,34 +274,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 									<!--end::Title-->
 									<!--begin::Separator-->
 									<div class="subheader-separator subheader-separator-ver mt-2 mb-2 mr-5 bg-gray-200"></div>
-									<!--end::Separator-->
-									<!--begin::Search Form-->
-									<div class="d-flex align-items-center" id="kt_subheader_search">
-										<span class="text-dark-50 font-weight-bold" id="kt_subheader_total"><?php echo count($rows); ?> Total</span>
-										<form class="ml-5" method ="GET" id="searchform">
-											<div class="input-group input-group-sm input-group-solid" style="max-width: 175px">
-                                            <input type="text" class="form-control" id="kt_subheader_search_form" placeholder="Search..." name="search">
-												<div class="input-group-append">
-                                                <span class="input-group-text"  style = "cursor: pointer;" id="iconsearch">
-														<span class="svg-icon">
-															<!--begin::Svg Icon | path:assets/media/svg/icons/General/Search.svg-->
-															<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-																<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-																	<rect x="0" y="0" width="24" height="24"></rect>
-																	<path d="M14.2928932,16.7071068 C13.9023689,16.3165825 13.9023689,15.6834175 14.2928932,15.2928932 C14.6834175,14.9023689 15.3165825,14.9023689 15.7071068,15.2928932 L19.7071068,19.2928932 C20.0976311,19.6834175 20.0976311,20.3165825 19.7071068,20.7071068 C19.3165825,21.0976311 18.6834175,21.0976311 18.2928932,20.7071068 L14.2928932,16.7071068 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
-																	<path d="M11,16 C13.7614237,16 16,13.7614237 16,11 C16,8.23857625 13.7614237,6 11,6 C8.23857625,6 6,8.23857625 6,11 C6,13.7614237 8.23857625,16 11,16 Z M11,18 C7.13400675,18 4,14.8659932 4,11 C4,7.13400675 7.13400675,4 11,4 C14.8659932,4 18,7.13400675 18,11 C18,14.8659932 14.8659932,18 11,18 Z" fill="#000000" fill-rule="nonzero"></path>
-																</g>
-															</svg>
-															<!--end::Svg Icon-->
-														</span>
-														<!--<i class="flaticon2-search-1 icon-sm"></i>-->
-													</span>
-												</div>
-											</div>
-										</form>
-									</div>
-									<!--end::Search Form-->
-									<!--begin::Group Actions-->
+				
 									<div class="d-flex- align-items-center flex-wrap mr-2 d-none" id="kt_subheader_group_actions">
 										<div class="text-dark-50 font-weight-bold">
 										<span id="kt_subheader_group_selected_rows">23</span>Selected:</div>
@@ -371,15 +344,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 									<div class="card-body">
 									
                                     										<!--begin: Datatable-->
-                 <table class="datatable datatable-bordered datatable-head-custom" id="kt_datatable" width="100%">
+                    <table class="table table-separate table-head-custom" id="tbI">
 											<thead>
 												<tr>
-													<th width="5%" title="Field #1">Number</th>
-													<th width="50%" title="Field #2">Agency Name</th>															
-                                                    <th width="10%" title="Field #4">Actions</th>
-                                                    <th width="10%" title="Field #5">Date</th>
-                                                   
-                                                   
+													<th>Number</th>
+													<th>AgencyName</th>															                                                
+                                                    <th>Date</th> 
+                                                    <th>Actions</th>                                               
 												</tr>
 											</thead>
 											<tbody>
@@ -391,14 +362,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 												<tr>
 													<td><?php echo $num ?></td>
 													<td><?php echo $row['Name']?></td>
-                                                 
+                                                    <td><?php echo DateThai($row['UpdateOn']);?></td>
                                                     <td><a href="addagency.php?id=<?php echo $row['AgencyID'] ?>"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
                                                         Edit
                                                     </button></a>                                              
                                                       <a href="Manage/delagency.php?id=<?php echo $row['AgencyID']; ?>">
                                                         <input type="button" class="btn btn-danger btn-shadow font-weight-bold mr-2" value="Remove"></a>                                                    
                                                     </td> 		
-                                                    <td><?php echo DateThai($row['UpdateOn']);?></td>
+                                                  
 												</tr>
  												<?php  $num++; } ?>
 											</tbody>
@@ -447,7 +418,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     <!--begin::Page Scripts(used by this page)-->
     <script src="Content/template/js/pages/html-table.js"></script>
 
-    <script src="assets/js/pages/custom/contacts/list-datatable.js"></script>
+    <script src="Content/template/plugins/custom/datatables/datatables.bundle.js"></script>
     <script>
  //iconsearch
  $(document).ready(function() {
@@ -458,6 +429,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
 });
 </script>
+<script>
+        $(document).ready(function () {
+            var table = $('#tbI').DataTable({
+
+                columns: [
+                    { data: 'Number' },
+                    { data: 'AgencyName' },
+                    { data: 'Date' },
+                    { data: 'Action' }
+                ],
+                "Number": [[ 0, "ASC" ]]
+            });
+
+        });
+    </script>  
                     </body>
                     <!--end::Footer-->
     <!--end::Header-->

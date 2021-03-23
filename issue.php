@@ -53,6 +53,7 @@ include("fun_progressive.php");
     <link href="Content/template/css/prismjs/prismjs.bundle.css" rel="stylesheet" type="text/css" />
     <link href="Content/template/css/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
     <link href="Content/template/css/css/style.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="Content/template/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" />
     <link rel="shortcut icon" href="Content/template/assets/media/k.png" />
     <!--end::Fonts ~/ -->
     <!--begin::Page Vendors Styles(used by this page)-->
@@ -360,53 +361,15 @@ include("fun_progressive.php");
 										</div>
 									</div>
 									<div class="card-body">
-										<!--begin: Search Form-->
-										<!--begin::Search Form-->
-										<div class="mb-7">
-											<div class="row align-items-center">
-												<div class="col-lg-9 col-xl-8">
-													<div class="row align-items-center">
-														<div class="col-md-4 my-2 my-md-0">
-															<div class="input-icon">
-																<input type="text" class="form-control" placeholder="Search..." id="kt_datatable_search_query" />
-																<span>
-																	<i class="flaticon2-search-1 text-muted"></i>
-																</span>
-															</div>
-														</div>
-														<!--<div class="col-md-4 my-2 my-md-0">
-															<div class="d-flex align-items-center">
-																<label class="mr-3 mb-0 d-none d-md-block">Agency:</label>
-																<select class="form-control" id="">
-																	<option value="">All</option>
-																	<option value="1">ฐานทัพเรือ สัตหีบ บก</option>
-																	<option value="2">ฐานทัพเรือ กรุงเทพ กองเรือ</option>
-																	<option value="3">หน่วยบัญชาการนาวิกโยธิน ปืนใหญ่</option>
-																</select>
-															</div>
-														</div> -->
-                                                        <div class="col-md-4 my-2 my-md-0">
-                                                        </div>
-                                                        <div class="col-md-4 my-2 my-md-0">
-                                                        </div>
-													</div>
-												</div>
-
-											</div>
-										</div>
-										<!--end::Search Form-->
-										<!--end: Search Form-->
-										<!--begin: Datatable-->
-										<table class="datatable datatable-bordered datatable-head-custom" id="kt_datatable" width="100%">
+                                        <table class="table table-separate table-head-custom" id="tbI">
 											<thead>
 												<tr>
-													<th width="5%" title="Field #1">Number</th>
-													<th width="50%" title="Field #2">ประเด็นยุทธศาสตร์</th>
-													<th width="5%" title="Field #3">Progressive</th>			
-													<th  title="Field #4">Agency</th>
-                                                    <th width="10%" title="Field #5">Action</th>
-                                                    <th width="10%" title="Field #6">Order Date</th>
-                                                   
+													<th>Number</th>
+													<th>ประเด็นยุทธศาสตร์</th>
+													<th>Progressive</th>			
+													<th>Agency</th>
+                                                    <th>Date</th>
+                                                    <th>Action</th>                                                                                                
 												</tr>
 											</thead>
 											<tbody>
@@ -418,14 +381,13 @@ include("fun_progressive.php");
 													<td><?php echo $row['Name'] ?></td>
                                                     <td><?php echo _progressiveIssue($row['IssueID'],$link).'%'; ?></td>															
 											
-													<td class="text-right"><?php echo $row['Agencyname'] ?></td>
-                                                    <td>
+													<td><?php echo $row['Agencyname'] ?></td>                                    
+                                                <td><?php echo DateThai($row['UpdateOn']);?></td>
+                                                <td>
                                                     <button type="button"  class="btn btn-primary" 
                                                     onClick="onclick_issue(<?php echo $row['IssueID'];  ?>)" data-toggle="modal" data-target="#exampleModal" >
                                                         Edit
                                                     </button></td>
-                                                <td><?php echo DateThai($row['UpdateOn']);?></td>
-                                                   
 												</tr>
                                                 <?php  } ?>
 												
@@ -467,7 +429,7 @@ include("fun_progressive.php");
 </div> -->
 
 <form action="Manage/upsertissue.php" method="POST">
-<div class="modal fade" id="exampleModalSizeLg" tabindex="-1" role="dialog" aria-labelledby="exampleModalSizeLg" aria-hidden="true">
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalSizeLg" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -547,7 +509,7 @@ include("fun_progressive.php");
                     </div>
     </div>
 
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="Content/template/css/global/plugins.bundle.js"></script>
     <script src="Content/template/css/prismjs/prismjs.bundle.js"></script>
     <script src="Content/template/js/scripts.bundle.js"></script>
@@ -556,7 +518,9 @@ include("fun_progressive.php");
     <script src="Content/template/js/fullcalendar/fullcalendar.bundle.js"></script>
     <!--end::Page Vendors-->
     <!--begin::Page Scripts(used by this page)-->
-    <script src="Content/template/js/pages/html-table.js"></script>
+   
+    <script src="Content/template/plugins/custom/datatables/datatables.bundle.js"></script>
+
 
     <script>
     function onclick_issue(value)
@@ -579,6 +543,24 @@ include("fun_progressive.php");
  });
 
     }
+
+    </script>
+    <script>
+        $(document).ready(function () {
+            var table = $('#tbI').DataTable({
+
+                columns: [
+                    { data: 'Number' },
+                    { data: 'ประเด็นยุทธศาสตร์' },
+                    { data: 'Progressive' },
+                    { data: 'Agency' },
+                    { data: 'Date' },
+                    { data: 'Action' }
+                ],
+                "Number": [[ 0, "ASC" ]]
+            });
+
+        });
     </script>                                          
 
                     </body>

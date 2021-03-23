@@ -64,6 +64,7 @@ exit();
     <link href="Content/template/css/prismjs/prismjs.bundle.css" rel="stylesheet" type="text/css" />
     <link href="Content/template/css/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
     <link href="Content/template/css/css/style.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="Content/template/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" />
     <link rel="shortcut icon" href="Content/template/assets/media/k.png" />
     <!--end::Fonts ~/ -->
     <!--begin::Page Vendors Styles(used by this page)-->
@@ -363,15 +364,16 @@ exit();
 										<!--end::Search Form-->
 										<!--end: Search Form-->
 										<!--begin: Datatable-->
-                                        <table class="datatable datatable-bordered datatable-head-custom" id="kt_datatable" width="100%">
+                                        <table class="table table-separate table-head-custom" id="tbI">
 											<thead>
 												<tr>
-													<th width="5%" title="Field #1">Number</th>
-													<th width="50%" title="Field #2">กลยุทธ์-เป้าประสงค์</th>
-													<th width="5%" title="Field #3">Progressive</th>			
-													<th  title="Field #4">Agency</th>
-                                                    <th width="10%" title="Field #5">Action</th>
-                                                    <th width="10%" title="Field #6">Order Date</th>
+													<th>Number</th>
+													<th>กลยุทธ์-เป้าประสงค์</th>
+													<th>Progressive</th>			
+													<th>Agency</th>
+                                                    <th> Date</th>
+                                                    <th>Action</th>
+                                                  
                                                    
 												</tr>
 											</thead>
@@ -386,13 +388,14 @@ exit();
 													<td><?php echo $row['Name'] ?></td>
 													<td><?php echo _progressiveStrategy($row['StrategyID'],$link).'%'; ?></td>													
 											
-													<td class="text-right"><?php echo $row['Agencyname'] ?></td>
+													<td><?php echo $row['Agencyname'] ?></td>
+                                                    <td><?php echo DateThai($row['UpdateOn']) ?></td>
                                                     <td><button type="button" class="btn btn-primary" 
                                                     data-toggle="modal" data-target="#exampleModal" 
                                                     onClick="onclick_Edit(<?php echo $row['StrategyID'];  ?>)">
                                                     Edit
                                                     </button></td>
-                                                    <td><?php echo DateThai($row['UpdateOn']) ?></td>
+                                                    
                                                    
 												</tr>
                                                 <?php  }  ?>
@@ -553,7 +556,7 @@ exit();
     <!--end::Page Vendors-->
     <!--begin::Page Scripts(used by this page)-->
     <script src="Content/template/js/pages/html-table.js"></script>
-
+    <script src="Content/template/plugins/custom/datatables/datatables.bundle.js"></script>
     <script>
     function onclick_Edit(value)
     {
@@ -582,7 +585,23 @@ exit();
 
     }
 </script>
+<script>
+        $(document).ready(function () {
+            var table = $('#tbI').DataTable({
 
+                columns: [
+                    { data: 'Number' },
+                    { data: 'กลยุทธ์-เป้าประสงค์' },
+                    { data: 'Progressive' },
+                    { data: 'Agency' },
+                    { data: 'Date' },
+                    { data: 'Action' }
+                ],
+                "Number": [[ 0, "ASC" ]]
+            });
+
+        });
+    </script>  
                     </body>
                     <!--end::Footer-->
     <!--end::Header-->

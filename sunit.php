@@ -118,6 +118,7 @@ exit();
     <link href="Content/template/css/prismjs/prismjs.bundle.css" rel="stylesheet" type="text/css" />
     <link href="Content/template/css/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
     <link href="Content/template/css/css/style.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="Content/template/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" />
     <link rel="shortcut icon" href="Content/template/assets/media/k.png" />
     <!--end::Fonts ~/ -->
     <!--begin::Page Vendors Styles(used by this page)-->
@@ -415,16 +416,16 @@ exit();
 										</div>
 
       
-                                        <table class="datatable datatable-bordered datatable-head-custom" id="kt_datatable" width="100%">
+                                        <table class="table table-separate table-head-custom" id="tbI">
 											<thead>
 												<tr>
-													<th width="5%" title="Field #1">Number</th>
-                                                    <th width="50%" title="Field #2">โครงการ</th>
-													<th width="50%" title="Field #3">หน่วยที่รับผิดชอบ</th>
-													<th width="5%" title="Field #4">Progressive</th>			                                                   
-                                                    <th width="10%" title="Field #5">Name</th> 
-                                                    <th width="10%" title="Field #6">Action</th>  
-                                                    <th width="10%" title="Field #7">Order Date</th>       
+													<th>Number</th>
+                                                    <th>โครงการ</th>
+													<th>หน่วยที่รับผิดชอบ</th>
+													<th>Progressive</th>			                                                   
+                                                    <th>Name</th>                                                
+                                                    <th>Date</th>
+                                                    <th>Action</th> 
                                                                                    
 												</tr>
 											</thead>
@@ -436,16 +437,19 @@ exit();
 													<td><?php  echo $master['ProjectName'] ?></td>
                                                     <td><?php echo subsplit($master['AgencyList'],$link);   ?></td>
 													<td><?php echo  $totalProgressive.'%' ?></td>						
-                                                    <td><?php  echo $master['Name'] ?></td>     																															
+                                                    <td><?php  echo $master['Name'] ?></td>     		
+                                                    <td><?php echo DateThai($master['UpdateOn']) ?></td>  																													
                                                     <td>
                                                     <?php if($totalProgressive != 100){ ?>
                                                     <button type="button" class="btn btn-primary" data-toggle="modal"                                                    
                                                      data-target="#exampleModal"
                                                      onClick="onclick_Update(<?php echo $master['SunitID'];  ?>)"
-                                                     >Update</button>
+                                                     >Update</button>                                                 
                                                      <?php } ?>
+                                                     <a href="sunitdetail.php?id=<?php echo $master['SunitID']; ?>" target="_blank">
+                                                        <input type="button" class="btn btn-danger btn-shadow font-weight-bold mr-2" value="Detail"></a>   
                                                      </td>
-                                                    <td><?php echo DateThai($master['UpdateOn']) ?></td>                                             
+                                                                                               
 												</tr>
 
                                                 <?php  $Detail = GetSunitDetail($master['SunitID'],$link);
@@ -458,9 +462,10 @@ exit();
 													<td><?php  echo $master['ProjectName'] ?></td>
                                                     <td><?php echo subsplit($master['AgencyList'],$link);   ?></td>
 													<td><?php  echo $detail['Progressive']."%" ?></td>			
-                                                    <td><?php  echo $detail['Name'] ?></td>   																																		
+                                                    <td><?php  echo $detail['Name'] ?></td>
+                                                    <td><?php  echo DateThai($detail['UpdateOn']) ?></td>     																																		
                                                     <td></td>
-                                                    <td><?php  echo DateThai($detail['UpdateOn']) ?></td>                                             
+                                                                                               
 												</tr>
                                                 <?php } ?>
                                             <?php } ?>
@@ -501,7 +506,8 @@ exit();
             <div class="col-9">
             <input class="form-control" type="text" value="" name = "Update_Progressive" id="Update_Progressive" onchange="handleChange(this);" onkeypress="return isNumber(event)"
             autocomplete="off" required
-            />										
+            />	
+
             </div>               
                 </div>
     <div class="form-group row">
@@ -633,7 +639,7 @@ id="createform">
     <script src="Content/template/js/fullcalendar/fullcalendar.bundle.js"></script>
     <!--end::Page Vendors-->
     <!--begin::Page Scripts(used by this page)-->
-    <script src="Content/template/js/pages/html-table.js"></script>
+    <script src="Content/template/plugins/custom/datatables/datatables.bundle.js"></script>
 
 
 
@@ -907,4 +913,22 @@ function ValidateCreate() {
 
     })
             </script>
+    <script>
+        $(document).ready(function () {
+            var table = $('#tbI').DataTable({
 
+                columns: [
+                    { data: 'Number' },
+                    { data: 'โครงการ' },
+                    { data: 'หน่วยที่รับผิดชอบ' },
+                    { data: 'Progressive' },
+                    { data: 'Name' },
+                    { data: 'Date' },
+                    { data: 'Action' }
+                ],
+                "Number": [[ 0, "ASC" ]]
+            });
+
+        });
+
+    </script>
