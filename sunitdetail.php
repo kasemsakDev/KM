@@ -68,7 +68,7 @@ function GetProgressive($id,$link)
     }
     return $_progressive;
 }
-
+include("DateThai.php");
 /*
 print_r($sunit);
 echo "<br>";
@@ -117,100 +117,101 @@ exit();
                                 </h3>
                             </div>
                         </div>
-                        <div class="card-body">
-                        <div class="form-group mb-16">
-                        <div class="col-9">
-                        <div class="d-flex flex-wrap mt-14">
-                      
-													<div class="mr-12 d-flex flex-column mb-7">
-														<span class="d-block font-weight-bold mb-4">Start Date</span>
-														<span class="btn btn-light-primary btn-sm font-weight-bold btn-upper btn-text">14 Jan, 16</span>
-													</div>
+    <div class="card-body">
+                        <div class="form-group row">
+                          <div class="col-9">                    
+							<div class="mr-12 d-flex flex-column mb-7">
+								<span class="d-block font-weight-bold mb-4">Start Date</span>
+									<span class="btn btn-light-primary btn-sm font-weight-bold btn-upper btn-text">14 Jan, 16</span>
+							</div>
 													<!--begin::Progress-->
-                                                    <?php $totalProgressive =  GetProgressive($sunit[0]['SunitID'],$link) ?>
-													<div class="flex-row-fluid mb-7">
+                                        <?php $totalProgressive =  GetProgressive($sunit[0]['SunitID'],$link) ?>
+							<div class="flex-row-fluid mb-7">
 														<span class="d-block font-weight-bold mb-4">Progress</span>
 														<div class="d-flex align-items-center pt-2">
 															<div class="progress progress-xs mt-2 mb-2 w-100">
 																<div class="progress-bar bg-warning" role="progressbar" style="width: <?php echo $totalProgressive; ?>%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
 															</div>
 															<span class="ml-3 font-weight-bolder"><?php echo $totalProgressive; ?>%</span>
-														</div>
-													</div>
-													<!--end::Progress-->
-                                                    </div>
+							</div>
 						</div>
+         </div>
+         </div>                                                  
                                     <div class="form-group row">
                                         <div class="col-2 col-form-label font-weight-bold text-right"><p>หมายเหตุ :</p></div>
                                         <div class="col-4">
                                         <input type="text" class="form-control" value="<?php echo $sunit[0]['Name'] ?>" disabled>
                                         </div>
                                     </div>
-                                </div>
-                        </div>
 
 
-           <div class="container">
-           <!-- Detail and upload file -->
-
-           <?php  
+                                    <?php  
                    if(count($sunitDetail) > 0){ 
                        foreach($sunitDetail as $detail){
-            ?>                                          
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card card-custom card-stretch">
-                        <div class="card-header">
-                            <div class="card-title">
+            ?>        
+
+                          <div class="card-title">
                                     <span class="card-icon">
                                         <i class="flaticon2-menu text-danger"></i>
                                     </span>
                                 <h3 class="card-label">
-                                    Log Update  <span class="btn btn-light-primary btn-sm font-weight-bold btn-upper btn-text">14 Jan, 16</span> : xxxxx 
+                                    Log Update  <span class="btn btn-light-primary btn-sm font-weight-bold btn-upper btn-text"><?php echo DateThai($detail['UpdateOn']);?></span>  
                                 </h3>
                             </div>
-                        </div>
-                        <div class="card-body">                                                                                              
-                         <div class="form-group row">
-                         <div class="col-2 col-form-label font-weight-bold text-right"><p>หมายเหตุ :</p></div>
-                                        <div class="col-4">
-                                        <input type="text" class="form-control" disabled>
-                                        </div>
-                                    </div>
+
+
                                     <div class="form-group row">
-                         <div class="col-2 col-form-label font-weight-bold text-right"><p>Progressive :</p></div>
+                                        <div class="col-2 col-form-label font-weight-bold text-right"><p>หมายเหตุ :</p></div>
                                         <div class="col-4">
-                                        <input type="text" class="form-control" disabled>
+                                        <input type="text" class="form-control" value="<?php echo $detail['Name'] ?>" disabled>
                                         </div>
                                     </div>
-                         </div>
+                                    
+                                    <div class="form-group row">
+                                    <div class="col-2 col-form-label font-weight-bold text-right"><p>Progressive :</p></div>
+                                        <div class="col-4">
+                                        <input type="text" class="form-control" value="<?php echo $detail['Progressive'] ?> %" disabled>
+                                        </div>
+                                    </div>
 
-                        <?php $Detail = GetUpload($sunit[0]['SunitID'],$link); ?>
 
-                         <div class="form-group row">
+                                    <?php $Detail = GetUpload($detail['SunitDetailID'],$link); ?>
+                                    <?php if(count($sunitDetail) > 0) {   
+                                        
+                                        foreach($Detail as $upload){
+                                        $num = 1;  ?>
+
+                                        <div class="form-group row">
                          <div class="col-2 col-form-label font-weight-bold text-right"><p>upload file :</p></div>
-                         <div class="container">
+
                          <table class="table table-bordered table-sm" id="tablePostedFile" width="100%">
+                         <tr>
+                            <th>number </th>
+                            <th>name </th>
+                        </tr>
                             <tr>
-                            <td>#</td>
-                            <td>Filename</td>
+                            <td><?php echo $num; ?>  </td>
+                            <td><a href="<?php echo $upload['FilePath']; ?>"><?php echo $upload['FileName']; ?></a> </td>
                             </tr>
-                            <tr>
-                            <td>1</td>
-                            <td></td>
-                           </tr>
                         </table>
                         </div>
-                        </div>
-                        </div>                 
-                    </div>
-                </div>
-            </div>
-                        <?php } //end loop sunit Detail  ?>
-            <?php } //end if ?>
+                                    <?php $num++; } ?>
+                                    <?php } ?>
+                            <?php } ?>
 
-            </div>
-        </div>
+                            <?php } ?>
+
+
+
+         </div>    
+      
+
+
+
+
+
+
+     
 
         
 
@@ -219,18 +220,9 @@ exit();
             </div>
         </div>
     </div>
-
-
     <!--begin::Entry-->
-  
         <!--begin::Container-->
-
         </div>
-  
-   
-
-       
-
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="Content/template/css/global/plugins.bundle.js"></script>
     <script src="Content/template/css/prismjs/prismjs.bundle.js"></script>
