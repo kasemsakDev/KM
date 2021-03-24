@@ -176,10 +176,7 @@ exit();
 
 
                                     <?php $Detail = GetUpload($detail['SunitDetailID'],$link); ?>
-                                    <?php if(count($sunitDetail) > 0) {   
-                                        
-                                        foreach($Detail as $upload){
-                                        $num = 1;  ?>
+    
 
                                         <div class="form-group row">
                          <div class="col-2 col-form-label font-weight-bold text-right"><p>upload file :</p></div>
@@ -189,14 +186,19 @@ exit();
                             <th>number </th>
                             <th>name </th>
                         </tr>
+                        <?php if(count($sunitDetail) > 0) {   
+                                        
+                           foreach($Detail as $upload){
+                             $num = 1;  ?>
                             <tr>
                             <td><?php echo $num; ?>  </td>
                             <td><a href="<?php echo $upload['FilePath']; ?>"><?php echo $upload['FileName']; ?></a> </td>
                             </tr>
+                            <?php $num++; } ?>
+                                    <?php } ?>
                         </table>
                         </div>
-                                    <?php $num++; } ?>
-                                    <?php } ?>
+
                             <?php } ?>
 
                             <?php } ?>
