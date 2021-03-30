@@ -34,7 +34,7 @@ function _progressiveProject($id,$link)
          }
          $progressive = (float)(($tasks * 100) / $total);
      }
-     return  $progressive;
+     return number_format($progressive, 2, '.', '');
 }
 
 function _progressiveStrategy($id,$link)
@@ -63,7 +63,7 @@ function _progressiveStrategy($id,$link)
          }
          $progressive = (float)(($tasks * 100) / $total);
      }
-     return  $progressive;
+     return number_format($progressive, 2, '.', '');
 }
 
 function _progressiveIndicator($id,$link)
@@ -93,7 +93,7 @@ function _progressiveIndicator($id,$link)
          }
          $progressive = (float)(($tasks * 100) / $total);
      }
-     return  $progressive;
+     return number_format($progressive, 2, '.', '');
 }
 
 function _progressivePurpose($id,$link)
@@ -124,7 +124,7 @@ function _progressivePurpose($id,$link)
          }
          $progressive = (float)(($tasks * 100) / $total);
      }
-     return  $progressive;
+     return number_format($progressive, 2, '.', '');
 }
 
 function _progressiveIssue($id,$link)
@@ -156,7 +156,7 @@ function _progressiveIssue($id,$link)
          }
          $progressive = (float)(($tasks * 100) / $total);
      }
-     return  $progressive;
+     return number_format($progressive, 2, '.', '');
 }
 
 ?>

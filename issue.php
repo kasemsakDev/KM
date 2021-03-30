@@ -17,7 +17,6 @@ include("fun_progressive.php");
 //get list ประเด็ดยุทธศาสตร์
 
     $agencyId = $_SESSION["AgencyID"];
-
     $sql_getIssue = "SELECT i.*,k.Name as Agencyname,k.AgencyID as K_AgencyID,k.IsActive as K_IsActive From km_issue i
     INNER JOIN km_agency k on k.AgencyID = i.AgencyID
     Where i.IsActive = 1 AND k.IsActive = 1 AND i.AgencyID = $agencyId

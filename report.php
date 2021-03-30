@@ -1,11 +1,14 @@
 <?php
 session_start();
 ob_start();
+require_once "dblink.php";
 
 if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
 	header("location: index.php");
 	exit();
 }
+
+
 
 ?>
 
@@ -24,7 +27,7 @@ if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
 
     <link href="Content/template/css/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" type="text/css" />
     <link href="Content/template/css/prismjs/prismjs.bundle.css" rel="stylesheet" type="text/css" />
-    <link href="Content/template/css/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="Content/template/css/global/plugins.bundle.css" rel="stylesheet" type="text/css" /><!-- อันนี้ -->
     <link href="Content/template/css/css/style.bundle.css" rel="stylesheet" type="text/css" />
     <link rel="shortcut icon" href="Content/template/assets/media/k.png" />
     <!--end::Fonts ~/ -->
@@ -256,243 +259,20 @@ if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
 									</div>
 								
 								</div>
-								<!--end::Notice-->
+
+
 								<div class="row">
-									<div class="col-lg-6">
-										<!--begin::Card-->
-										<div class="card card-custom gutter-b">
-											<!--begin::Header-->
-											<div class="card-header h-auto">
-												<!--begin::Title-->
-												<div class="card-title py-5">
-													<h3 class="card-label">Line Chart</h3>
-												</div>
-												<!--end::Title-->
-											</div>
-											<!--end::Header-->
-											<div class="card-body">
-												<!--begin::Chart-->
-												<div id="chart_1"></div>
-												<!--end::Chart-->
-											</div>
-										</div>
-										<!--end::Card-->
-									</div>
-									<div class="col-lg-6">
+									<div class="col-lg-12">
 										<!--begin::Card-->
 										<div class="card card-custom gutter-b">
 											<div class="card-header">
 												<div class="card-title">
-													<h3 class="card-label">Area Chart</h3>
+													<h3 class="card-label">Progressive  Chart</h3>
 												</div>
 											</div>
 											<div class="card-body">
 												<!--begin::Chart-->
-												<div id="chart_2"></div>
-												<!--end::Chart-->
-											</div>
-										</div>
-										<!--end::Card-->
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-lg-6">
-										<!--begin::Card-->
-										<div class="card card-custom gutter-b">
-											<div class="card-header">
-												<div class="card-title">
-													<h3 class="card-label">Column Chart</h3>
-												</div>
-											</div>
-											<div class="card-body">
-												<!--begin::Chart-->
-												<div id="chart_3"></div>
-												<!--end::Chart-->
-											</div>
-										</div>
-										<!--end::Card-->
-									</div>
-									<div class="col-lg-6">
-										<!--begin::Card-->
-										<div class="card card-custom gutter-b">
-											<div class="card-header">
-												<div class="card-title">
-													<h3 class="card-label">Area Chart</h3>
-												</div>
-											</div>
-											<div class="card-body">
-												<!--begin::Chart-->
-												<div id="chart_4"></div>
-												<!--end::Chart-->
-											</div>
-										</div>
-										<!--end::Card-->
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-lg-6">
-										<!--begin::Card-->
-										<div class="card card-custom gutter-b">
-											<div class="card-header">
-												<div class="card-title">
-													<h3 class="card-label">Mixed Chart</h3>
-												</div>
-											</div>
-											<div class="card-body">
-												<!--begin::Chart-->
-												<div id="chart_5"></div>
-												<!--end::Chart-->
-											</div>
-										</div>
-										<!--end::Card-->
-									</div>
-									<div class="col-lg-6">
-										<!--begin::Card-->
-										<div class="card card-custom gutter-b">
-											<div class="card-header">
-												<div class="card-title">
-													<h3 class="card-label">Timeline Chart</h3>
-												</div>
-											</div>
-											<div class="card-body">
-												<!--begin::Chart-->
-												<div id="chart_6"></div>
-												<!--end::Chart-->
-											</div>
-										</div>
-										<!--end::Card-->
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-lg-6">
-										<!--begin::Card-->
-										<div class="card card-custom gutter-b">
-											<div class="card-header">
-												<div class="card-title">
-													<h3 class="card-label">Candlestick Chart</h3>
-												</div>
-											</div>
-											<div class="card-body">
-												<!--begin::Chart-->
-												<div id="chart_7"></div>
-												<!--end::Chart-->
-											</div>
-										</div>
-										<!--end::Card-->
-									</div>
-									<div class="col-lg-6">
-										<!--begin::Card-->
-										<div class="card card-custom gutter-b">
-											<div class="card-header">
-												<div class="card-title">
-													<h3 class="card-label">Bubble Chart</h3>
-												</div>
-											</div>
-											<div class="card-body">
-												<!--begin::Chart-->
-												<div id="chart_8"></div>
-												<!--end::Chart-->
-											</div>
-										</div>
-										<!--end::Card-->
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-lg-6">
-										<!--begin::Card-->
-										<div class="card card-custom gutter-b">
-											<div class="card-header">
-												<div class="card-title">
-													<h3 class="card-label">Scatter Chart</h3>
-												</div>
-											</div>
-											<div class="card-body">
-												<!--begin::Chart-->
-												<div id="chart_9"></div>
-												<!--end::Chart-->
-											</div>
-										</div>
-										<!--end::Card-->
-									</div>
-									<div class="col-lg-6">
-										<!--begin::Card-->
-										<div class="card card-custom gutter-b">
-											<div class="card-header">
-												<div class="card-title">
-													<h3 class="card-label">Heatmap Chart</h3>
-												</div>
-											</div>
-											<div class="card-body">
-												<!--begin::Chart-->
-												<div id="chart_10"></div>
-												<!--end::Chart-->
-											</div>
-										</div>
-										<!--end::Card-->
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-lg-6">
-										<!--begin::Card-->
-										<div class="card card-custom gutter-b">
-											<div class="card-header">
-												<div class="card-title">
-													<h3 class="card-label">Donut Chart</h3>
-												</div>
-											</div>
-											<div class="card-body">
-												<!--begin::Chart-->
-												<div id="chart_11" class="d-flex justify-content-center"></div>
-												<!--end::Chart-->
-											</div>
-										</div>
-										<!--end::Card-->
-									</div>
-									<div class="col-lg-6">
-										<!--begin::Card-->
-										<div class="card card-custom gutter-b">
-											<div class="card-header">
-												<div class="card-title">
-													<h3 class="card-label">Pie Chart</h3>
-												</div>
-											</div>
-											<div class="card-body">
-												<!--begin::Chart-->
-												<div id="chart_12" class="d-flex justify-content-center"></div>
-												<!--end::Chart-->
-											</div>
-										</div>
-										<!--end::Card-->
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-lg-6">
-										<!--begin::Card-->
-										<div class="card card-custom gutter-b">
-											<div class="card-header">
-												<div class="card-title">
-													<h3 class="card-label">Radial Bar Chart</h3>
-												</div>
-											</div>
-											<div class="card-body">
-												<!--begin::Chart-->
-												<div id="chart_13"></div>
-												<!--end::Chart-->
-											</div>
-										</div>
-										<!--end::Card-->
-									</div>
-									<div class="col-lg-6">
-										<!--begin::Card-->
-										<div class="card card-custom gutter-b">
-											<div class="card-header">
-												<div class="card-title">
-													<h3 class="card-label">Radar Chart</h3>
-												</div>
-											</div>
-											<div class="card-body">
-												<!--begin::Chart-->
-												<div id="chart_14"></div>
+												<canvas id="mycanvas" width="800" height="400"></canvas>
 												<!--end::Chart-->
 											</div>
 										</div>
@@ -500,9 +280,7 @@ if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
 									</div>
 								</div>
 							</div>
-							<!--end::Container-->
 						</div>
-						<!--end::Entry-->
     </div>
     </div>
 </div>
@@ -531,27 +309,9 @@ if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
     <!--end::Page Vendors-->
     <!--begin::Page Scripts(used by this page)-->
     <script src="Content/template/js/pages/html-table.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script src="Scripts/appchar.js"></script>
+    </body>
 
-    <script src="Scripts/apexcharts.js"></script>
 
-                    </body>
-
-    <script> 
-        function addCode() { 
-            document.getElementById("idselect").innerHTML +=  
-            `<div class="form-group row">
-            <label class="col-3 col-form-label">หน่วยงาน : </label>
-            <div class="col-9">
-														<select class="form-control">
-															<option>Select</option>
-                                                            <option>แผนกกรรมวิธีข้อมูล บก.ฐท.สส.</option>
-                                                            <option>ยก.ฐท.สส.</option>
-                                                            <option>กบ.ฐท.สส.</option>
-														</select>
-													</div>
-        </div>`; 
-        } 
-    </script> 
-
-                    <!--end::Footer-->
-    <!--end::Header-->
+    
