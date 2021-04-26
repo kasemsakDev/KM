@@ -183,12 +183,14 @@ exit();
                     <div class="topbar-item">
                         <div class="btn btn-icon btn-hover-transparent-white w-sm-auto d-flex align-items-center btn-lg px-2" id="kt_quick_user_toggle">
                             <div class="d-flex flex-column text-right pr-sm-3">
-                                <span class="text-white font-weight-bolder font-size-sm d-none d-sm-inline">Admin</span>
-                            </div>
-                            <span class="symbol symbol-35">
-                                <span class="symbol-label font-size-h5 font-weight-bold text-white bg-white-o-30">A</span>
-                            </span>
+                            <?php if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] == true){ ?>
+                                <span class="text-white font-weight-bolder font-size-sm d-none d-sm-inline"><?php echo $_SESSION["Name"]; ?></span>
+                                <?php } ?>
+                            </div>                                                                                
                         </div>
+                        <?php if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] == true){ ?>
+                        <a href="logout.php" > <button class="btn btn-success">Logout</button></a>
+                        <?php } ?>
                     </div>
                     <!--end::User-->
                 </div>
@@ -335,56 +337,7 @@ exit();
 										<div class="card-toolbar">
 											<!--begin::Dropdown-->
 											<div class="dropdown dropdown-inline mr-2">
-											
-												<!--begin::Dropdown Menu-->
-												<div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-													<!--begin::Navigation-->
-													<ul class="navi flex-column navi-hover py-2">
-														<li class="navi-header font-weight-bolder text-uppercase font-size-sm text-primary pb-2">Choose an option:</li>
-														<li class="navi-item">
-															<a href="#" class="navi-link">
-																<span class="navi-icon">
-																	<i class="la la-print"></i>
-																</span>
-																<span class="navi-text">Print</span>
-															</a>
-														</li>
-														<li class="navi-item">
-															<a href="#" class="navi-link">
-																<span class="navi-icon">
-																	<i class="la la-copy"></i>
-																</span>
-																<span class="navi-text">Copy</span>
-															</a>
-														</li>
-														<li class="navi-item">
-															<a href="#" class="navi-link">
-																<span class="navi-icon">
-																	<i class="la la-file-excel-o"></i>
-																</span>
-																<span class="navi-text">Excel</span>
-															</a>
-														</li>
-														<li class="navi-item">
-															<a href="#" class="navi-link">
-																<span class="navi-icon">
-																	<i class="la la-file-text-o"></i>
-																</span>
-																<span class="navi-text">CSV</span>
-															</a>
-														</li>
-														<li class="navi-item">
-															<a href="#" class="navi-link">
-																<span class="navi-icon">
-																	<i class="la la-file-pdf-o"></i>
-																</span>
-																<span class="navi-text">PDF</span>
-															</a>
-														</li>
-													</ul>
-													<!--end::Navigation-->
-												</div>
-												<!--end::Dropdown Menu-->
+										
 											</div>
 											<!--end::Dropdown-->
 											<!--begin::Button-->
@@ -650,7 +603,8 @@ $(document).ready(function() {
         type: 'post',
         dataType: 'JSON',
         url: 'AjaxManage/_getallagency.php',
-        success: function (response) {      
+        success: function (response) {     
+     //       console.log(response); 
             if(response.length > 0){   
             AddSelectList_Agency(response,'stratagency');
             }
@@ -764,7 +718,7 @@ $(document).ready(function() {
             ajax_id:value
         },
             success: function (response) {
-                console.log(response);
+              //  console.log(response);
      document.getElementById("ajaxid").value = response[0].SunitID;
      document.getElementById("Update_projectid").value = response[0].ProjectID;
      document.getElementById("Update_projecttext").value = response[0].ProjectName;
@@ -785,13 +739,16 @@ $(document).ready(function() {
             ajax_id:id
         },
             success: function (response) {
+                var total = 100;
+                console.log(response);
+                //response is total all project
                 if(response == 0)
                 {
                 if (input.value < 0) input.value = 0;
                 if (input.value > 100) input.value = 100;
                 }else {
                 if(input.value > response) {                
-                    input.value = response;
+                    input.value = (total - response);
                 }
                
                 if(input.value < 0) input.value = 0;                

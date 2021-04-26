@@ -54,10 +54,9 @@ if(empty(trim($_POST["password"]))){
 
 								$_SESSION["loggedin"] = true;
 								$_SESSION["id"] = $row['UserID'];
-								$_SESSION["Name"] = $row['Name'];
+								$_SESSION["Name"] = $row['username'];
 								$_SESSION["AgencyID"] = $row['AgencyID'];
 								$_SESSION["RoleID"] = $row['RoleID'];
-
 								header("location: issue.php");
 						}else {
 							$passowrd_err = "passowrd not have in database";

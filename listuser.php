@@ -131,12 +131,14 @@ mysqli_close($link);
                     <div class="topbar-item">
                         <div class="btn btn-icon btn-hover-transparent-white w-sm-auto d-flex align-items-center btn-lg px-2" id="kt_quick_user_toggle">
                             <div class="d-flex flex-column text-right pr-sm-3">
-                                <span class="text-white font-weight-bolder font-size-sm d-none d-sm-inline">Admin</span>
-                            </div>
-                            <span class="symbol symbol-35">
-                                <span class="symbol-label font-size-h5 font-weight-bold text-white bg-white-o-30">A</span>
-                            </span>
+                            <?php if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] == true){ ?>
+                                <span class="text-white font-weight-bolder font-size-sm d-none d-sm-inline"><?php echo $_SESSION["Name"]; ?></span>
+                                <?php } ?>
+                            </div>                                                                                
                         </div>
+                        <?php if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] == true){ ?>
+                        <a href="logout.php" > <button class="btn btn-success">Logout</button></a>
+                        <?php } ?>
                     </div>
                     <!--end::User-->
                 </div>

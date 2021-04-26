@@ -8,7 +8,7 @@ $(document).ready(function(){
 			var progressive = [];
             var id = [];
 			for(var i in data) {
-				player.push(data[i].Name+"("+data[i].Count+")");
+				player.push(data[i].Name+" ประเด็นยุทธศาสตร์ ทั้งหมด "+data[i].Count+" งาน");
 				progressive.push(data[i].Progressive);
                 id.push(data[i].Id);
 			}

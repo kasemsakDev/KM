@@ -11,14 +11,14 @@ if(isset($_POST['save'])){
     $name = $_POST['name'];
     if($_POST['AgencyID'] == 0){
         //INSERT
-        $sql = "INSERT INTO km_agency (Name,IsActive)
+        $sql = "INSERT INTO km_role (Name,IsActive)
         VALUES ('$name',1);";
         mysqli_query($link,$sql);
 
     }else{
         //Update
         $id = $_POST['AgencyID'];
-        $sql = "UPDATE km_agency
+        $sql = "UPDATE km_role
         SET Name = '$name',IsActive = 1
         WHERE AgencyID = $id";
 
@@ -26,7 +26,7 @@ if(isset($_POST['save'])){
     
     }
     mysqli_close($link);
-    header("location: ../listagency.php");
+    header("location: ../listrole.php");
 
 }
 

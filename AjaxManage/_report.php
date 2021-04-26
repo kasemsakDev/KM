@@ -5,7 +5,7 @@ header("Content-type: application/json");
 
 $result = array();  //GET => id,name,progressive
 
-$sql = "select * from km_agency WHERE km_agency.IsActive = 1";
+$sql = "select * from km_agency WHERE km_agency.IsActive = 1 AND Name <> 'ผู้บริหาร'";
 $sql_result =  mysqli_query($link,$sql);
 $agency = array();
     while($row = mysqli_fetch_assoc($sql_result))

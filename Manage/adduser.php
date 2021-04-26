@@ -21,7 +21,6 @@ if(isset($_POST['save'])){
     }else{
         $name = trim($_POST["name"]);
     }
-
     //check passowrd
 
     if(empty(trim($_POST['password'])))
@@ -31,14 +30,16 @@ if(isset($_POST['save'])){
         $password = trim($_POST['password']);
     }
 
-
-
     //check all 
-    if(empty($name_err) && !empty($_POST['roleId']) && !empty($_POST['agencyId']))
+   /* echo 'check all';echo '<br>';
+    echo $_POST['roleId'];echo '<br>';
+    echo $_POST['agencyId'];echo '<br>';
+    echo 'check name error';echo '<br>';
+    echo $name_err;
+    exit();*/
+    if(empty($name_err))
     {
-
         if($_POST['UserID'] == 0){
-
 
         $agencyId = $_POST['agencyId'];
         $roleId = $_POST['roleId'];
@@ -47,9 +48,7 @@ if(isset($_POST['save'])){
         $sql_check = "SELECT Name, IsActive From km_user WHERE  Name = '$name' AND  IsActive = 1";
         $result = mysqli_query($link,$sql_check);
 
-        $rescheck = mysqli_fetch_assoc($result);
-    
-      
+        $rescheck = mysqli_fetch_assoc($result);     //null
         if($rescheck == null)
         {  //INSERT
             // Is true    VALUES ('".$agencyId."','".$roleId."','".$name."','".$passowrd."',1,'".$_SESSION["id"]."','".$datetime."','".$_SESSION["id"]."','".$datetime."');";        
@@ -61,7 +60,7 @@ if(isset($_POST['save'])){
             header("location: ../listuser.php");
 
         }else{
-           echo 'have a username in db';
+           echo 'something wrong';
         }
 
     }else{

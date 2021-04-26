@@ -6,7 +6,7 @@ header("Content-type: application/json");
     require_once "../dblink.php";
 
     $return_arr = array();
-    $mysql = mysqli_query($link,"select AgencyID,Name from km_agency where IsActive = 1 LIMIT 1");
+    $mysql = mysqli_query($link,"select AgencyID,Name from km_agency where IsActive = 1 AND Name <> 'ผู้บริหาร'");
     while($row=mysqli_fetch_array($mysql))
     {
       $return_arr[] = $row; 

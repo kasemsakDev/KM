@@ -113,7 +113,7 @@ exit();
                                         <i class="flaticon2-menu text-danger"></i>
                                     </span>
                                 <h3 class="card-label">
-                                    โครงการ : 
+                                    โครงการ : <?php echo $sunit[0]['ProjectName'] ?>
                                 </h3>
                             </div>
                         </div>

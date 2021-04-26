@@ -8,11 +8,12 @@ ob_start();
     {
         require_once "../dblink.php";
 
-
-      function _getNumber($link)
+      $agencySession =  $_SESSION["AgencyID"];
+      function _getNumber($link,$agencySession)
       {
         $number = 0;
-        $sql = "select number FROM km_issue 
+        $sql = "select number FROM km_issue
+        Where km_issue.AgencyID = $agencySession 
         ORDER BY number DESC 
         LIMIT 1";
         $result = mysqli_query($link,$sql);
@@ -32,7 +33,6 @@ ob_start();
       }
 
 
-
         $id = $_POST['id'];
         $name = $_POST['name'];
         $agencyId = $_POST['agencyid']; 
@@ -42,7 +42,7 @@ ob_start();
         if($id == 0)
         { //INSERT
           
-          $number = _getNumber($link);
+          $number = _getNumber($link,$agencySession);
 
             $sql = "INSERT INTO km_issue (Name,AgencyID,IsActive,CreateBy,CreateOn,UpdateBy,UpdateOn,number)
             VALUES ('".$name."','".$agencyId."','1','".$userid."','".$datetime."','".$userid."','".$datetime."','".$number."');";

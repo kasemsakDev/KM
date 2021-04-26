@@ -129,12 +129,14 @@ exit();
                     <div class="topbar-item">
                         <div class="btn btn-icon btn-hover-transparent-white w-sm-auto d-flex align-items-center btn-lg px-2" id="kt_quick_user_toggle">
                             <div class="d-flex flex-column text-right pr-sm-3">
-                                <span class="text-white font-weight-bolder font-size-sm d-none d-sm-inline">Admin</span>
-                            </div>
-                            <span class="symbol symbol-35">
-                                <span class="symbol-label font-size-h5 font-weight-bold text-white bg-white-o-30">A</span>
-                            </span>
+                            <?php if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] == true){ ?>
+                                <span class="text-white font-weight-bolder font-size-sm d-none d-sm-inline"><?php echo $_SESSION["Name"]; ?></span>
+                                <?php } ?>
+                            </div>                                                                                
                         </div>
+                        <?php if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] == true){ ?>
+                        <a href="logout.php" > <button class="btn btn-success">Logout</button></a>
+                        <?php } ?>
                     </div>
                     <!--end::User-->
                 </div>
@@ -442,7 +444,7 @@ exit();
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">แกไข ตัวชีวัด-เป้าประสงค์</h5>
+                <h5 class="modal-title" id="exampleModalLabel">แกไข กลยุทธ์-เป้าประสงค์</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <i aria-hidden="true" class="ki ki-close"></i>
                 </button>
@@ -489,7 +491,7 @@ exit();
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">สร้าง ตัวชีวัด-เป้าประสงค์</h5>
+                <h5 class="modal-title" id="exampleModalLabel">สร้าง กลยุทธ์-เป้าประสงค์</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <i aria-hidden="true" class="ki ki-close"></i>
                 </button>

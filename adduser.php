@@ -38,6 +38,7 @@ $user[0]['RoleID'] = 0;
 $user[0]['Name'] = "";
 
 
+
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if(!empty($_GET['id']))
     {
@@ -144,12 +145,14 @@ mysqli_close($link);
                     <div class="topbar-item">
                         <div class="btn btn-icon btn-hover-transparent-white w-sm-auto d-flex align-items-center btn-lg px-2" id="kt_quick_user_toggle">
                             <div class="d-flex flex-column text-right pr-sm-3">
-                                <span class="text-white font-weight-bolder font-size-sm d-none d-sm-inline">Admin</span>
-                            </div>
-                            <span class="symbol symbol-35">
-                                <span class="symbol-label font-size-h5 font-weight-bold text-white bg-white-o-30">A</span>
-                            </span>
+                            <?php if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] == true){ ?>
+                                <span class="text-white font-weight-bolder font-size-sm d-none d-sm-inline"><?php echo $_SESSION["Name"]; ?></span>
+                                <?php } ?>
+                            </div>                                                                                
                         </div>
+                        <?php if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] == true){ ?>
+                        <a href="logout.php" > <button class="btn btn-success">Logout</button></a>
+                        <?php } ?>
                     </div>
                     <!--end::User-->
                 </div>
@@ -333,7 +336,7 @@ mysqli_close($link);
 																	<div class="form-group row fv-plugins-icon-container">
 																		<label class="col-xl-3 col-lg-3 col-form-label">Name</label>
 																		<div class="col-lg-9 col-xl-9">
-																			<input class="form-control form-control-lg" name="name" type="text" name="name" value="<?php echo $user[0]['Name']  ?>" required>
+																			<input class="form-control form-control-lg" name="name" type="text" name="name" value="<?php echo $user[0]['Name']  ?>" required autocomplete="off">
 																		<div class="fv-plugins-message-container"></div></div>
 																	</div>
 																	<div class="form-group row fv-plugins-icon-container">
@@ -380,7 +383,7 @@ mysqli_close($link);
 																		<div class="fv-plugins-message-container"></div></div>
 																	</div>
                                                                  <?php   }else{ ?>
-                                                                    <input type="hidden" class="form-control form-control-lg" name="password" value="" >
+                                                                    <input type="hidden" class="form-control form-control-lg" name="password" value=""  >
                                                                 <?php } ?>
 																	
 																</div>
