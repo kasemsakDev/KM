@@ -11,6 +11,11 @@ if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
 	exit();
 }
 
+if($_SESSION["Rolename"] != 'superadmin' &&  $_SESSION["Rolename"] != 'Programmer'){
+	header("location: logout.php");
+	exit();
+}
+
 
 //get Agency
 $sql_agency = "SELECT * FROM km_agency WHERE IsActive = 1";

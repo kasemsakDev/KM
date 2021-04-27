@@ -79,14 +79,18 @@ $agencyId = $_SESSION["AgencyID"];
                     <!--begin::Tab Navs(for desktop mode)-->
                     <ul class="header-tabs nav align-self-end font-size-lg" role="tablist">
                         <!--begin::Item-->
+                        <?php if($_SESSION["Rolename"] != 'superadmin' ){ ?>  
                         <li class="nav-item">
                             <a href="#" class="nav-link py-4 px-6 active" data-toggle="tab" data-target="#kt_header_tab_1" role="tab">Manage</a>
                         </li>
+                        <?php } ?>
                         <!--end::Item-->
                         <!--begin::Item-->
+                        <?php if($_SESSION["AgencyName"] == 'ผู้บริหาร' ||  $_SESSION["Rolename"] == 'Programmer'){ ?>
                         <li class="nav-item mr-3">
                         <a href="report.php" class="nav-link py-4 px-6" >Reports</a>
                         </li>
+                        <?php } ?>
                         <!--end::Item-->
                         <!--begin::Item-->
                         <li class="nav-item mr-3">
@@ -151,9 +155,11 @@ $agencyId = $_SESSION["AgencyID"];
                         </li>
                         <!--end::Item-->
                         <!--begin::Item-->
+                        <?php if($_SESSION["AgencyName"] == 'ผู้บริหาร' ||  $_SESSION["Rolename"] == 'Programmer'){ ?>
                         <li class="nav-item mr-2">
                             <a href="#" class="nav-link btn btn-clean" data-toggle="tab" data-target="#kt_header_tab_2" role="tab">Reports</a>
                         </li>
+                        <?php } ?>
                         <!--end::Item-->
                         <!--begin::Item-->
                         <li class="nav-item mr-2">
@@ -240,8 +246,10 @@ $agencyId = $_SESSION["AgencyID"];
                             <div class="d-flex flex-column flex-lg-row align-items-start align-items-lg-center">
                                 <!--begin::Actions-->
                                 <a href="listuser.php" class="btn btn-light-success font-weight-bold mr-3 my-2 my-lg-0">List User</a>
+                                <?php if($_SESSION["Rolename"] == 'Programmer' ||  $_SESSION["Rolename"] == 'superadmin'){ ?>
                                 <a href="listrole.php" class="btn btn-light-primary font-weight-bold mr-3 my-lg-0">List Role</a>
                                 <a href="listagency.php" class="btn btn-light-info font-weight-bold my-2 my-lg-0">List Agency</a>
+                                <?php } ?>
                                 <!--end::Actions-->
                             </div>
                            <!-- <div class="d-flex align-items-center">
@@ -494,7 +502,7 @@ Edit
                             <!--begin::Copyright-->
                             <div class="text-dark order-2 order-md-1">
                                 <span class="text-muted font-weight-bold mr-2">2021©</span>
-                                <a href="http://keenthemes.com/metronic" target="_blank" class="text-dark-75 text-hover-primary">KM</a>
+                                <span class="text-dark-75 text-hover-primary">KM</span>
                             </div>
                         </div>
                         <!--end::Container-->

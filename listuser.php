@@ -12,11 +12,19 @@ if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
 
 require_once "dblink.php";
 include("DateThai.php");
-
+$sql_listUser = "";
+if($_SESSION["Rolename"] == 'superadmin' || $_SESSION["Rolename"] == 'Programmer') {
 $sql_listUser = "SELECT u.UserID,u.AgencyID,u.RoleID,u.Name as username,r.Name as rolename,a.Name as agencyname, u.IsActive as user_active  ,u.UpdateOn,a.IsActive,r.IsActive FROM km_user u
 INNER JOIN km_role r on r.RoleID = u.RoleID 
 INNER join km_agency a on u.AgencyID = a.AgencyID
 Where a.IsActive = 1 AND r.IsActive = 1";
+}else{
+    $AgencyID = $_SESSION["AgencyID"];
+    $sql_listUser = "SELECT u.UserID,u.AgencyID,u.RoleID,u.Name as username,r.Name as rolename,a.Name as agencyname, u.IsActive as user_active  ,u.UpdateOn,a.IsActive,r.IsActive FROM km_user u
+    INNER JOIN km_role r on r.RoleID = u.RoleID 
+    INNER join km_agency a on u.AgencyID = a.AgencyID
+    Where a.IsActive = 1 AND r.IsActive = 1 AND a.AgencyID = $AgencyID";
+}
 $result = mysqli_query($link,$sql_listUser);
 
 $allUser = array();
@@ -89,14 +97,18 @@ mysqli_close($link);
                     <!--begin::Tab Navs(for desktop mode)-->
                     <ul class="header-tabs nav align-self-end font-size-lg" role="tablist">
                         <!--begin::Item-->
+                        <?php if($_SESSION["Rolename"] != 'superadmin' ){ ?>  
                         <li class="nav-item">
-                            <a href="#" class="nav-link py-4 px-6" data-toggle="tab" data-target="#kt_header_tab_1" role="tab">Manage</a>
+                            <a href="#" class="nav-link py-4 px-6 active" data-toggle="tab" data-target="#kt_header_tab_1" role="tab">Manage</a>
                         </li>
+                        <?php } ?>
                         <!--end::Item-->
                         <!--begin::Item-->
+                        <?php if($_SESSION["AgencyName"] == 'ผู้บริหาร' ||  $_SESSION["Rolename"] == 'Programmer' ){ ?>
                         <li class="nav-item mr-3">
                         <a href="report.php" class="nav-link py-4 px-6" >Reports</a>
                         </li>
+                        <?php } ?>
                         <!--end::Item-->
                         <!--begin::Item-->
                         <li class="nav-item mr-3">
@@ -156,14 +168,18 @@ mysqli_close($link);
                     <!--begin::Tab Navs(for tablet and mobile modes)-->
                     <ul class="header-tabs p-5 p-lg-0 d-flex d-lg-none nav nav-bold nav-tabs" role="tablist">
                         <!--begin::Item-->
+                        <?php if($_SESSION["Rolename"] != 'superadmin' ){ ?>  
                         <li class="nav-item mr-2">
                             <a href="#" class="nav-link btn btn-clean active" data-toggle="tab" data-target="#kt_header_tab_1" role="tab">Manage</a>
                         </li>
+                        <?php } ?>
                         <!--end::Item-->
                         <!--begin::Item-->
+                        <?php if($_SESSION["AgencyName"] == 'ผู้บริหาร' ||  $_SESSION["Rolename"] == 'Programmer'){ ?>
                         <li class="nav-item mr-2">
                             <a href="#" class="nav-link btn btn-clean" data-toggle="tab" data-target="#kt_header_tab_2" role="tab">Reports</a>
                         </li>
+                        <?php } ?>
                         <!--end::Item-->
                         <!--begin::Item-->
                         <li class="nav-item mr-2">
@@ -250,8 +266,10 @@ mysqli_close($link);
                             <div class="d-flex flex-column flex-lg-row align-items-start align-items-lg-center">
                                 <!--begin::Actions-->
                                 <a href="listuser.php" class="btn btn-light-success font-weight-bold mr-3 my-2 my-lg-0 active">List User</a>
+                                <?php if($_SESSION["Rolename"] == 'Programmer' ||  $_SESSION["Rolename"] == 'superadmin'){ ?>
                                 <a href="listrole.php" class="btn btn-light-primary font-weight-bold mr-3 my-lg-0">List Role</a>
                                 <a href="listagency.php" class="btn btn-light-info font-weight-bold my-2 my-lg-0">List Agency</a>
+                                <?php } ?>
                                 <!--end::Actions-->
                             </div>
                            <!-- <div class="d-flex align-items-center">
@@ -440,7 +458,7 @@ mysqli_close($link);
                             <!--begin::Copyright-->
                             <div class="text-dark order-2 order-md-1">
                                 <span class="text-muted font-weight-bold mr-2">2021©</span>
-                                <a href="http://keenthemes.com/metronic" target="_blank" class="text-dark-75 text-hover-primary">KM</a>
+                                <span class="text-dark-75 text-hover-primary">KM</span>
                             </div>
                         </div>
                         <!--end::Container-->

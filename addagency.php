@@ -8,6 +8,11 @@ if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
 	exit();
 }
 
+if($_SESSION["Rolename"] != 'superadmin' &&  $_SESSION["Rolename"] != 'Programmer'){
+	header("location: logout.php");
+	exit();
+}
+
 require_once "dblink.php";
 
 $agency = array();

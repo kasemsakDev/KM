@@ -12,8 +12,7 @@ $agency = array();
     {
         $agency[] = $row;
     }
-
-
+    
 if(count($agency) > 0){
     $resultprogressiveByagency = array();
     $num = 0;

@@ -3,12 +3,15 @@ session_start();
 ob_start();
 require_once "dblink.php";
 
-if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
+if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true ){
 	header("location: index.php");
 	exit();
 }
 
-
+if($_SESSION["AgencyName"] != 'ผู้บริหาร' &&  $_SESSION["Rolename"] != 'Programmer'){
+	header("location: logout.php");
+	exit();
+}
 
 ?>
 
