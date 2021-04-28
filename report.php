@@ -8,7 +8,7 @@ if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true ){
 	exit();
 }
 
-if($_SESSION["AgencyName"] != 'ผู้บริหาร' &&  $_SESSION["Rolename"] != 'Programmer'){
+if($_SESSION["IsManager"] != 1 &&  $_SESSION["IsProgrammer"] != 1){
 	header("location: logout.php");
 	exit();
 }
@@ -54,17 +54,21 @@ if($_SESSION["AgencyName"] != 'ผู้บริหาร' &&  $_SESSION["Rolen
                     <!--begin::Tab Navs(for desktop mode)-->
                     <ul class="header-tabs nav align-self-end font-size-lg" role="tablist">
                         <!--begin::Item-->
+                        <?php if($_SESSION["IsSupperAdmin"] != 1 ){ ?>  
                         <li class="nav-item">
-                            <a href="#" class="nav-link py-4 px-6 " data-toggle="tab" data-target="#kt_header_tab_1" role="tab">Manage</a>
+                            <a href="#" class="nav-link py-4 px-6" data-toggle="tab" data-target="#kt_header_tab_1" role="tab">Manage</a>
                         </li>
+                        <?php } ?>
                         <!--end::Item-->
                         <!--begin::Item-->
+                        <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 ){ ?>
                         <li class="nav-item mr-3">
                         <a href="report.php" class="nav-link py-4 px-6 active" >Reports</a>
                         </li>
+                        <?php } ?>
                         <!--end::Item-->
                         <!--begin::Item-->
-                        <?php if($_SESSION["AgencyName"] != 'ผู้บริหาร') { ?>
+                        <?php if($_SESSION["IsManager"] != 1) { ?>
                         <li class="nav-item mr-3">
                             <a href="#" class="nav-link py-4 px-6" data-toggle="tab" data-target="#kt_header_tab_3" role="tab">User</a>
                         </li>
@@ -123,14 +127,18 @@ if($_SESSION["AgencyName"] != 'ผู้บริหาร' &&  $_SESSION["Rolen
                     <!--begin::Tab Navs(for tablet and mobile modes)-->
                     <ul class="header-tabs p-5 p-lg-0 d-flex d-lg-none nav nav-bold nav-tabs" role="tablist">
                         <!--begin::Item-->
+                        <?php if($_SESSION["IsSupperAdmin"] != 1 ){ ?>  
                         <li class="nav-item mr-2">
-                            <a href="#" class="nav-link btn btn-clean " data-toggle="tab" data-target="#kt_header_tab_1" role="tab">Manage</a>
+                            <a href="#" class="nav-link btn btn-clean active" data-toggle="tab" data-target="#kt_header_tab_1" role="tab">Manage</a>
                         </li>
+                        <?php } ?>
                         <!--end::Item-->
                         <!--begin::Item-->
+                        <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1){ ?>
                         <li class="nav-item mr-2">
-                            <a href="report.php" class="nav-link btn btn-clean active">Reports</a>
+                            <a href="#" class="nav-link btn btn-clean" data-toggle="tab" data-target="#kt_header_tab_2" role="tab">Reports</a>
                         </li>
+                        <?php } ?>
                         <!--end::Item-->
                         <!--begin::Item-->
                         <li class="nav-item mr-2">
@@ -217,8 +225,10 @@ if($_SESSION["AgencyName"] != 'ผู้บริหาร' &&  $_SESSION["Rolen
                             <div class="d-flex flex-column flex-lg-row align-items-start align-items-lg-center">
                                 <!--begin::Actions-->
                                 <a href="listuser.php" class="btn btn-light-success font-weight-bold mr-3 my-2 my-lg-0">List User</a>
+                                <?php if($_SESSION["IsProgrammer"] == 1 ||  $_SESSION["IsSupperAdmin"] == 1){ ?>
                                 <a href="listrole.php" class="btn btn-light-primary font-weight-bold mr-3 my-lg-0">List Role</a>
                                 <a href="listagency.php" class="btn btn-light-info font-weight-bold my-2 my-lg-0">List Agency</a>
+                                <?php } ?>
                                 <!--end::Actions-->
                             </div>
                            <!-- <div class="d-flex align-items-center">

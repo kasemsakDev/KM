@@ -8,7 +8,7 @@ if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
 	exit();
 }
 
-if($_SESSION["Rolename"] == 'superadmin'){
+if($_SESSION["IsSupperAdmin"] == 1){
 	header("location: logout.php");
 	exit();
 }
