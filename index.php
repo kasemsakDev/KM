@@ -34,14 +34,14 @@ if(empty(trim($_POST["password"]))){
 
 	if(empty($username_err) && empty($password_err)){
 
-
-
 		$sql = "SELECT u.UserID,u.AgencyID,u.RoleID,u.Name as username,r.Name as rolename,a.Name as agencyname, u.IsActive,u.UpdateOn,a.IsActive,r.IsActive 
-		,u.Password
-		FROM km_user u INNER JOIN 
-		km_role r on r.RoleID = u.RoleID 
-		INNER join km_agency a on u.AgencyID = a.AgencyID 
-		Where a.IsActive = 1 AND r.IsActive = 1 AND u.Name = '$username' AND u.IsActive = 1";
+		,u.Password,u.IsManager,u.IsProgrammer,u.IsSupperAdmin,u.IsAdmin
+		FROM km_user u left join
+		km_role r on u.RoleID = r.RoleID 
+		left join km_agency a on u.AgencyID = a.AgencyID 
+		Where  u.Name = '$username' AND u.IsActive = 1";
+
+
 
 		$stmt = mysqli_query($link,$sql);
 				if(mysqli_num_rows($stmt) > 0){
@@ -59,7 +59,20 @@ if(empty(trim($_POST["password"]))){
 								$_SESSION["AgencyName"] = $row['agencyname'];
 								$_SESSION["RoleID"] = $row['RoleID'];
 								$_SESSION["Rolename"] = $row['rolename'];
-								header("location: issue.php");
+								$_SESSION["IsAdmin"] = $row['IsAdmin'];
+								$_SESSION["IsManager"] = $row['IsManager'];
+								$_SESSION["IsProgrammer"] = $row['IsProgrammer'];
+								$_SESSION["IsSupperAdmin"] = $row['IsSupperAdmin'];
+
+								if($row['IsAdmin'] == 1){
+									header("location: issue.php");
+								}else if($row['IsManager'] == 1){
+									header("location: report.php");
+								}else if($row['IsProgrammer'] == 1){
+									header("location: issue.php");
+								}else if($row['IsSupperAdmin'] == 1){
+									header("location: listuser.php");
+								}
 						}else {
 							$passowrd_err = "passowrd not have in database";
 							echo  "passowrd not have in database";

@@ -64,9 +64,11 @@ if($_SESSION["AgencyName"] != 'ผู้บริหาร' &&  $_SESSION["Rolen
                         </li>
                         <!--end::Item-->
                         <!--begin::Item-->
+                        <?php if($_SESSION["AgencyName"] != 'ผู้บริหาร') { ?>
                         <li class="nav-item mr-3">
                             <a href="#" class="nav-link py-4 px-6" data-toggle="tab" data-target="#kt_header_tab_3" role="tab">User</a>
                         </li>
+                        <?php }  ?>
                         <!--end::Item-->
                         <!--begin::Item-->
                         <!--end::Item-->

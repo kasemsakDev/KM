@@ -9,6 +9,11 @@ if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
 	header("location: index.php");
 	exit();
 }
+
+if($_SESSION["Rolename"] == 'superadmin'){
+	header("location: logout.php");
+	exit();
+}
 $agencyId = $_SESSION["AgencyID"];
 //get ประเด็นยุทธ์
     $sql_listissue = "SELECT IssueID,Name,AgencyID FROM km_issue WHERE IsActive  = 1 AND AgencyID =  $agencyId";
@@ -93,9 +98,11 @@ $agencyId = $_SESSION["AgencyID"];
                         <?php } ?>
                         <!--end::Item-->
                         <!--begin::Item-->
+                        <?php if($_SESSION["AgencyName"] != 'ผู้บริหาร') { ?>
                         <li class="nav-item mr-3">
                             <a href="#" class="nav-link py-4 px-6" data-toggle="tab" data-target="#kt_header_tab_3" role="tab">User</a>
                         </li>
+                        <?php }  ?>
                         <!--end::Item-->
                         <!--begin::Item-->
                         <!--end::Item-->

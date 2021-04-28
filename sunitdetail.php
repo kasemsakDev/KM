@@ -8,6 +8,11 @@ if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
 	exit();
 }
 
+if($_SESSION["Rolename"] == 'superadmin'){
+	header("location: logout.php");
+	exit();
+}
+
 $sunit = [];
 $sunitDetail = [];
 $upload_sunit = [];

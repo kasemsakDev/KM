@@ -10,6 +10,11 @@ if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
 	exit();
 }
 
+ if($_SESSION["AgencyName"] == 'ผู้บริหาร') {
+    header("location: logout.php");
+	exit();
+ }
+
 require_once "dblink.php";
 include("DateThai.php");
 $sql_listUser = "";
@@ -97,7 +102,7 @@ mysqli_close($link);
                     <!--begin::Tab Navs(for desktop mode)-->
                     <ul class="header-tabs nav align-self-end font-size-lg" role="tablist">
                         <!--begin::Item-->
-                        <?php if($_SESSION["Rolename"] != 'superadmin' ){ ?>  
+                        <?php if($_SESSION["Rolename"] != 'superadmin' ) { ?>  
                         <li class="nav-item">
                             <a href="#" class="nav-link py-4 px-6 active" data-toggle="tab" data-target="#kt_header_tab_1" role="tab">Manage</a>
                         </li>

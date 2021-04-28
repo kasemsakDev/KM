@@ -7,6 +7,11 @@ if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
 	exit();
 }
 
+if($_SESSION["AgencyName"] == 'ผู้บริหาร') {
+    header("location: logout.php");
+	exit();
+ }
+
 
 //get role  get agency
 

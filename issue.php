@@ -3,12 +3,17 @@
 session_start();
 ob_start();
 
+
+
 if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
 	header("location: index.php");
 	exit();
 }
 
-
+if($_SESSION["Rolename"] == 'superadmin'){
+	header("location: logout.php");
+	exit();
+}
 
 require_once "dblink.php";
 include("DateThai.php");
@@ -121,9 +126,12 @@ include("fun_progressive.php");
                         <?php } ?>
                         <!--end::Item-->
                         <!--begin::Item-->
+                        <?php if($_SESSION["AgencyName"] != 'ผู้บริหาร') { ?>
                         <li class="nav-item mr-3">
                             <a href="#" class="nav-link py-4 px-6" data-toggle="tab" data-target="#kt_header_tab_3" role="tab">User</a>
                         </li>
+                        <?php }  ?>
+                        <?php ?>
                         <!--end::Item-->
                         <!--begin::Item-->
                         <!--end::Item-->
