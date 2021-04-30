@@ -20,40 +20,49 @@ include("fun_progressive.php");
 //get list Project
 
 $agencyId = $_SESSION["AgencyID"];
-
+$sql_getproject  = "";
+$projects = array();
+$sql_liststrategy = "";
+$liststrategy = array();
+if($_SESSION["IsManager"] == 0 ) {
 $sql_getproject = "SELECT p.*,a.Name as Agencyname,a.AgencyID as a_AgencyID,a.IsActive as a_IsActive From km_project p
 INNER JOIN  km_agency a on p.AgencyID = a.AgencyID
 INNER JOIN  km_strategy s on p.StrategyID = s.StrategyID 
 Where p.IsActive = 1 AND a.IsActive = 1 AND p.AgencyID = $agencyId AND s.IsActive = 1";
 $sql_resultproject =  mysqli_query($link,$sql_getproject);
 
-$projects = array();
 while($row = mysqli_fetch_assoc($sql_resultproject))
 {
     $projects[] = $row;
 }
-
 //get indicator
 $sql_liststrategy = "SELECT StrategyID,Name,AgencyID FROM km_strategy WHERE IsActive  = 1 AND AgencyID = $agencyId";
 $result_lisstrategy = mysqli_query($link,$sql_liststrategy);
 
-$liststrategy = array();
+
 while($row = mysqli_fetch_assoc($result_lisstrategy))
 {
     $liststrategy[] = $row;
 }
 
-//Test 
-/*
-  print_r($projects);
-echo "<br>";
-print_r($liststrategy);
-exit();*/
-
-
-
-
-
+}
+$_getId = 0;
+if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 ){ 
+if(isset($_GET['id']))
+{
+    $_getId = $_GET['id'];  
+    $sql_getproject = "SELECT p.*,a.Name as Agencyname,a.AgencyID as a_AgencyID,a.IsActive as a_IsActive From km_project p
+    INNER JOIN  km_agency a on p.AgencyID = a.AgencyID
+    INNER JOIN  km_strategy s on p.StrategyID = s.StrategyID 
+    Where p.IsActive = 1 AND a.IsActive = 1 AND p.AgencyID = $_getId AND s.IsActive = 1";
+    $sql_resultproject =  mysqli_query($link,$sql_getproject);
+    
+    while($row = mysqli_fetch_assoc($sql_resultproject))
+    {
+        $projects[] = $row;
+    }
+}
+}
 ?>
 
 <!DOCTYPE html>
@@ -305,67 +314,41 @@ exit();*/
 										</div>
 										<div class="card-toolbar">
 											<!--begin::Dropdown-->
-											<div class="dropdown dropdown-inline mr-2">
-											
-												<!--begin::Dropdown Menu-->
-												<div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-													<!--begin::Navigation-->
-													<ul class="navi flex-column navi-hover py-2">
-														<li class="navi-header font-weight-bolder text-uppercase font-size-sm text-primary pb-2">Choose an option:</li>
-														<li class="navi-item">
-															<a href="#" class="navi-link">
-																<span class="navi-icon">
-																	<i class="la la-print"></i>
-																</span>
-																<span class="navi-text">Print</span>
-															</a>
-														</li>
-														<li class="navi-item">
-															<a href="#" class="navi-link">
-																<span class="navi-icon">
-																	<i class="la la-copy"></i>
-																</span>
-																<span class="navi-text">Copy</span>
-															</a>
-														</li>
-														<li class="navi-item">
-															<a href="#" class="navi-link">
-																<span class="navi-icon">
-																	<i class="la la-file-excel-o"></i>
-																</span>
-																<span class="navi-text">Excel</span>
-															</a>
-														</li>
-														<li class="navi-item">
-															<a href="#" class="navi-link">
-																<span class="navi-icon">
-																	<i class="la la-file-text-o"></i>
-																</span>
-																<span class="navi-text">CSV</span>
-															</a>
-														</li>
-														<li class="navi-item">
-															<a href="#" class="navi-link">
-																<span class="navi-icon">
-																	<i class="la la-file-pdf-o"></i>
-																</span>
-																<span class="navi-text">PDF</span>
-															</a>
-														</li>
-													</ul>
-													<!--end::Navigation-->
-												</div>
-												<!--end::Dropdown Menu-->
-											</div>
+
 											<!--end::Dropdown-->
 											<!--begin::Button-->
+                                            <?php if($_SESSION["IsManager"] == 0){ ?>
                                             <button type="button" class="btn btn-primary mr-2" data-toggle="modal" data-target="#exampleModalSizeLg">สร้าง โครงการ</button>
+                                            <?php } ?>
 											<!--end::Button-->
 										</div>
 									</div>
 									<div class="card-body">
-										<!--begin: Search Form-->
-										<!--begin::Search Form-->
+                                    <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 ){
+                                        
+                                        $sql_allAgency = "select AgencyID,Name from km_agency Where km_agency.IsActive = 1 AND  km_agency.Name <> 'ผู้บริหาร'";
+                                        $sql_resultIssue =  mysqli_query($link,$sql_allAgency);
+                                        $allAgency = array();
+                                        while($row = mysqli_fetch_assoc($sql_resultIssue))
+                                        {
+                                            $allAgency[] = $row;
+                                        }                                            
+                                        ?>
+                                            <br>
+                                      <label for="cars">ค้นหาหน่วยงาน : </label>
+                                        <select id="selectAllAgency" class="form-control col-md-6" onchange="selectsearch()">
+                                            <option value="0" >=========================Select=======================</option>
+                                        <?php foreach ($allAgency as $value) { ?>
+                                            <?php if($_getId == $value['AgencyID']){ ?>
+                                            <option value="<?php echo $value['AgencyID'] ?>" selected><?php echo $value['Name'] ?></option>
+                                            <?php }else { ?>
+                                            <option value="<?php echo $value['AgencyID'] ?>"><?php echo $value['Name'] ?></option> 
+                                            <?php } ?>
+                                            <?php } ?>
+                                        </select>                                  
+                                            <br>
+                                            <br>
+                                      <?php }  ?>
 										<div class="mb-7">
 											<div class="row align-items-center">
 												<div class="col-lg-9 col-xl-8">
@@ -397,7 +380,9 @@ exit();*/
 													<th>Progressive</th>			
 													<th>Agency</th>
                                                     <th>Date</th>
-                                                    <th>Action</th>                                                                                                  
+                                                    <?php if($_SESSION["IsManager"] == 0){ ?>
+                                                    <th>Action</th>                          
+                                                    <?php } ?>                                                                        
 												</tr>
 											</thead>
 											<tbody>
@@ -413,12 +398,13 @@ exit();*/
 													<td><?php echo _progressiveProject($row['ProjectID'],$link).'%'; ?></td>																								
 													<td><?php echo $row['Agencyname'] ?></td>
                                                     <td><?php echo DateThai($row['UpdateOn']) ?></td>  
+                                                    <?php if($_SESSION["IsManager"] == 0){ ?>
                                                     <td><button type="button" class="btn btn-primary" 
                                                     data-toggle="modal" data-target="#exampleModal" 
                                                     onClick="onclick_Edit(<?php echo $row['ProjectID'];  ?>)">
                                                     Edit
                                                     </button></td>
-                                                                                            
+                                                        <?php } ?>                                    
 												</tr>
                                                 <?php  }  ?>
 											</tbody>
@@ -621,7 +607,13 @@ exit();*/
             });
 
         });
+        function selectsearch() {
+        var e = document.getElementById("selectAllAgency");
+        var value = e.value;
+        window.location.href = 'project.php?id='+value;
+        }
     </script>  
+
                     </body>
                     <!--end::Footer-->
     <!--end::Header-->

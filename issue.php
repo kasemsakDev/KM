@@ -3,8 +3,6 @@
 session_start();
 ob_start();
 
-
-
 if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
 	header("location: index.php");
 	exit();
@@ -22,23 +20,40 @@ include("fun_progressive.php");
 //get list ประเด็ดยุทธศาสตร์
 
     $agencyId = $_SESSION["AgencyID"];
+    $sql_getIssue  = "";
+    $issues = array();
+    if($_SESSION["IsManager"] == 0 ) {
     $sql_getIssue = "SELECT i.*,k.Name as Agencyname,k.AgencyID as K_AgencyID,k.IsActive as K_IsActive From km_issue i
     INNER JOIN km_agency k on k.AgencyID = i.AgencyID
     Where i.IsActive = 1 AND k.IsActive = 1 AND i.AgencyID = $agencyId
     ORDER BY i.Number 
     ";
-    $sql_resultIssue =  mysqli_query($link,$sql_getIssue);
-
-    $issues = array();
-    while($row = mysqli_fetch_assoc($sql_resultIssue))
-    {
-        $issues[] = $row;
+        $sql_resultIssue =  mysqli_query($link,$sql_getIssue);
+        while($row = mysqli_fetch_assoc($sql_resultIssue))
+        {
+            $issues[] = $row;
+        }
     }
+    $_getId = 0;
+    if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 ){ 
+    if(isset($_GET['id']))
+    {
+        $_getId = $_GET['id'];  
+        $sql_getIssue = "SELECT i.*,k.Name as Agencyname,k.AgencyID as K_AgencyID,k.IsActive as K_IsActive From km_issue i
+        INNER JOIN km_agency k on k.AgencyID = i.AgencyID
+        Where i.IsActive = 1 AND k.IsActive = 1 AND i.AgencyID = $_getId
+        ORDER BY i.Number 
+        ";
+            $sql_resultIssue =  mysqli_query($link,$sql_getIssue);
+            while($row = mysqli_fetch_assoc($sql_resultIssue))
+            {
+                $issues[] = $row;
+            }
+    }
+}
+
     
-
-
 ?>
-
 
 <!DOCTYPE html>
 <html>
@@ -319,66 +334,39 @@ include("fun_progressive.php");
 											<span class="d-block text-muted pt-2 font-size-sm">กำหนดประเด็นยุทธศาสตร์</span></h3>
 										</div>
 										<div class="card-toolbar">
-											<!--begin::Dropdown-->
-											<div class="dropdown dropdown-inline mr-2">
-											
-												<!--begin::Dropdown Menu-->
-												<div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-													<!--begin::Navigation-->
-													<ul class="navi flex-column navi-hover py-2">
-														<li class="navi-header font-weight-bolder text-uppercase font-size-sm text-primary pb-2">Choose an option:</li>
-														<li class="navi-item">
-															<a href="#" class="navi-link">
-																<span class="navi-icon">
-																	<i class="la la-print"></i>
-																</span>
-																<span class="navi-text">Print</span>
-															</a>
-														</li>
-														<li class="navi-item">
-															<a href="#" class="navi-link">
-																<span class="navi-icon">
-																	<i class="la la-copy"></i>
-																</span>
-																<span class="navi-text">Copy</span>
-															</a>
-														</li>
-														<li class="navi-item">
-															<a href="#" class="navi-link">
-																<span class="navi-icon">
-																	<i class="la la-file-excel-o"></i>
-																</span>
-																<span class="navi-text">Excel</span>
-															</a>
-														</li>
-														<li class="navi-item">
-															<a href="#" class="navi-link">
-																<span class="navi-icon">
-																	<i class="la la-file-text-o"></i>
-																</span>
-																<span class="navi-text">CSV</span>
-															</a>
-														</li>
-														<li class="navi-item">
-															<a href="#" class="navi-link">
-																<span class="navi-icon">
-																	<i class="la la-file-pdf-o"></i>
-																</span>
-																<span class="navi-text">PDF</span>
-															</a>
-														</li>
-													</ul>
-													<!--end::Navigation-->
-												</div>
-												<!--end::Dropdown Menu-->
-											</div>
-											<!--end::Dropdown-->
-											<!--begin::Button-->
+                                            <?php if($_SESSION["IsManager"] == 0){ ?>
+                                          
                                             <button type="button" class="btn btn-primary mr-2" data-toggle="modal" data-target="#exampleModalSizeLg">สร้าง ประเด็นยุทธศาสตร์</button>
+                                            <?php } ?>
 											<!--end::Button-->
 										</div>
 									</div>
 									<div class="card-body">
+                                    <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 ){
+                                        
+                                        $sql_allAgency = "select AgencyID,Name from km_agency Where km_agency.IsActive = 1 AND  km_agency.Name <> 'ผู้บริหาร'";
+                                        $sql_resultIssue =  mysqli_query($link,$sql_allAgency);
+                                        $allAgency = array();
+                                        while($row = mysqli_fetch_assoc($sql_resultIssue))
+                                        {
+                                            $allAgency[] = $row;
+                                        }                                            
+                                        ?>
+                                            <br>
+                                      <label for="cars">ค้นหาหน่วยงาน : </label>
+                                        <select id="selectAllAgency" class="form-control col-md-6" onchange="selectsearch()">
+                                            <option value="0" >=========================Select=======================</option>
+                                        <?php foreach ($allAgency as $value) { ?>
+                                            <?php if($_getId == $value['AgencyID']){ ?>
+                                            <option value="<?php echo $value['AgencyID'] ?>" selected><?php echo $value['Name'] ?></option>
+                                            <?php }else { ?>
+                                            <option value="<?php echo $value['AgencyID'] ?>"><?php echo $value['Name'] ?></option> 
+                                            <?php } ?>
+                                            <?php } ?>
+                                        </select>                                  
+                                            <br>
+                                            <br>
+                                      <?php }  ?>
                                         <table class="table table-separate table-head-custom" id="tbI">
 											<thead>
 												<tr>
@@ -387,7 +375,9 @@ include("fun_progressive.php");
 													<th>Progressive</th>			
 													<th>Agency</th>
                                                     <th>Date</th>
-                                                    <th>Action</th>                                                                                                
+                                                    <?php if($_SESSION["IsManager"] == 0){ ?>
+                                                    <th>Action</th>                          
+                                                    <?php } ?>                                                                      
 												</tr>
 											</thead>
 											<tbody>
@@ -401,11 +391,14 @@ include("fun_progressive.php");
 											
 													<td><?php echo $row['Agencyname'] ?></td>                                    
                                                 <td><?php echo DateThai($row['UpdateOn']);?></td>
+                                                <?php if($_SESSION["IsManager"] == 0){ ?>
                                                 <td>
                                                     <button type="button"  class="btn btn-primary" 
                                                     onClick="onclick_issue(<?php echo $row['IssueID'];  ?>)" data-toggle="modal" data-target="#exampleModal" >
                                                         Edit
-                                                    </button></td>
+                                                    </button>
+                                                </td>
+                                                <?php } ?>
 												</tr>
                                                 <?php  } ?>
 												
@@ -510,9 +503,6 @@ include("fun_progressive.php");
 </div>
 </form>
 
-
-
-
                         <!--begin::Footer-->
                         <div class="footer bg-white py-4 d-flex flex-lg-column" id="kt_footer">
                         <!--begin::Container-->
@@ -577,8 +567,13 @@ include("fun_progressive.php");
                 ],
                 "Number": [[ 0, "ASC" ]]
             });
-
         });
+
+       function selectsearch() {
+        var e = document.getElementById("selectAllAgency");
+        var value = e.value;
+        window.location.href = 'issue.php?id='+value;
+        }
     </script>                                          
 
                     </body>

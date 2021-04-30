@@ -15,7 +15,11 @@ include("dblink.php");
 include("DateThai.php");
 
 $agencyId = $_SESSION["AgencyID"];
-
+$sql_getsunit = "";
+$sunits = array();
+$sql_listproject = "";
+$listproject = array();
+if($_SESSION["IsManager"] == 0){ 
 //master
 $sql_getsunit = "SELECT s.*,a.Name as Agency_name,a.AgencyID as a_AgencyID,a.IsActive as a_IsActive 
 ,p.Name as ProjectName
@@ -24,8 +28,6 @@ INNER JOIN  km_project p on p.ProjectID = s.ProjectID
 INNER JOIN  km_agency a on p.AgencyID = a.AgencyID
 Where s.IsActive = 1 AND a.IsActive = 1 AND s.AgencyID = $agencyId AND p.IsActive = 1";
 $sql_resultsunit =  mysqli_query($link,$sql_getsunit);
-
-$sunits = array();
 while($row = mysqli_fetch_assoc($sql_resultsunit))
 {
     $sunits[] = $row;
@@ -34,11 +36,10 @@ while($row = mysqli_fetch_assoc($sql_resultsunit))
 //get project
 $sql_listproject = "SELECT ProjectID,Name,AgencyID FROM km_project WHERE IsActive  = 1 AND AgencyID = $agencyId";
 $result_listproject = mysqli_query($link,$sql_listproject);
-
-$listproject = array();
 while($row = mysqli_fetch_assoc($result_listproject))
 {
     $listproject[] = $row;
+}
 }
 
 function subsplit($list,$link){
@@ -94,15 +95,24 @@ function GetProgressive($id,$link)
 }
 
 
-/*
-echo "sunit<br>";
-print_r($sunits);/*
-//echo "sunitDetail<br>";
-//print_r($sunitDetails);
-echo "project<br>";
-print_r($listproject);
-exit();
-*/
+$_getId = 0;
+if(isset($_GET['id']))
+{
+    $_getId = $_GET['id'];  
+    $sql_getsunit = "SELECT s.*,a.Name as Agency_name,a.AgencyID as a_AgencyID,a.IsActive as a_IsActive 
+    ,p.Name as ProjectName
+    From km_sunit s
+    INNER JOIN  km_project p on p.ProjectID = s.ProjectID 
+    INNER JOIN  km_agency a on p.AgencyID = a.AgencyID
+    Where s.IsActive = 1 AND a.IsActive = 1 AND s.AgencyID = $_getId AND p.IsActive = 1";
+    $sql_resultsunit =  mysqli_query($link,$sql_getsunit);
+    while($row = mysqli_fetch_assoc($sql_resultsunit))
+    {
+        $sunits[] = $row;
+    }
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -357,33 +367,38 @@ exit();
 											</div>
 											<!--end::Dropdown-->
 											<!--begin::Button-->
+                                            <?php if($_SESSION["IsManager"] == 0){ ?>
                                             <button type="button" class="btn btn-primary mr-2" data-toggle="modal" data-target="#exampleModalSizeLg">สร้าง เจ้าภาพกลยุทธิ์ / หน่วยส่งมอบผลงาน</button>
+                                            <?php } ?>
 											<!--end::Button-->
 										</div>
 									</div>
 									<div class="card-body">
-										<!--begin: Search Form-->
-										<!--begin::Search Form-->
-										<div class="mb-7">
-											<div class="row align-items-center">
-												<div class="col-lg-9 col-xl-8">
-													<div class="row align-items-center">
-														<div class="col-md-4 my-2 my-md-0">
-															<div class="input-icon">
-																<input type="text" class="form-control" placeholder="Search..." id="kt_datatable_search_query" />
-																<span>
-																	<i class="flaticon2-search-1 text-muted"></i>
-																</span>
-															</div>
-														</div>
-							
-                                                        <div class="col-md-4 my-2 my-md-0">
-                                                        </div>
-													</div>
-												</div>									
-											</div>
-										</div>
-
+                                    <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 ){
+                                        
+                                        $sql_allAgency = "select AgencyID,Name from km_agency Where km_agency.IsActive = 1 AND  km_agency.Name <> 'ผู้บริหาร'";
+                                        $sql_resultIssue =  mysqli_query($link,$sql_allAgency);
+                                        $allAgency = array();
+                                        while($row = mysqli_fetch_assoc($sql_resultIssue))
+                                        {
+                                            $allAgency[] = $row;
+                                        }                                            
+                                        ?>
+                                            <br>
+                                      <label for="cars">ค้นหาหน่วยงาน : </label>
+                                        <select id="selectAllAgency" class="form-control col-md-6" onchange="selectsearch()">
+                                            <option value="0" >=========================Select=======================</option>
+                                        <?php foreach ($allAgency as $value) { ?>
+                                            <?php if($_getId == $value['AgencyID']){ ?>
+                                            <option value="<?php echo $value['AgencyID'] ?>" selected><?php echo $value['Name'] ?></option>
+                                            <?php }else { ?>
+                                            <option value="<?php echo $value['AgencyID'] ?>"><?php echo $value['Name'] ?></option> 
+                                            <?php } ?>
+                                            <?php } ?>
+                                        </select>                                  
+                                            <br>
+                                            <br>
+                                      <?php }  ?>
       
                                         <table class="table table-separate table-head-custom" id="tbI">
 											<thead>
@@ -393,8 +408,8 @@ exit();
 													<th>หน่วยที่รับผิดชอบ</th>
 													<th>Progressive</th>			                                                   
                                                     <th>Name</th>                                                
-                                                    <th>Date</th>
-                                                    <th>Action</th> 
+                                                    <th>Date</th>                                                 
+                                                    <th>Action</th>                                                 
                                                                                    
 												</tr>
 											</thead>
@@ -407,13 +422,15 @@ exit();
                                                     <td><?php echo subsplit($master['AgencyList'],$link);   ?></td>
 													<td><?php echo  $totalProgressive.'%' ?></td>						
                                                     <td><?php  echo $master['Name'] ?></td>     		
-                                                    <td><?php echo DateThai($master['UpdateOn']) ?></td>  																													
+                                                    <td><?php echo DateThai($master['UpdateOn']) ?></td> 																												
                                                     <td>
+                                                    <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 ){ ?>
                                                     <?php if($totalProgressive != 100){ ?>
                                                     <button type="button" class="btn btn-primary" data-toggle="modal"                                                    
                                                      data-target="#exampleModal"
                                                      onClick="onclick_Update(<?php echo $master['SunitID'];  ?>)"
                                                      >Update</button>                                                 
+                                                     <?php } ?>
                                                      <?php } ?>
                                                      <a href="sunitdetail.php?id=<?php echo $master['SunitID']; ?>" target="_blank">
                                                         <input type="button" class="btn btn-danger btn-shadow font-weight-bold mr-2" value="Detail"></a>   
@@ -432,9 +449,10 @@ exit();
                                                     <td><?php echo subsplit($master['AgencyList'],$link);   ?></td>
 													<td><?php  echo $detail['Progressive']."%" ?></td>			
                                                     <td><?php  echo $detail['Name'] ?></td>
-                                                    <td><?php  echo DateThai($detail['UpdateOn']) ?></td>     																																		
+                                                    <td><?php  echo DateThai($detail['UpdateOn']) ?></td>     
+                                                    <?php if($_SESSION["IsManager"] == 0){ ?>																																		
                                                     <td></td>
-                                                                                               
+                                                    <?php } ?>                
 												</tr>
                                                 <?php } ?>
                                             <?php } ?>
@@ -903,5 +921,10 @@ function ValidateCreate() {
             });
 
         });
+        function selectsearch() {
+        var e = document.getElementById("selectAllAgency");
+        var value = e.value;
+        window.location.href = 'sunit.php?id='+value;
+        }
 
     </script>
