@@ -233,42 +233,67 @@ include("fun_progressive.php");
                                 <!--begin::Nav-->
                                 <ul class="menu-nav">
                                     <li class="menu-item menu-item-active" aria-haspopup="true">
-                                        <a href="issue.php" class="menu-link">
+                                    <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 ){ ?>
+                                        <a href="<?php echo "issue.php?id=".$_getId?>" class="menu-link">
+                                        <?php }else { ?>
+                                            <a href="issue.php"class="menu-link">
+                                        <?php } ?>
                                             <span class="menu-text">ประเด็นยุทธศาสตร์</span>
                                         </a>
                                     </li>                         
                                 </ul>
                                 <ul class="menu-nav">
                                     <li class="menu-item " aria-haspopup="true">
-                                        <a href="purpose.php" class="menu-link">
+
+                                    <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 ){ ?>
+                                        <a href="<?php echo "purpose.php?id=".$_getId?>" class="menu-link">
+                                        <?php }else { ?>
+                                            <a href="purpose.php" class="menu-link">
+                                        <?php } ?>
                                             <span class="menu-text">เป้าประสงค์</span>
                                         </a>
                                     </li>                         
                                 </ul>
                                 <ul class="menu-nav">
                                     <li class="menu-item" aria-haspopup="true">
+                                    <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 ){ ?>
+                                        <a href="<?php echo "indicator.php?id=".$_getId?>" class="menu-link">
+                                        <?php }else { ?>
                                         <a href="indicator.php" class="menu-link">
+                                        <?php } ?>
                                             <span class="menu-text">ตัวชีวัด-เป้าประสงค์</span>
                                         </a>
                                     </li>                         
                                 </ul>
                                 <ul class="menu-nav">
                                     <li class="menu-item " aria-haspopup="true">
+                                    <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 ){ ?>
+                                        <a href="<?php echo "strategy.php?id=".$_getId?>" class="menu-link">
+                                        <?php }else { ?>
                                         <a href="strategy.php" class="menu-link">
+                                        <?php } ?>
                                             <span class="menu-text">กลยุทธ์ เป้าประสงค์</span>
                                         </a>
                                     </li>                         
                                 </ul>
                                 <ul class="menu-nav">
                                     <li class="menu-item " aria-haspopup="true">
+                                    <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 ){ ?>
+                                        <a href="<?php echo "project.php?id=".$_getId?>" class="menu-link">
+                                        <?php }else { ?>
                                         <a href="project.php" class="menu-link">
+                                        <?php } ?>
                                             <span class="menu-text">โครงการ</span>
                                         </a>
                                     </li>                         
                                 </ul>
                                 <ul class="menu-nav">
                                     <li class="menu-item " aria-haspopup="true">
+                                    <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 ){ ?>
+                                        <a href="<?php echo "sunit.php?id=".$_getId?>" class="menu-link">
+                                        <?php }else{ ?>
                                         <a href="sunit.php" class="menu-link">
+                                        <?php } ?>
                                             <span class="menu-text">หน่วยส่งมอบผลงาน</span>
                                         </a>
                                     </li>                         

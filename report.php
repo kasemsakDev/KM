@@ -288,6 +288,31 @@ if($_SESSION["IsManager"] != 1 &&  $_SESSION["IsProgrammer"] != 1){
 												</div>
 											</div>
 											<div class="card-body">
+                                            <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 ){
+                                        
+                                        $sql_allAgency = "select AgencyID,Name from km_agency Where km_agency.IsActive = 1 AND  km_agency.Name <> 'ผู้บริหาร'";
+                                        $sql_resultIssue =  mysqli_query($link,$sql_allAgency);
+                                        $allAgency = array();
+                                        while($row = mysqli_fetch_assoc($sql_resultIssue))
+                                        {
+                                            $allAgency[] = $row;
+                                        }                                            
+                                        ?>
+                                            <br>
+                                      <label for="cars">ค้นหาประเด็นยุทธศาสตร์ของหน่วยงาน : </label>
+                                        <select id="selectAllAgency" class="form-control col-md-6" onchange="selectsearch()">
+                                            <option value="0" >=========================Select=======================</option>
+                                        <?php foreach ($allAgency as $value) { ?>
+                                            <?php if($_getId == $value['AgencyID']){ ?>
+                                            <option value="<?php echo $value['AgencyID'] ?>" selected><?php echo $value['Name'] ?></option>
+                                            <?php }else { ?>
+                                            <option value="<?php echo $value['AgencyID'] ?>"><?php echo $value['Name'] ?></option> 
+                                            <?php } ?>
+                                            <?php } ?>
+                                        </select>                                  
+                                            <br>
+                                            <br>
+                                      <?php }  ?>
 												<!--begin::Chart-->
 												<canvas id="mycanvas" width="800" height="400"></canvas>
 												<!--end::Chart-->
@@ -328,6 +353,13 @@ if($_SESSION["IsManager"] != 1 &&  $_SESSION["IsProgrammer"] != 1){
     <script src="Content/template/js/pages/html-table.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
     <script src="Scripts/appchar.js"></script>
+    <script>
+        function selectsearch() {
+        var e = document.getElementById("selectAllAgency");
+        var value = e.value;
+        window.location.href = 'issue.php?id='+value;
+        }
+    </script>
     </body>
 
 
