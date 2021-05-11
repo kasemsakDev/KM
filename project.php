@@ -428,7 +428,9 @@ if(isset($_GET['id']))
                                                     data-toggle="modal" data-target="#exampleModal" 
                                                     onClick="onclick_Edit(<?php echo $row['ProjectID'];  ?>)">
                                                     Edit
-                                                    </button></td>
+                                                    </button>
+                                                    <button  class="btn btn-danger" onclick="deleteProject(<?php echo $row['ProjectID']; ?>,<?php echo $row['StrategyID']; ?> )">Delete</button>
+                                                    </td>
                                                         <?php } ?>                                    
 												</tr>
                                                 <?php  }  ?>
@@ -441,35 +443,6 @@ if(isset($_GET['id']))
 </div>
 </div>
 
-
-<!-- Modal-->
-<!--
-<div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">แก้ไขประเด็นยุทธศาสตร์</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <i aria-hidden="true" class="ki ki-close"></i>
-                </button>
-            </div>
-            <div class="modal-body" style="height: 300px;">
-                <div class="row">
-                <div class="col-md-3"></div>
-                <input type="text" class="form control" value="Land Rover" >
-                
-                
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary font-weight-bold">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div> -->
-
-<!-- Edit -->
 <form action="Manage/upsertproject.php" method="POST">
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -637,6 +610,15 @@ if(isset($_GET['id']))
         var value = e.value;
         window.location.href = 'project.php?id='+value;
         }
+
+        function deleteProject(id,payload) {
+          if(!confirm('Are you sure?')){
+            e.preventDefault();
+            return false;
+        }
+          window.location.href = 'Manage/delete.php?id='+id+'&action=project&payload='+payload;
+        }
+
     </script>  
 
                     </body>

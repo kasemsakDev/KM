@@ -396,6 +396,7 @@ if(isset($_GET['id']))
                                                     onClick="onclick_issue(<?php echo $row['PurposeID'];  ?>)">
                                                     Edit
                                                     </button>
+                                                    <button  class="btn btn-danger" onclick="deletePurpose(<?php echo $row['PurposeID']; ?>,<?php echo $row['IssueID']; ?> )">Delete</button>
                                                     </td>
                                                     <?php } ?>
 												</tr>
@@ -596,6 +597,15 @@ if(isset($_GET['id']))
         var value = e.value;
         window.location.href = 'purpose.php?id='+value;
         }
+
+        function deletePurpose(id,payload) {
+            if(!confirm('Are you sure?')){
+            e.preventDefault();
+            return false;
+        }
+          window.location.href = 'Manage/delete.php?id='+id+'&action=purpose&payload='+payload;
+        }
+
     </script>   
                     </body>
                 

@@ -423,7 +423,9 @@ if(isset($_GET['id']))
                                                     data-toggle="modal" data-target="#exampleModal" 
                                                     onClick="onclick_Edit(<?php echo $row['StrategyID'];  ?>)">
                                                     Edit
-                                                    </button></td>
+                                                    </button>
+                                                    <button  class="btn btn-danger" onclick="deleteStrategy(<?php echo $row['StrategyID']; ?>,<?php echo $row['IndicatorID']; ?> )">Delete</button>
+                                                    </td>
                                                     <?php } ?>
                                                     
                                                    
@@ -636,6 +638,16 @@ if(isset($_GET['id']))
         var value = e.value;
         window.location.href = 'strategy.php?id='+value;
         }
+
+        function deleteStrategy(id,payload) {
+            if(!confirm('Are you sure?')){
+            e.preventDefault();
+            return false;
+        }
+          window.location.href = 'Manage/delete.php?id='+id+'&action=strategy&payload='+payload;
+        }
+        
+
     </script>  
                     </body>
                     <!--end::Footer-->

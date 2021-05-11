@@ -449,7 +449,7 @@ if(isset($_GET['id']))
                                                     <td><?php  echo $master['Name'] ?></td>     		
                                                     <td><?php echo DateThai($master['UpdateOn']) ?></td> 																												
                                                     <td>
-                                                    <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 ){ ?>
+                                                    <?php if($_SESSION["IsAdmin"] == 1 ||  $_SESSION["IsProgrammer"] == 1 ){ ?>
                                                     <?php if($totalProgressive != 100){ ?>
                                                     <button type="button" class="btn btn-primary" data-toggle="modal"                                                    
                                                      data-target="#exampleModal"
@@ -458,7 +458,10 @@ if(isset($_GET['id']))
                                                      <?php } ?>
                                                      <?php } ?>
                                                      <a href="sunitdetail.php?id=<?php echo $master['SunitID']; ?>" target="_blank">
-                                                        <input type="button" class="btn btn-danger btn-shadow font-weight-bold mr-2" value="Detail"></a>   
+                                                        <input type="button" class="btn btn-info btn-shadow font-weight-bold mr-2" value="Detail"></a>   
+                                                       
+                                                        <button  class="btn btn-danger" onclick="deleteSunit(<?php echo $master['SunitID']; ?>,<?php echo $master['ProjectID']; ?> )">Delete</button>
+                                               
                                                      </td>
                                                                                                
 												</tr>
@@ -476,7 +479,7 @@ if(isset($_GET['id']))
                                                     <td><?php  echo $detail['Name'] ?></td>
                                                     <td><?php  echo DateThai($detail['UpdateOn']) ?></td>     
                                                     <?php if($_SESSION["IsManager"] == 0){ ?>																																		
-                                                    <td></td>
+                                                    <td><button  class="btn btn-danger" onclick="deleteItem(<?php echo $detail['SunitDetailID']; ?>,<?php echo $master['SunitID'];  ?> )">Delete</button></td>
                                                     <?php } ?>                
 												</tr>
                                                 <?php } ?>
@@ -753,6 +756,7 @@ $(document).ready(function() {
     });
            
         });
+
         
         function AddSelectList_Agency(value,idname)
         {
@@ -950,6 +954,22 @@ function ValidateCreate() {
         var e = document.getElementById("selectAllAgency");
         var value = e.value;
         window.location.href = 'sunit.php?id='+value;
+        }
+
+        function deleteSunit(id,payload) {
+          if(!confirm('Are you sure?')){
+            e.preventDefault();
+            return false;
+        }
+          window.location.href = 'Manage/delete.php?id='+id+'&action=sunit&payload='+payload;
+        }
+
+        function deleteItem(id,payload) {
+            if(!confirm('Are you sure?')){
+            e.preventDefault();
+            return false;
+        }
+            window.location.href = 'Manage/delete.php?id='+id+'&action=sunitdetail&payload='+payload;
         }
 
     </script>

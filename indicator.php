@@ -397,7 +397,9 @@ include("fun_progressive.php");
                                                     data-toggle="modal" data-target="#exampleModal" 
                                                     onClick="onclick_Edit(<?php echo $row['IndicatorID'];  ?>)">
                                                     Edit
-                                                    </button></td>  
+                                                    </button>
+                                                    <button  class="btn btn-danger" onclick="deleteIndicator(<?php echo $row['IndicatorID']; ?>,<?php echo $row['PurposeID']; ?> )">Delete</button>
+                                                    </td>  
                                                     <?php } ?>                                                                                            
 												</tr>
                                                 <?php  }  ?>
@@ -483,7 +485,6 @@ include("fun_progressive.php");
     </div>
 </div>
 </form> 
-
 <!-- สร้าง -->
 <form action="Manage/upsertindicator.php" method="POST">
 <div class="modal fade" id="exampleModalSizeLg" tabindex="-1" role="dialog" aria-labelledby="exampleModalSizeLg" aria-hidden="true">
@@ -607,6 +608,15 @@ include("fun_progressive.php");
         var value = e.value;
         window.location.href = 'indicator.php?id='+value;
         }
+
+        function deleteIndicator(id,payload) {
+            if(!confirm('Are you sure?')) {
+            e.preventDefault();
+            return false;
+        }
+          window.location.href = 'Manage/delete.php?id='+id+'&action=indicator&payload='+payload;
+        }
+
     </script>  
                     </body>
                     <!--end::Footer-->
