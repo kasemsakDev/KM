@@ -469,7 +469,7 @@ if(isset($_GET['id']))
 </div> -->
 
 
-<form action="Manage/upsertstrategy.php" method="POST">
+<form action="Manage/upsertstrategy.php" method="POST" id="postEdit">
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
@@ -486,7 +486,7 @@ if(isset($_GET['id']))
             <label class="col-3 col-form-label">เป้าประสงค์ : </label>
             <div class="col-9">
     
-														<select class="form-control" name="indicatorid" id="indicatorID" required>
+														<select class="form-control" name="indicatorid" id="indicatorID" required disabled>
 															<option value = "">Select</option>
                                                             <?php foreach($listindicator as $row){ ?>
                                                             <option value="<?php echo $row["IndicatorID"]  ?>"><?php echo $row["Name"]   ?></option>
@@ -647,6 +647,9 @@ if(isset($_GET['id']))
           window.location.href = 'Manage/delete.php?id='+id+'&action=strategy&payload='+payload;
         }
         
+        $('#postEdit').on('submit', function() {
+            $('input, select').prop('disabled', false);
+        });
 
     </script>  
                     </body>

@@ -972,4 +972,8 @@ function ValidateCreate() {
             window.location.href = 'Manage/delete.php?id='+id+'&action=sunitdetail&payload='+payload;
         }
 
+        $('#postEdit').on('submit', function() {
+            $('input, select').prop('disabled', false);
+        });
+
     </script>

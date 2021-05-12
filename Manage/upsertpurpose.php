@@ -61,7 +61,6 @@ ob_start();
           //  echo $sql; exit();
         }else{
             //Update
-        //    echo $id; exit();
             $sql = "UPDATE  km_purpose
             SET Name = '$name',IssueID = $issueId
             WHERE PurposeID = $id";

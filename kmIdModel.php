@@ -90,7 +90,7 @@ function _getIdALL($id,$Action,$link){
             WHERE km_issue.IssueID = $id";
             while($row = mysqli_fetch_assoc($result))
             {
-                $PurposeID = $row['IndicatorID'];
+                $PurposeID = $row['PurposeID'];
             }
 
             $Obj->IssueID=$id;

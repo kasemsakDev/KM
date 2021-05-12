@@ -440,7 +440,7 @@ include("fun_progressive.php");
     </div>
 </div> -->
 <!-- Edit -->
-<form action="Manage/upsertindicator.php" method="POST">
+<form action="Manage/upsertindicator.php" method="POST" id="postEdit">
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
@@ -457,7 +457,7 @@ include("fun_progressive.php");
             <label class="col-3 col-form-label">เป้าประสงค์ : </label>
             <div class="col-9">
     
-														<select class="form-control" name="purposeid" id="purposeID" required>
+														<select class="form-control" name="purposeid" id="purposeID" required disabled>
 															<option value = "">Select</option>
                                                             <?php foreach($list_purpose as $row){ ?>
                                                             <option value="<?php echo $row["PurposeID"]  ?>"><?php echo $row["Name"]   ?></option>
@@ -616,6 +616,10 @@ include("fun_progressive.php");
         }
           window.location.href = 'Manage/delete.php?id='+id+'&action=indicator&payload='+payload;
         }
+
+        $('#postEdit').on('submit', function() {
+            $('input, select').prop('disabled', false);
+        });
 
     </script>  
                     </body>

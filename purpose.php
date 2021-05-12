@@ -438,7 +438,7 @@ if(isset($_GET['id']))
     </div>
 </div> -->
 
-<form action="Manage/upsertpurpose.php" method="POST">
+<form action="Manage/upsertpurpose.php" method="POST" id="postEdit">
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
@@ -454,7 +454,7 @@ if(isset($_GET['id']))
             <div class="form-group row">
             <label class="col-3 col-form-label">ประเด็นยุทธศาสตร์ : </label>
             <div class="col-9">
-												<select class="form-control" id="issueId" name = "issueId" required>
+												<select class="form-control" id="issueId" name = "issueId" required disabled>
                                                         <option value="">Select</option>
                                                     <?php foreach($list_issue as $row){  ?>															
                                                             <option value="<?php echo $row['IssueID'] ?>"><?php echo $row['Name'] ?></option>
@@ -605,6 +605,10 @@ if(isset($_GET['id']))
         }
           window.location.href = 'Manage/delete.php?id='+id+'&action=purpose&payload='+payload;
         }
+
+        $('#postEdit').on('submit', function() {
+            $('input, select').prop('disabled', false);
+        });
 
     </script>   
                     </body>

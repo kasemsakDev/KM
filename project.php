@@ -443,12 +443,12 @@ if(isset($_GET['id']))
 </div>
 </div>
 
-<form action="Manage/upsertproject.php" method="POST">
+<form action="Manage/upsertproject.php" method="POST" id="postEdit">
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">สร้าง โครงการ</h5>
+                <h5 class="modal-title" id="exampleModalLabel">แก้ไข โครงการ</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <i aria-hidden="true" class="ki ki-close"></i>
                 </button>
@@ -459,7 +459,7 @@ if(isset($_GET['id']))
             <div class="form-group row">
             <label class="col-3 col-form-label">กลยุทธ์-เป้าประสงค์ : </label>
             <div class="col-9">
-            <select class="form-control" name="Strategyid" id="StrategyID" required>
+            <select class="form-control" name="Strategyid" id="StrategyID" required disabled>
 															<option value = "">Select</option>
                                                             <?php foreach($liststrategy as $row){ ?>
                                                             <option value="<?php echo $row["StrategyID"]  ?>"><?php echo $row["Name"]   ?></option>
@@ -618,6 +618,10 @@ if(isset($_GET['id']))
         }
           window.location.href = 'Manage/delete.php?id='+id+'&action=project&payload='+payload;
         }
+
+        $('#postEdit').on('submit', function() {
+            $('input, select').prop('disabled', false);
+        });
 
     </script>  
 
