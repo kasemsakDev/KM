@@ -422,6 +422,7 @@ include("fun_progressive.php");
                                                     onClick="onclick_issue(<?php echo $row['IssueID'];  ?>)" data-toggle="modal" data-target="#exampleModal" >
                                                         Edit
                                                     </button>
+                                                    <button  class="btn btn-danger" onclick="deleteIssue(<?php echo $row['IssueID']; ?>,<?php echo $agencyId ?>)">Delete</button>
                                                 </td>
                                                 <?php } ?>
 												</tr>
@@ -599,6 +600,15 @@ include("fun_progressive.php");
         var value = e.value;
         window.location.href = 'issue.php?id='+value;
         }
+
+        function deleteIssue(id,payload) {
+          if(!confirm('Are you sure?')){
+            e.preventDefault();
+            return false;
+        }
+          window.location.href = 'Manage/delete.php?id='+id+'&action=issue&payload='+payload;
+        }
+
     </script>                                          
 
                     </body>

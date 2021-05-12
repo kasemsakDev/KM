@@ -562,7 +562,7 @@ switch ($_GET['action']) {
           mysqli_query($link,$sql);
 
           $_indicator = array();
-          $_getindicator = "select IndicatorID,UpdateOn from km_indicator Where PurposeID = $payload order by UpdateOn asc";
+          $_getindicator = "select IndicatorID,UpdateOn from km_indicator Where PurposeID = $id order by UpdateOn asc";
           $sql_indicator =  mysqli_query($link,$_getindicator);
           if (mysqli_num_rows($sql_indicator) > 0) {
           while($row = mysqli_fetch_assoc($sql_indicator))
@@ -571,7 +571,7 @@ switch ($_GET['action']) {
           }
           foreach($_indicator as $indicator){
             $numberIndicator++;
-            $_newNumberIndicator = (string)$_numberPurposeID .'.'. (string)$numberIndicator;
+            $_newNumberIndicator = (string)$_numberPurpose .'.'. (string)$numberIndicator;
             $id = $indicator['IndicatorID'];
             $sql = "UPDATE km_indicator
             SET Number = '$_newNumberIndicator'
@@ -657,8 +657,196 @@ switch ($_GET['action']) {
 header("location: ../purpose.php");
     break;  
    case "issue":
-    echo "issue";
-    exit();
+    $sql = "";  
+    $payload  = $_GET['payload'];
+    $_numberissueID = "";
+    $IdModel = _getIdALL($id,$_GET['action'],$link);
+    
+    //ลบทุกตัวที่เกี่ยวข้อง
+    $PurposeID =  $IdModel->PurposeID;
+    $IndicatorID = $IdModel->IndicatorID;
+    $StrategyID = $IdModel->StrategyID;
+    $ProjectID = $IdModel->ProjectID;
+    $SunitID = $IdModel->SunitID;
+    $SunitDetailID = $IdModel->SunitDetailID;
+
+    $sql = "DELETE FROM km_sunitdetail
+    where km_sunitdetail.SunitDetailID = $SunitDetailID";
+    mysqli_query($link,$sql);
+
+    //-Del Sunit
+    $sql = "DELETE FROM km_sunit 
+    Where km_sunit.SunitID = $SunitID";
+    mysqli_query($link,$sql);
+
+    //-Del project
+    $sql = "DELETE FROM km_project 
+    Where km_project.ProjectID = $ProjectID";
+
+    mysqli_query($link,$sql);
+    //-Del strategy
+    $sql = "DELETE FROM km_strategy
+    Where km_strategy.StrategyID = $StrategyID";
+    mysqli_query($link,$sql);
+
+    //-Del indicator
+    $sql = "DELETE FROM km_indicator
+    Where km_indicator.IndicatorID = $IndicatorID";
+    mysqli_query($link,$sql);
+
+    $sql = "DELETE FROM km_purpose
+    Where km_purpose.PurposeID = $PurposeID";
+    mysqli_query($link,$sql);
+    
+    $sql = "DELETE FROM km_issue
+    Where km_issue.IssueID = $id";
+    mysqli_query($link,$sql);
+
+    //get all Project issue
+    $issueList = array();
+    $numberissue = 0; 
+    $_purpose = array();
+    $numberPurpose = 0;
+    $_Indicator = array();
+    $numberIndicator = 0;
+    $_strategy = array();
+    $numberStrategy = 0;
+    $_Project = array();
+    $numberProject = 0;
+    $_sunit = array();
+    $numberSunit = 0;
+    $_sunitdetail = array();
+    $numberSunitDetail = 0;
+    $sql = "select IssueID,UpdateOn from km_issue Where AgencyID = $payload order by UpdateOn asc";
+    $resultGetAllByIssue = mysqli_query($link,$sql);
+    if (mysqli_num_rows($resultGetAllByIssue) > 0) {
+        while($row = mysqli_fetch_assoc($resultGetAllByIssue)){
+          $issueList[] = $row;
+        }
+       
+        foreach($issueList as $issues){
+          $numberissue++;
+          $_numberissue = (string)$numberissue;
+          $id = $issues['IssueID'];
+          $sql = "UPDATE km_issue
+          SET Number = '$_numberissue'
+          WHERE IssueID = $id";
+          mysqli_query($link,$sql);
+
+          
+          $_getpurpose = "select PurposeID,UpdateOn from km_purpose Where IssueID = $id order by UpdateOn asc";
+          $resultPurpose =  mysqli_query($link,$_getpurpose);
+          if(mysqli_num_rows($resultPurpose)){
+          while($row = mysqli_fetch_assoc($resultPurpose))
+          {
+            $_purpose[] = $row;
+          }
+
+          foreach($_purpose as $purpose){
+            $numberPurpose++;
+            $_numberPurpose = (string)$_numberissue.'.'.(string)$numberPurpose;
+            $id = $purpose['PurposeID'];
+            $sql = "UPDATE km_purpose
+            SET Number = '$_numberPurpose'
+            WHERE PurposeID = $id";
+
+$_indicator = array();
+$_getindicator = "select IndicatorID,UpdateOn from km_indicator Where PurposeID = $id order by UpdateOn asc";
+$sql_indicator =  mysqli_query($link,$_getindicator);
+if (mysqli_num_rows($sql_indicator) > 0) {
+while($row = mysqli_fetch_assoc($sql_indicator))
+{
+  $_indicator[] = $row;
+}
+foreach($_indicator as $indicator){
+  $numberIndicator++;
+  $_newNumberIndicator = (string)$_numberPurpose .'.'. (string)$numberIndicator;
+  $id = $indicator['IndicatorID'];
+  $sql = "UPDATE km_indicator
+  SET Number = '$_newNumberIndicator'
+  WHERE IndicatorID=$id";
+  mysqli_query($link,$sql);
+//update Number strategy
+      $sql = "select StrategyID,UpdateOn from km_strategy Where IndicatorID = $id order by UpdateOn asc";
+      $sql_Resultstrategy =  mysqli_query($link,$sql);
+    if (mysqli_num_rows($sql_Resultstrategy) > 0) {
+      while($row = mysqli_fetch_assoc($sql_Resultstrategy))
+    { 
+      $_strategy[] = $row;
+    }
+    foreach($_strategy as $strategy)
+    {
+      $numberStrategy++;
+      $_numberStrategy = (string)$_newNumberIndicator .'.'. (string)$numberStrategy;
+      $id = $strategy['StrategyID'];
+      $sql = "UPDATE km_strategy
+      SET Number = '$_numberStrategy'
+      WHERE StrategyID =$id";
+      mysqli_query($link,$sql);
+
+      $sql = "select ProjectID,UpdateOn from km_project Where StrategyID = $id order by UpdateOn asc";
+      $sql_ResultProject =  mysqli_query($link,$sql);
+      if (mysqli_num_rows($sql_ResultProject) > 0) {
+      while($row = mysqli_fetch_assoc($sql_ResultProject))
+      {
+        $_Project[] = $row;
+      }
+        foreach($_Project as $project) {
+      $numberProject++;
+      $_numberProject = (string)$_numberStrategy .'.'. (string)$numberProject;
+      $id = $project['ProjectID'];
+      $sql = "UPDATE km_project 
+      SET Number = '$_numberProject' 
+      WHERE ProjectID = $id";
+      mysqli_query($link,$sql);
+
+      $sql = "select SunitID,UpdateOn from km_sunit Where ProjectID = $id order by UpdateOn asc";
+      $sql_ResultSunit =  mysqli_query($link,$sql);
+      if (mysqli_num_rows($sql_ResultSunit) > 0) {
+      while($row = mysqli_fetch_assoc($sql_ResultSunit))
+      {
+          $_sunit[] = $row;  
+      }
+      foreach($_sunit as $sunit){
+      $numberSunit++;
+      $_newNumberSunit = (string)$_numberProject .'.'. (string)$numberSunit;
+      $id = $sunit['SunitID'];
+      $sql = "UPDATE km_sunit
+      SET Number = '$_newNumberSunit'
+      WHERE SunitID=$id";
+      mysqli_query($link,$sql);
+
+      $sql = "select SunitDetailID,UpdateOn from km_sunitdetail Where SunitID = $id order by UpdateOn asc";
+      $sql_ResultSunuDetail =  mysqli_query($link,$sql);
+      if (mysqli_num_rows($sql_ResultSunuDetail) > 0) {
+      while($row = mysqli_fetch_assoc($sql_ResultSunuDetail))
+          {
+              $_sunitdetail[] = $row;
+          }
+          foreach($_sunitdetail as $detail){
+          $numberSunitDetail++;
+          $_newNumberSunitDetail = (string)$_newNumberSunit .'.'. (string)$numberSunitDetail;
+          $id = $detail['SunitDetailID'];
+          $sql = "UPDATE km_sunitdetail
+          SET Number = '$_newNumberSunitDetail'
+          WHERE SunitDetailID=$id";
+          mysqli_query($link,$sql);
+                            }//End loop SunitDetail
+                          }//End if SunitDetail
+                        }//End loop sunit
+                      }//End if sunit
+                    }//End loop project
+                  }//End if project
+                }//End loop strategy
+              }// End if strategy
+            }// End loop indicator
+          }//End if indicator
+        }//End loop purpose
+      }//End if purpose
+    }//End loop issue
+} //End if issue
+
+    header("location: ../issue.php");
     break;  
   default:
     echo 'Not Action to Delete';

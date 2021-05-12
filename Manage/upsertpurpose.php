@@ -8,7 +8,7 @@ ob_start();
     {
         require_once "../dblink.php";
 
-
+         
 
         function _getNumber($issueId,$link)
         {
@@ -47,7 +47,7 @@ ob_start();
         $agencyId = $_POST['agencyid']; 
         $userid = $_SESSION["id"];
         $issueId = $_POST['issueId'];
-
+        
         $datetime = date('Y-m-d H:i:s');
         $sql = "";
         if($id == 0)

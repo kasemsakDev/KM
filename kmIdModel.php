@@ -4,7 +4,103 @@ function _getIdALL($id,$Action,$link){
     $Obj = new IdModel();
     switch ($Action) {
         case 'issue':
-            
+            $IssueID = 0;
+            $PurposeID = 0;
+            $IndicatorID = 0;
+            $StrategyID = 0;
+            $ProjectID = 0;
+            $SunitID = 0;
+            $SunitDetailID = 0;
+            $sql = "";
+
+            $sql = "SELECT SunitDetailID FROM  km_sunitdetail
+            inner join km_sunit on km_sunitdetail.SunitID = km_sunit.SunitID
+            inner join km_project on km_sunit.ProjectID = km_project.ProjectID
+            inner join km_strategy on km_strategy.StrategyID = km_project.StrategyID
+            inner join km_indicator on km_strategy.IndicatorID = km_indicator.IndicatorID
+            inner join km_purpose on km_purpose.PurposeID = km_indicator.PurposeID
+            inner join km_issue on km_issue.IssueID = km_purpose.IssueID
+            where km_issue.IssueID = $id";
+            $result =  mysqli_query($link,$sql);
+            while($row = mysqli_fetch_assoc($result))
+            {
+                   $SunitDetailID = $row['SunitDetailID'];
+            }
+
+            $sql = "SELECT SunitID FROM  km_sunit 
+            INNER JOIN km_project on km_project.ProjectID = km_sunit.ProjectID
+            INNER JOIN km_strategy on km_strategy.StrategyID = km_project.StrategyID
+            INNER JOIN km_indicator on km_strategy.IndicatorID = km_indicator.IndicatorID
+            inner join km_purpose on km_purpose.PurposeID = km_indicator.PurposeID
+            inner join km_issue on km_issue.IssueID = km_purpose.IssueID
+            where km_issue.IssueID = $id";
+            $result =  mysqli_query($link,$sql);
+            while($row = mysqli_fetch_assoc($result))
+            {
+                   $SunitID = $row['SunitID'];
+            }
+
+            $sql = "SELECT SunitID FROM  km_sunit 
+            INNER JOIN km_project on km_project.ProjectID = km_sunit.ProjectID
+            INNER JOIN km_strategy on km_strategy.StrategyID = km_project.StrategyID
+            INNER JOIN km_indicator on km_strategy.IndicatorID = km_indicator.IndicatorID
+            inner join km_purpose on km_purpose.PurposeID = km_indicator.PurposeID
+            inner join km_issue on km_issue.IssueID = km_purpose.IssueID
+            where km_issue.IssueID = $id";
+            $result =  mysqli_query($link,$sql);
+            while($row = mysqli_fetch_assoc($result))
+            {
+                   $SunitID = $row['SunitID'];
+            }
+
+            $sql = "SELECT ProjectID FROM  km_project 
+            INNER JOIN km_strategy on km_strategy.StrategyID = km_project.StrategyID
+            INNER JOIN km_indicator on km_strategy.IndicatorID = km_indicator.IndicatorID
+            inner join km_purpose on km_purpose.PurposeID = km_indicator.PurposeID
+            inner join km_issue on km_issue.IssueID = km_purpose.IssueID
+            where km_issue.IssueID = $id";
+            $result =  mysqli_query($link,$sql);
+            while($row = mysqli_fetch_assoc($result))
+            {
+                   $ProjectID = $row['ProjectID'];
+            }
+            $sql = "SELECT StrategyID   FROM km_strategy
+            INNER JOIN km_indicator on km_strategy.IndicatorID = km_indicator.IndicatorID
+            inner join km_purpose on km_purpose.PurposeID = km_indicator.PurposeID
+            inner join km_issue on km_issue.IssueID = km_purpose.IssueID
+            where km_issue.IssueID = $id";
+            $result =  mysqli_query($link,$sql);
+            while($row = mysqli_fetch_assoc($result))
+                {
+                    $StrategyID = $row['StrategyID'];
+                }
+
+            $sql = "SELECT IndicatorID FROM  km_indicator
+            inner join km_purpose on km_purpose.PurposeID = km_indicator.PurposeID
+            inner join km_issue on km_issue.IssueID = km_purpose.IssueID
+            where km_issue.IssueID = $id";
+            $result =  mysqli_query($link,$sql);
+            while($row = mysqli_fetch_assoc($result))
+            {
+                $IndicatorID = $row['IndicatorID'];
+            }
+
+            $sql = "select PurposeID from km_purpose
+            inner join km_issue on km_purpose.IssueID = km_issue.IssueID
+            WHERE km_issue.IssueID = $id";
+            while($row = mysqli_fetch_assoc($result))
+            {
+                $PurposeID = $row['IndicatorID'];
+            }
+
+            $Obj->IssueID=$id;
+            $Obj->PurposeID=$PurposeID;
+            $Obj->IndicatorID=$IndicatorID;
+            $Obj->StrategyID=$StrategyID;
+            $Obj->ProjectID=$ProjectID;
+            $Obj->SunitID=$SunitID;
+            $Obj->SunitDetailID=$SunitDetailID;
+
             break;
         case 'purpose':
             $IssueID = 0;
