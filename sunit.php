@@ -267,7 +267,7 @@ if(isset($_GET['id']))
                                         <?php }else { ?>
                                             <a href="issue.php"class="menu-link">
                                         <?php } ?>
-                                            <span class="menu-text">ประเด็นยุทธศาสตร์</span>
+                                            <span class="menu-text" style="color:black">ประเด็นยุทธศาสตร์</span>
                                         </a>
                                     </li>                         
                                 </ul>
@@ -279,7 +279,7 @@ if(isset($_GET['id']))
                                         <?php }else { ?>
                                             <a href="purpose.php" class="menu-link">
                                         <?php } ?>
-                                            <span class="menu-text">เป้าประสงค์</span>
+                                            <span class="menu-text" style="color:black">เป้าประสงค์</span>
                                         </a>
                                     </li>                         
                                 </ul>
@@ -290,7 +290,7 @@ if(isset($_GET['id']))
                                         <?php }else { ?>
                                         <a href="indicator.php" class="menu-link">
                                         <?php } ?>
-                                            <span class="menu-text">ตัวชีวัด-เป้าประสงค์</span>
+                                            <span class="menu-text" style="color:black">ตัวชีวัด-เป้าประสงค์</span>
                                         </a>
                                     </li>                         
                                 </ul>
@@ -301,7 +301,7 @@ if(isset($_GET['id']))
                                         <?php }else { ?>
                                         <a href="strategy.php" class="menu-link">
                                         <?php } ?>
-                                            <span class="menu-text">กลยุทธ์ เป้าประสงค์</span>
+                                            <span class="menu-text" style="color:black">กลยุทธ์ เป้าประสงค์</span>
                                         </a>
                                     </li>                         
                                 </ul>
@@ -312,7 +312,7 @@ if(isset($_GET['id']))
                                         <?php }else { ?>
                                         <a href="project.php" class="menu-link">
                                         <?php } ?>
-                                            <span class="menu-text">โครงการ</span>
+                                            <span class="menu-text" style="color:black">โครงการ</span>
                                         </a>
                                     </li>                         
                                 </ul>
@@ -323,7 +323,7 @@ if(isset($_GET['id']))
                                         <?php }else{ ?>
                                         <a href="sunit.php" class="menu-link">
                                         <?php } ?>
-                                            <span class="menu-text">หน่วยส่งมอบผลงาน</span>
+                                            <span class="menu-text" style="color:black">หน่วยส่งมอบผลงาน</span>
                                         </a>
                                     </li>                         
                                 </ul>
@@ -456,11 +456,12 @@ if(isset($_GET['id']))
                                                      onClick="onclick_Update(<?php echo $master['SunitID'];  ?>)"
                                                      >Update</button>                                                 
                                                      <?php } ?>
+                                                     <button  class="btn btn-danger" onclick="deleteSunit(<?php echo $master['SunitID']; ?>,<?php echo $master['ProjectID']; ?> )">Delete</button>
                                                      <?php } ?>
                                                      <a href="sunitdetail.php?id=<?php echo $master['SunitID']; ?>" target="_blank">
                                                         <input type="button" class="btn btn-info btn-shadow font-weight-bold mr-2" value="Detail"></a>   
                                                        
-                                                        <button  class="btn btn-danger" onclick="deleteSunit(<?php echo $master['SunitID']; ?>,<?php echo $master['ProjectID']; ?> )">Delete</button>
+                                                      
                                                
                                                      </td>
                                                                                                

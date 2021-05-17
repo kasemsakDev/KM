@@ -141,9 +141,7 @@ include("fun_progressive.php");
                                 </span>
                             </div>
                         </div>
-
                     </div>
-
                     <!--end::Chat-->
                     <!--begin::User-->
                     <div class="topbar-item">
@@ -202,7 +200,9 @@ include("fun_progressive.php");
                     <!--begin::Tab Content-->
                     <div class="tab-content">
                         <!--begin::Tab Pane-->
-                        <div id="kt_header_menu" class="header-menu header-menu-mobile header-menu-layout-default">
+                        <div class="tab-pane py-5 p-lg-0 show active" id="kt_header_tab_1">
+                            <!--begin::Menu-->
+                            <div id="kt_header_menu" class="header-menu header-menu-mobile header-menu-layout-default">
                                 <!--begin::Nav-->
                                 <ul class="menu-nav">
                                     <li class="menu-item" aria-haspopup="true">
@@ -211,30 +211,30 @@ include("fun_progressive.php");
                                         <?php }else { ?>
                                             <a href="issue.php"class="menu-link">
                                         <?php } ?>
-                                            <span class="menu-text">ประเด็นยุทธศาสตร์</span>
+                                            <span class="menu-text" style="color:black">ประเด็นยุทธศาสตร์</span>
                                         </a>
                                     </li>                         
                                 </ul>
                                 <ul class="menu-nav">
-                                    <li class="menu-item" aria-haspopup="true">
+                                    <li class="menu-item " aria-haspopup="true">
 
                                     <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 ){ ?>
                                         <a href="<?php echo "purpose.php?id=".$_getId?>" class="menu-link">
                                         <?php }else { ?>
                                             <a href="purpose.php" class="menu-link">
                                         <?php } ?>
-                                            <span class="menu-text">เป้าประสงค์</span>
+                                            <span class="menu-text" style="color:black">เป้าประสงค์</span>
                                         </a>
                                     </li>                         
                                 </ul>
                                 <ul class="menu-nav">
-                                    <li class="menu-item  menu-item-active" aria-haspopup="true">
+                                    <li class="menu-item menu-item-active" aria-haspopup="true">
                                     <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 ){ ?>
                                         <a href="<?php echo "indicator.php?id=".$_getId?>" class="menu-link">
                                         <?php }else { ?>
                                         <a href="indicator.php" class="menu-link">
                                         <?php } ?>
-                                            <span class="menu-text">ตัวชีวัด-เป้าประสงค์</span>
+                                            <span class="menu-text" style="color:black">ตัวชีวัด-เป้าประสงค์</span>
                                         </a>
                                     </li>                         
                                 </ul>
@@ -245,7 +245,7 @@ include("fun_progressive.php");
                                         <?php }else { ?>
                                         <a href="strategy.php" class="menu-link">
                                         <?php } ?>
-                                            <span class="menu-text">กลยุทธ์ เป้าประสงค์</span>
+                                            <span class="menu-text" style="color:black">กลยุทธ์ เป้าประสงค์</span>
                                         </a>
                                     </li>                         
                                 </ul>
@@ -256,7 +256,7 @@ include("fun_progressive.php");
                                         <?php }else { ?>
                                         <a href="project.php" class="menu-link">
                                         <?php } ?>
-                                            <span class="menu-text">โครงการ</span>
+                                            <span class="menu-text" style="color:black">โครงการ</span>
                                         </a>
                                     </li>                         
                                 </ul>
@@ -267,16 +267,14 @@ include("fun_progressive.php");
                                         <?php }else{ ?>
                                         <a href="sunit.php" class="menu-link">
                                         <?php } ?>
-                                            <span class="menu-text">หน่วยส่งมอบผลงาน</span>
+                                            <span class="menu-text" style="color:black">หน่วยส่งมอบผลงาน</span>
                                         </a>
                                     </li>                         
                                 </ul>
                                 <!--end::Nav-->
                             </div>
-                                <!--begin::Nav-->
-                             
-                                <!--end::Nav-->
-                           
+                            <!--end::Menu-->
+                        </div>
                         
                         <!--begin::Tab Pane-->
                         <!--begin::Tab Pane-->
@@ -301,6 +299,7 @@ include("fun_progressive.php");
                                 <a href="listrole.php" class="btn btn-light-primary font-weight-bold mr-3 my-lg-0">List Role</a>
                                 <a href="listagency.php" class="btn btn-light-info font-weight-bold my-2 my-lg-0">List Agency</a>
                                 <?php } ?>
+                                <?php ?>
                                 <!--end::Actions-->
                             </div>
                            <!-- <div class="d-flex align-items-center">
@@ -532,8 +531,6 @@ include("fun_progressive.php");
 </div>
 </form> 
 
-
-
                         <!--begin::Footer-->
                         <div class="footer bg-white py-4 d-flex flex-lg-column" id="kt_footer">
                         <!--begin::Container-->
@@ -578,7 +575,7 @@ include("fun_progressive.php");
     response[0] // first $sup variable
     response[1] // second $second_var variable
      */
-    
+
      document.getElementById("ajaxid").value = value;
      document.getElementById("purposeID").value = response[0];
      document.getElementById("editname").value = response[1]; 
