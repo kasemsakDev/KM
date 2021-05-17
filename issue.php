@@ -24,7 +24,6 @@ include("fun_progressive.php");
         {
             $allyear[] = $row;
         } 
-
     $year = "";
     if(isset($_GET['year'])){
         $year = $_GET['year'];
@@ -412,16 +411,16 @@ include("fun_progressive.php");
                                         </select>  
                                         <br>
                                         <label for="cars">ค้นหาปี : </label>
-                                        <?php  $numyear = 1; ?>
                                         <select id="selectyear" class="form-control col-md-2" onchange="selectyear()">
                                         <?php foreach ($allyear as $value) { ?>
                                             <?php if($year == $value['YearName']){ ?>
                                             <option value="<?php echo $value['YearID'] ?>" selected><?php echo $value['YearName'] ?></option>
-                                            <?php }else ?>
+                                            <?php }else{ ?>
                                             <option value="<?php echo $value['YearID'] ?>"><?php echo $value['YearName'] ?></option>
                                             <?php } ?>
                                         </select>                                                                    
                                             <br>
+                                            <?php }  ?>
                                       <?php }  ?>
                                         <table class="table table-separate table-head-custom" id="tbI">
 											<thead>

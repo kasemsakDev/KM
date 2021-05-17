@@ -390,11 +390,12 @@ while($row = mysqli_fetch_assoc($sql_resultyear))
                                         <?php foreach ($allyear as $value) { ?>
                                             <?php if($year == $value['YearName']){ ?>
                                             <option value="<?php echo $value['YearID'] ?>" selected><?php echo $value['YearName'] ?></option>
-                                            <?php }else ?>
+                                            <?php }else{ ?>
                                             <option value="<?php echo $value['YearID'] ?>"><?php echo $value['YearName'] ?></option>
                                             <?php } ?>
                                         </select>                                                                    
                                             <br>
+                                            <?php }  ?>
                                       <?php }  ?>
                                     <table class="table table-separate table-head-custom" id="tbI">
 											<thead>

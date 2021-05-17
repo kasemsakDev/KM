@@ -390,11 +390,12 @@ if(isset($_GET['id']))
                                         <?php foreach ($allyear as $value) { ?>
                                             <?php if($year == $value['YearName']){ ?>
                                             <option value="<?php echo $value['YearID'] ?>" selected><?php echo $value['YearName'] ?></option>
-                                            <?php }else ?>
+                                            <?php }else{ ?>
                                             <option value="<?php echo $value['YearID'] ?>"><?php echo $value['YearName'] ?></option>
                                             <?php } ?>
                                         </select>                                                                    
                                             <br>
+                                            <?php }  ?>
                                       <?php }  ?>
 										<div class="mb-7">
 											<div class="row align-items-center">

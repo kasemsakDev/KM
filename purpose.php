@@ -214,7 +214,7 @@ if(isset($_GET['id']))
                             <a href="#" class="nav-link btn btn-clean" data-toggle="tab" data-target="#kt_header_tab_2" role="tab">Orders</a>
                         </li>
                         <!--end::Item-->
-                        <!--begin::Item-->
+                        <!--begin::Item--
                         <li class="nav-item mr-2">
                             <a href="#" class="nav-link btn btn-clean" data-toggle="tab" data-target="#kt_header_tab_2" role="tab">Help Ceter</a>
                         </li>
@@ -390,11 +390,12 @@ if(isset($_GET['id']))
                                         <?php foreach ($allyear as $value) { ?>
                                             <?php if($year == $value['YearName']){ ?>
                                             <option value="<?php echo $value['YearID'] ?>" selected><?php echo $value['YearName'] ?></option>
-                                            <?php }else ?>
+                                            <?php }else{ ?>
                                             <option value="<?php echo $value['YearID'] ?>"><?php echo $value['YearName'] ?></option>
                                             <?php } ?>
                                         </select>                                                                    
                                             <br>
+                                            <?php }  ?>
                                       <?php }  ?>
                                     <table class="table table-separate table-head-custom" id="tbI">
 											<thead>
