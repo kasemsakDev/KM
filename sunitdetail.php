@@ -3,10 +3,6 @@ require_once "dblink.php";
 session_start();
 ob_start();
 
-if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
-	header("location: index.php");
-	exit();
-}
 
 if($_SESSION["IsSupperAdmin"] == 1){
 	header("location: logout.php");

@@ -2,7 +2,7 @@
 
 session_start();
 ob_start();
-
+require_once "../fun_createyear.php";
 
     if(isset($_POST['save']))
     {
@@ -41,7 +41,10 @@ ob_start();
         $sql = "";
         if($id == 0)
         { //INSERT
-          
+
+          $year=(date("Y")+543);
+          UpdateYear($year,$link);
+
           $number = _getNumber($link,$agencySession);
 
             $sql = "INSERT INTO km_issue (Name,AgencyID,IsActive,CreateBy,CreateOn,UpdateBy,UpdateOn,number)

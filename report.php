@@ -3,15 +3,13 @@ session_start();
 ob_start();
 require_once "dblink.php";
 
-if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true ){
-	header("location: index.php");
-	exit();
-}
-
-if($_SESSION["IsManager"] != 1 &&  $_SESSION["IsProgrammer"] != 1){
-	header("location: logout.php");
-	exit();
-}
+$sql_year = "select * from km_year Where km_year.IsActive = 1 order by  km_year.YearName";
+$sql_resultyear =  mysqli_query($link,$sql_year);
+$allyear = array();
+while($row = mysqli_fetch_assoc($sql_resultyear))
+    {
+            $allyear[] = $row;
+    } 
 
 ?>
 
@@ -68,7 +66,7 @@ if($_SESSION["IsManager"] != 1 &&  $_SESSION["IsProgrammer"] != 1){
                         <?php } ?>
                         <!--end::Item-->
                         <!--begin::Item-->
-                        <?php if($_SESSION["IsManager"] != 1) { ?>
+                        <?php if($_SESSION["IsManager"] != 1 && $_SESSION["nonUse"] != 1) { ?>
                         <li class="nav-item mr-3">
                             <a href="#" class="nav-link py-4 px-6" data-toggle="tab" data-target="#kt_header_tab_3" role="tab">User</a>
                         </li>
@@ -109,7 +107,9 @@ if($_SESSION["IsManager"] != 1 &&  $_SESSION["IsProgrammer"] != 1){
                         </div>
                         <?php if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] == true){ ?>
                         <a href="logout.php" > <button class="btn btn-success">Logout</button></a>
-                        <?php } ?>
+                        <?php }else { ?>
+                        <a href="login.php"> <button class="btn btn-success">Login</button></a>
+                      <?php  } ?>
                     </div>
                     <!--end::User-->
                 </div>
@@ -162,42 +162,42 @@ if($_SESSION["IsManager"] != 1 &&  $_SESSION["IsProgrammer"] != 1){
                                 <ul class="menu-nav">
                                     <li class="menu-item menu-item-active" aria-haspopup="true">
                                         <a href="issue.php" class="menu-link">
-                                            <span class="menu-text">ประเด็นยุทธศาสตร์</span>
+                                            <span class="menu-text" style="color:black">ประเด็นยุทธศาสตร์</span>
                                         </a>
                                     </li>                         
                                 </ul>
                                 <ul class="menu-nav">
                                     <li class="menu-item " aria-haspopup="true">
                                         <a href="purpose.php" class="menu-link">
-                                            <span class="menu-text">เป้าประสงค์</span>
+                                            <span class="menu-text" style="color:black">เป้าประสงค์</span>
                                         </a>
                                     </li>                         
                                 </ul>
                                 <ul class="menu-nav">
                                     <li class="menu-item" aria-haspopup="true">
                                         <a href="indicator.php" class="menu-link">
-                                            <span class="menu-text">ตัวชีวัด-เป้าประสงค์</span>
+                                            <span class="menu-text" style="color:black">ตัวชีวัด-เป้าประสงค์</span>
                                         </a>
                                     </li>                         
                                 </ul>
                                 <ul class="menu-nav">
                                     <li class="menu-item " aria-haspopup="true">
                                         <a href="strategy.php" class="menu-link">
-                                            <span class="menu-text">กลยุทธ์ เป้าประสงค์</span>
+                                            <span class="menu-text" style="color:black">กลยุทธ์ เป้าประสงค์</span>
                                         </a>
                                     </li>                         
                                 </ul>
                                 <ul class="menu-nav">
                                     <li class="menu-item " aria-haspopup="true">
                                         <a href="project.php" class="menu-link">
-                                            <span class="menu-text">โครงการ</span>
+                                            <span class="menu-text" style="color:black">โครงการ</span>
                                         </a>
                                     </li>                         
                                 </ul>
                                 <ul class="menu-nav">
                                     <li class="menu-item " aria-haspopup="true">
                                         <a href="sunit.php" class="menu-link">
-                                            <span class="menu-text">หน่วยส่งมอบผลงาน</span>
+                                            <span class="menu-text" style="color:black">หน่วยส่งมอบผลงาน</span>
                                         </a>
                                     </li>                         
                                 </ul>
@@ -288,7 +288,7 @@ if($_SESSION["IsManager"] != 1 &&  $_SESSION["IsProgrammer"] != 1){
 												</div>
 											</div>
 											<div class="card-body">
-                                            <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 ){
+                                            <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 || $_SESSION["nonUse"] == true){
                                         
                                         $sql_allAgency = "select AgencyID,Name from km_agency Where km_agency.IsActive = 1 AND  km_agency.Name <> 'ผู้บริหาร'";
                                         $sql_resultIssue =  mysqli_query($link,$sql_allAgency);
@@ -311,6 +311,13 @@ if($_SESSION["IsManager"] != 1 &&  $_SESSION["IsProgrammer"] != 1){
                                             <?php } ?>
                                         </select>                                  
                                             <br>
+                                            <label for="cars">ค้นหาปี : </label>
+                                        <?php  $numyear = 1; ?>
+                                        <select id="selectyear" class="form-control col-md-2" onchange="selectyear()">
+                                        <?php foreach ($allyear as $value) { ?>
+                                            <option value="<?php echo $value['YearID'] ?>"><?php echo $value['YearName'] ?></option>
+                                            <?php } ?>
+                                        </select>   
                                             <br>
                                       <?php }  ?>
 												<!--begin::Chart-->

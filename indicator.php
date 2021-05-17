@@ -2,10 +2,8 @@
 
 session_start();
 ob_start();
-if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
-	header("location: index.php");
-	exit();
-}
+
+
 
 if($_SESSION["IsSupperAdmin"] == 1){
 	header("location: logout.php");
@@ -24,7 +22,7 @@ include("fun_progressive.php");
     $indicator = array();
     $sql_listpurpose = "";
     $list_purpose = array();
-    if($_SESSION["IsManager"] == 0){
+    if($_SESSION["IsManager"] == 0 &&  $_SESSION["nonUse"] != true){
     $sql_getindicator = "SELECT i.*,a.Name as Agencyname,a.AgencyID as a_AgencyID,a.IsActive as a_IsActive From km_indicator i
     INNER JOIN  km_agency a on i.AgencyID = a.AgencyID
     INNER JOIN  km_purpose p on p.PurposeID = i.PurposeID 
@@ -108,14 +106,14 @@ include("fun_progressive.php");
                         <?php } ?>
                         <!--end::Item-->
                         <!--begin::Item-->
-                        <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 ){ ?>
+                        <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 || $_SESSION["nonUse"] == true ){ ?>
                         <li class="nav-item mr-3">
                         <a href="report.php" class="nav-link py-4 px-6" >Reports</a>
                         </li>
                         <?php } ?>
                         <!--end::Item-->
                         <!--begin::Item-->
-                        <?php if($_SESSION["IsManager"] != 1) { ?>
+                        <?php if($_SESSION["IsManager"] != 1 && $_SESSION["nonUse"] != true) { ?>
                         <li class="nav-item mr-3">
                             <a href="#" class="nav-link py-4 px-6" data-toggle="tab" data-target="#kt_header_tab_3" role="tab">User</a>
                         </li>
@@ -154,7 +152,9 @@ include("fun_progressive.php");
                         </div>
                         <?php if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] == true){ ?>
                         <a href="logout.php" > <button class="btn btn-success">Logout</button></a>
-                        <?php } ?>
+                        <?php }else { ?>
+                        <a href="login.php"> <button class="btn btn-success">Login</button></a>
+                      <?php  } ?>
                     </div>
                     <!--end::User-->
                 </div>
@@ -179,7 +179,7 @@ include("fun_progressive.php");
                         <?php } ?>
                         <!--end::Item-->
                         <!--begin::Item-->
-                        <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1){ ?>
+                        <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 || $_SESSION["nonUse"] == true){ ?>
                         <li class="nav-item mr-2">
                             <a href="#" class="nav-link btn btn-clean" data-toggle="tab" data-target="#kt_header_tab_2" role="tab">Reports</a>
                         </li>
@@ -206,7 +206,7 @@ include("fun_progressive.php");
                                 <!--begin::Nav-->
                                 <ul class="menu-nav">
                                     <li class="menu-item" aria-haspopup="true">
-                                    <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 ){ ?>
+                                    <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 || $_SESSION["nonUse"] == true){ ?>
                                         <a href="<?php echo "issue.php?id=".$_getId?>" class="menu-link">
                                         <?php }else { ?>
                                             <a href="issue.php"class="menu-link">
@@ -218,7 +218,7 @@ include("fun_progressive.php");
                                 <ul class="menu-nav">
                                     <li class="menu-item " aria-haspopup="true">
 
-                                    <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 ){ ?>
+                                    <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 || $_SESSION["nonUse"] == true){ ?>
                                         <a href="<?php echo "purpose.php?id=".$_getId?>" class="menu-link">
                                         <?php }else { ?>
                                             <a href="purpose.php" class="menu-link">
@@ -229,7 +229,7 @@ include("fun_progressive.php");
                                 </ul>
                                 <ul class="menu-nav">
                                     <li class="menu-item menu-item-active" aria-haspopup="true">
-                                    <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 ){ ?>
+                                    <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 || $_SESSION["nonUse"] == true){ ?>
                                         <a href="<?php echo "indicator.php?id=".$_getId?>" class="menu-link">
                                         <?php }else { ?>
                                         <a href="indicator.php" class="menu-link">
@@ -240,7 +240,7 @@ include("fun_progressive.php");
                                 </ul>
                                 <ul class="menu-nav">
                                     <li class="menu-item " aria-haspopup="true">
-                                    <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 ){ ?>
+                                    <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 || $_SESSION["nonUse"] == true){ ?>
                                         <a href="<?php echo "strategy.php?id=".$_getId?>" class="menu-link">
                                         <?php }else { ?>
                                         <a href="strategy.php" class="menu-link">
@@ -251,7 +251,7 @@ include("fun_progressive.php");
                                 </ul>
                                 <ul class="menu-nav">
                                     <li class="menu-item " aria-haspopup="true">
-                                    <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 ){ ?>
+                                    <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 || $_SESSION["nonUse"] == true){ ?>
                                         <a href="<?php echo "project.php?id=".$_getId?>" class="menu-link">
                                         <?php }else { ?>
                                         <a href="project.php" class="menu-link">
@@ -262,7 +262,7 @@ include("fun_progressive.php");
                                 </ul>
                                 <ul class="menu-nav">
                                     <li class="menu-item " aria-haspopup="true">
-                                    <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 ){ ?>
+                                    <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 || $_SESSION["nonUse"] == true){ ?>
                                         <a href="<?php echo "sunit.php?id=".$_getId?>" class="menu-link">
                                         <?php }else{ ?>
                                         <a href="sunit.php" class="menu-link">
@@ -331,14 +331,14 @@ include("fun_progressive.php");
 											<span class="d-block text-muted pt-2 font-size-sm">กำหนดตัวชีวัด-เป้าประสงค์</span></h3>
 										</div>
 										<div class="card-toolbar">
-                                        <?php if($_SESSION["IsManager"] == 0){ ?>
+                                        <?php if($_SESSION["IsManager"] == 0 && $_SESSION["nonUse"] != true){ ?>
                                             <button type="button" class="btn btn-primary mr-2" data-toggle="modal" data-target="#exampleModalSizeLg">สร้าง ตัวชีวัด-เป้าประสงค์</button>
 											<!--end::Button-->
                                             <?php } ?>
 										</div>
 									</div>
 									<div class="card-body">
-                                    <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 ){
+                                    <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 || $_SESSION["nonUse"] == true){
                                         
                                         $sql_allAgency = "select AgencyID,Name from km_agency Where km_agency.IsActive = 1 AND  km_agency.Name <> 'ผู้บริหาร'";
                                         $sql_resultIssue =  mysqli_query($link,$sql_allAgency);
@@ -371,7 +371,7 @@ include("fun_progressive.php");
 													<th>Progressive</th>			
 													<th>Agency</th>
                                                     <th>Date</th>
-                                                    <?php if($_SESSION["IsManager"] == 0){ ?>
+                                                    <?php if($_SESSION["IsManager"] == 0 && $_SESSION["nonUse"] != true){ ?>
                                                     <th>Action</th>
                                                     <?php } ?>
                                            
@@ -391,7 +391,7 @@ include("fun_progressive.php");
 											
 													<td><?php echo $row['Agencyname'] ?></td>
                                                     <td><?php echo DateThai($row['UpdateOn']) ?></td>
-                                                    <?php if($_SESSION["IsManager"] == 0){ ?>
+                                                    <?php if($_SESSION["IsManager"] == 0 && $_SESSION["nonUse"] != true){ ?>
                                                     <td><button type="button" class="btn btn-primary" 
                                                     data-toggle="modal" data-target="#exampleModal" 
                                                     onClick="onclick_Edit(<?php echo $row['IndicatorID'];  ?>)">

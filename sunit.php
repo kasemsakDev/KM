@@ -2,10 +2,6 @@
 session_start();
 ob_start();
 
-if(!isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] != true){
-	header("location: index.php");
-	exit();
-}
 
 if($_SESSION["IsSupperAdmin"] == 1){
 	header("location: logout.php");
@@ -19,7 +15,7 @@ $sql_getsunit = "";
 $sunits = array();
 $sql_listproject = "";
 $listproject = array();
-if($_SESSION["IsManager"] == 0){ 
+if($_SESSION["IsManager"] == 0 && $_SESSION["nonUse"] != true){ 
 //master
 $sql_getsunit = "SELECT s.*,a.Name as Agency_name,a.AgencyID as a_AgencyID,a.IsActive as a_IsActive 
 ,p.Name as ProjectName
@@ -162,14 +158,14 @@ if(isset($_GET['id']))
                         <?php } ?>
                         <!--end::Item-->
                         <!--begin::Item-->
-                        <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 ){ ?>
+                        <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 || $_SESSION["nonUse"] == true){ ?>
                         <li class="nav-item mr-3">
                         <a href="report.php" class="nav-link py-4 px-6" >Reports</a>
                         </li>
                         <?php } ?>
                         <!--end::Item-->
                         <!--begin::Item-->
-                        <?php if($_SESSION["IsManager"] != 1) { ?>
+                        <?php if($_SESSION["IsManager"] != 1 && $_SESSION["nonUse"] != true) { ?>
                         <li class="nav-item mr-3">
                             <a href="#" class="nav-link py-4 px-6" data-toggle="tab" data-target="#kt_header_tab_3" role="tab">User</a>
                         </li>
@@ -210,7 +206,9 @@ if(isset($_GET['id']))
                         </div>
                         <?php if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] == true){ ?>
                         <a href="logout.php" > <button class="btn btn-success">Logout</button></a>
-                        <?php } ?>
+                        <?php }else { ?>
+                        <a href="login.php"> <button class="btn btn-success">Login</button></a>
+                      <?php  } ?>
                     </div>
                     <!--end::User-->
                 </div>
@@ -235,7 +233,7 @@ if(isset($_GET['id']))
                         <?php } ?>
                         <!--end::Item-->
                         <!--begin::Item-->
-                        <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1){ ?>
+                        <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 || $_SESSION["nonUse"] == true){ ?>
                         <li class="nav-item mr-2">
                             <a href="#" class="nav-link btn btn-clean" data-toggle="tab" data-target="#kt_header_tab_2" role="tab">Reports</a>
                         </li>
@@ -262,7 +260,7 @@ if(isset($_GET['id']))
                                 <!--begin::Nav-->
                                 <ul class="menu-nav">
                                     <li class="menu-item" aria-haspopup="true">
-                                    <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 ){ ?>
+                                    <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 || $_SESSION["nonUse"] == true){ ?>
                                         <a href="<?php echo "issue.php?id=".$_getId?>" class="menu-link">
                                         <?php }else { ?>
                                             <a href="issue.php"class="menu-link">
@@ -274,7 +272,7 @@ if(isset($_GET['id']))
                                 <ul class="menu-nav">
                                     <li class="menu-item" aria-haspopup="true">
 
-                                    <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 ){ ?>
+                                    <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 || $_SESSION["nonUse"] == true){ ?>
                                         <a href="<?php echo "purpose.php?id=".$_getId?>" class="menu-link">
                                         <?php }else { ?>
                                             <a href="purpose.php" class="menu-link">
@@ -285,7 +283,7 @@ if(isset($_GET['id']))
                                 </ul>
                                 <ul class="menu-nav">
                                     <li class="menu-item" aria-haspopup="true">
-                                    <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 ){ ?>
+                                    <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 || $_SESSION["nonUse"] == true){ ?>
                                         <a href="<?php echo "indicator.php?id=".$_getId?>" class="menu-link">
                                         <?php }else { ?>
                                         <a href="indicator.php" class="menu-link">
@@ -296,7 +294,7 @@ if(isset($_GET['id']))
                                 </ul>
                                 <ul class="menu-nav">
                                     <li class="menu-item" aria-haspopup="true">
-                                    <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 ){ ?>
+                                    <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 || $_SESSION["nonUse"] == true){ ?>
                                         <a href="<?php echo "strategy.php?id=".$_getId?>" class="menu-link">
                                         <?php }else { ?>
                                         <a href="strategy.php" class="menu-link">
@@ -307,7 +305,7 @@ if(isset($_GET['id']))
                                 </ul>
                                 <ul class="menu-nav">
                                     <li class="menu-item" aria-haspopup="true">
-                                    <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 ){ ?>
+                                    <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 || $_SESSION["nonUse"] == true){ ?>
                                         <a href="<?php echo "project.php?id=".$_getId?>" class="menu-link">
                                         <?php }else { ?>
                                         <a href="project.php" class="menu-link">
@@ -318,7 +316,7 @@ if(isset($_GET['id']))
                                 </ul>
                                 <ul class="menu-nav">
                                     <li class="menu-item menu-item-active" aria-haspopup="true">
-                                    <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 ){ ?>
+                                    <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 || $_SESSION["nonUse"] == true){ ?>
                                         <a href="<?php echo "sunit.php?id=".$_getId?>" class="menu-link">
                                         <?php }else{ ?>
                                         <a href="sunit.php" class="menu-link">
@@ -392,14 +390,14 @@ if(isset($_GET['id']))
 											</div>
 											<!--end::Dropdown-->
 											<!--begin::Button-->
-                                            <?php if($_SESSION["IsManager"] == 0){ ?>
+                                            <?php if($_SESSION["IsManager"] == 0 && $_SESSION["nonUse"] != true){ ?>
                                             <button type="button" class="btn btn-primary mr-2" data-toggle="modal" data-target="#exampleModalSizeLg">สร้าง เจ้าภาพกลยุทธิ์ / หน่วยส่งมอบผลงาน</button>
                                             <?php } ?>
 											<!--end::Button-->
 										</div>
 									</div>
 									<div class="card-body">
-                                    <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 ){
+                                    <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 || $_SESSION["nonUse"] == true){
                                         
                                         $sql_allAgency = "select AgencyID,Name from km_agency Where km_agency.IsActive = 1 AND  km_agency.Name <> 'ผู้บริหาร'";
                                         $sql_resultIssue =  mysqli_query($link,$sql_allAgency);
@@ -433,8 +431,10 @@ if(isset($_GET['id']))
 													<th>หน่วยที่รับผิดชอบ</th>
 													<th>Progressive</th>			                                                   
                                                     <th>Name</th>                                                
-                                                    <th>Date</th>                                                 
-                                                    <th>Action</th>                                                 
+                                                    <th>Date</th>              
+                                                    <?php if($_SESSION["nonUse"] != true){ ?>                                   
+                                                    <th>Action</th>       
+                                                    <?php } ?>                                          
                                                                                    
 												</tr>
 											</thead>
@@ -447,7 +447,9 @@ if(isset($_GET['id']))
                                                     <td><?php echo subsplit($master['AgencyList'],$link);   ?></td>
 													<td><?php echo  $totalProgressive.'%' ?></td>						
                                                     <td><?php  echo $master['Name'] ?></td>     		
-                                                    <td><?php echo DateThai($master['UpdateOn']) ?></td> 																												
+                                                    <td><?php echo DateThai($master['UpdateOn']) ?></td> 	
+
+                                                    <?php if($_SESSION["nonUse"] != true){ ?> 
                                                     <td>
                                                     <?php if($_SESSION["IsAdmin"] == 1 ||  $_SESSION["IsProgrammer"] == 1 ){ ?>
                                                     <?php if($totalProgressive != 100){ ?>
@@ -460,10 +462,8 @@ if(isset($_GET['id']))
                                                      <?php } ?>
                                                      <a href="sunitdetail.php?id=<?php echo $master['SunitID']; ?>" target="_blank">
                                                         <input type="button" class="btn btn-info btn-shadow font-weight-bold mr-2" value="Detail"></a>   
-                                                       
-                                                      
-                                               
                                                      </td>
+                                                     <?php } ?>
                                                                                                
 												</tr>
 
@@ -479,7 +479,7 @@ if(isset($_GET['id']))
 													<td><?php  echo $detail['Progressive']."%" ?></td>			
                                                     <td><?php  echo $detail['Name'] ?></td>
                                                     <td><?php  echo DateThai($detail['UpdateOn']) ?></td>     
-                                                    <?php if($_SESSION["IsManager"] == 0){ ?>																																		
+                                                    <?php if($_SESSION["IsManager"] == 0 &&  $_SESSION["nonUse"] != true){ ?>																																		
                                                     <td><button  class="btn btn-danger" onclick="deleteItem(<?php echo $detail['SunitDetailID']; ?>,<?php echo $master['SunitID'];  ?> )">Delete</button></td>
                                                     <?php } ?>                
 												</tr>
