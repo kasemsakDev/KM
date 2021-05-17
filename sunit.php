@@ -10,19 +10,38 @@ if($_SESSION["IsSupperAdmin"] == 1){
 include("dblink.php");
 include("DateThai.php");
 
+
+$sql_year = "select * from km_year Where km_year.IsActive = 1 order by  km_year.YearName";
+$sql_resultyear =  mysqli_query($link,$sql_year);
+$allyear = array();
+while($row = mysqli_fetch_assoc($sql_resultyear))
+    {
+        $allyear[] = $row;
+    } 
+
+    $year = "";
+    if(isset($_GET['year'])){
+        $year = $_GET['year'];
+    }else{
+        $year = $allyear[0]['YearName'];
+    }
+
+
 $agencyId = $_SESSION["AgencyID"];
 $sql_getsunit = "";
 $sunits = array();
 $sql_listproject = "";
 $listproject = array();
 if($_SESSION["IsManager"] == 0 && $_SESSION["nonUse"] != true){ 
+$Whereyear = 0;
+$Whereyear = ((int)$year-543);
 //master
 $sql_getsunit = "SELECT s.*,a.Name as Agency_name,a.AgencyID as a_AgencyID,a.IsActive as a_IsActive 
 ,p.Name as ProjectName
 From km_sunit s
 INNER JOIN  km_project p on p.ProjectID = s.ProjectID 
 INNER JOIN  km_agency a on p.AgencyID = a.AgencyID
-Where s.IsActive = 1 AND a.IsActive = 1 AND s.AgencyID = $agencyId AND p.IsActive = 1";
+Where s.IsActive = 1 AND a.IsActive = 1 AND s.AgencyID = $agencyId AND p.IsActive = 1 AND YEAR(s.CreateOn) = '$Whereyear'";
 $sql_resultsunit =  mysqli_query($link,$sql_getsunit);
 while($row = mysqli_fetch_assoc($sql_resultsunit))
 {
@@ -30,7 +49,7 @@ while($row = mysqli_fetch_assoc($sql_resultsunit))
 }
 
 //get project
-$sql_listproject = "SELECT ProjectID,Name,AgencyID FROM km_project WHERE IsActive  = 1 AND AgencyID = $agencyId";
+$sql_listproject = "SELECT ProjectID,Name,AgencyID FROM km_project WHERE IsActive  = 1 AND AgencyID = $agencyId AND YEAR(km_project.CreateOn) = '$Whereyear'";
 $result_listproject = mysqli_query($link,$sql_listproject);
 while($row = mysqli_fetch_assoc($result_listproject))
 {
@@ -94,13 +113,19 @@ function GetProgressive($id,$link)
 $_getId = 0;
 if(isset($_GET['id']))
 {
+
+    $Whereyear = 0;
+    if(isset($_GET['year'])){
+        $Whereyear = ((int)$_GET['year']-543);
+    }
+
     $_getId = $_GET['id'];  
     $sql_getsunit = "SELECT s.*,a.Name as Agency_name,a.AgencyID as a_AgencyID,a.IsActive as a_IsActive 
     ,p.Name as ProjectName
     From km_sunit s
     INNER JOIN  km_project p on p.ProjectID = s.ProjectID 
     INNER JOIN  km_agency a on p.AgencyID = a.AgencyID
-    Where s.IsActive = 1 AND a.IsActive = 1 AND s.AgencyID = $_getId AND p.IsActive = 1";
+    Where s.IsActive = 1 AND a.IsActive = 1 AND s.AgencyID = $_getId AND p.IsActive = 1 AND YEAR(s.CreateOn) = '$Whereyear'";
     $sql_resultsunit =  mysqli_query($link,$sql_getsunit);
     while($row = mysqli_fetch_assoc($sql_resultsunit))
     {
@@ -261,7 +286,7 @@ if(isset($_GET['id']))
                                 <ul class="menu-nav">
                                     <li class="menu-item" aria-haspopup="true">
                                     <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 || $_SESSION["nonUse"] == true){ ?>
-                                        <a href="<?php echo "issue.php?id=".$_getId?>" class="menu-link">
+                                        <a href="<?php echo "issue.php?id=".$_getId."&year=".$year ?>" class="menu-link">
                                         <?php }else { ?>
                                             <a href="issue.php"class="menu-link">
                                         <?php } ?>
@@ -273,7 +298,7 @@ if(isset($_GET['id']))
                                     <li class="menu-item" aria-haspopup="true">
 
                                     <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 || $_SESSION["nonUse"] == true){ ?>
-                                        <a href="<?php echo "purpose.php?id=".$_getId?>" class="menu-link">
+                                        <a href="<?php echo "purpose.php?id=".$_getId."&year=".$year ?>" class="menu-link">
                                         <?php }else { ?>
                                             <a href="purpose.php" class="menu-link">
                                         <?php } ?>
@@ -284,7 +309,7 @@ if(isset($_GET['id']))
                                 <ul class="menu-nav">
                                     <li class="menu-item" aria-haspopup="true">
                                     <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 || $_SESSION["nonUse"] == true){ ?>
-                                        <a href="<?php echo "indicator.php?id=".$_getId?>" class="menu-link">
+                                        <a href="<?php echo "indicator.php?id=".$_getId."&year=".$year ?>" class="menu-link">
                                         <?php }else { ?>
                                         <a href="indicator.php" class="menu-link">
                                         <?php } ?>
@@ -295,7 +320,7 @@ if(isset($_GET['id']))
                                 <ul class="menu-nav">
                                     <li class="menu-item" aria-haspopup="true">
                                     <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 || $_SESSION["nonUse"] == true){ ?>
-                                        <a href="<?php echo "strategy.php?id=".$_getId?>" class="menu-link">
+                                        <a href="<?php echo "strategy.php?id=".$_getId."&year=".$year ?>" class="menu-link">
                                         <?php }else { ?>
                                         <a href="strategy.php" class="menu-link">
                                         <?php } ?>
@@ -306,7 +331,7 @@ if(isset($_GET['id']))
                                 <ul class="menu-nav">
                                     <li class="menu-item" aria-haspopup="true">
                                     <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 || $_SESSION["nonUse"] == true){ ?>
-                                        <a href="<?php echo "project.php?id=".$_getId?>" class="menu-link">
+                                        <a href="<?php echo "project.php?id=".$_getId."&year=".$year ?>" class="menu-link">
                                         <?php }else { ?>
                                         <a href="project.php" class="menu-link">
                                         <?php } ?>
@@ -317,7 +342,7 @@ if(isset($_GET['id']))
                                 <ul class="menu-nav">
                                     <li class="menu-item menu-item-active" aria-haspopup="true">
                                     <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 || $_SESSION["nonUse"] == true){ ?>
-                                        <a href="<?php echo "sunit.php?id=".$_getId?>" class="menu-link">
+                                        <a href="<?php echo "sunit.php?id=".$_getId."&year=".$year ?>" class="menu-link">
                                         <?php }else{ ?>
                                         <a href="sunit.php" class="menu-link">
                                         <?php } ?>
@@ -419,7 +444,17 @@ if(isset($_GET['id']))
                                             <?php } ?>
                                             <?php } ?>
                                         </select>                                  
-                                            <br>
+                                        <br>
+                                        <label for="cars">ค้นหาปี : </label>
+                                        <?php  $numyear = 1; ?>
+                                        <select id="selectyear" class="form-control col-md-2" onchange="selectyear()">
+                                        <?php foreach ($allyear as $value) { ?>
+                                            <?php if($year == $value['YearName']){ ?>
+                                            <option value="<?php echo $value['YearID'] ?>" selected><?php echo $value['YearName'] ?></option>
+                                            <?php }else ?>
+                                            <option value="<?php echo $value['YearID'] ?>"><?php echo $value['YearName'] ?></option>
+                                            <?php } ?>
+                                        </select>                                                                    
                                             <br>
                                       <?php }  ?>
       
@@ -952,9 +987,18 @@ function ValidateCreate() {
 
         });
         function selectsearch() {
+        var year = $( "#selectyear option:selected" ).text();
+        //alert(year);
         var e = document.getElementById("selectAllAgency");
         var value = e.value;
-        window.location.href = 'sunit.php?id='+value;
+        window.location.href = 'sunit.php?id='+value+'&year='+year;
+        }
+
+        function selectyear(){
+            var year = $( "#selectyear option:selected" ).text();
+            var e = document.getElementById("selectAllAgency");
+            var value = e.value;
+            window.location.href = 'sunit.php?id='+value+'&year='+year;
         }
 
         function deleteSunit(id,payload) {

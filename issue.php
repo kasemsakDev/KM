@@ -25,15 +25,22 @@ include("fun_progressive.php");
             $allyear[] = $row;
         } 
 
-    $year = $allyear[0]['YearName'];
+    $year = "";
+    if(isset($_GET['year'])){
+        $year = $_GET['year'];
+    }else{
+        $year = $allyear[0]['YearName'];
+    }
+
     $agencyId = $_SESSION["AgencyID"];
     $sql_getIssue  = "";
     $issues = array();
     if($_SESSION["IsManager"] == 0 && $_SESSION["nonUse"] != true) {
-    $year = ((int)$year-543);
+    $Whereyear = 0;
+    $Whereyear = ((int)$year-543);
     $sql_getIssue = "SELECT i.*,k.Name as Agencyname,k.AgencyID as K_AgencyID,k.IsActive as K_IsActive From km_issue i
     INNER JOIN km_agency k on k.AgencyID = i.AgencyID
-    Where i.IsActive = 1 AND k.IsActive = 1 AND i.AgencyID = $agencyId AND YEAR(i.CreateOn) = '$year' 
+    Where i.IsActive = 1 AND k.IsActive = 1 AND i.AgencyID = $agencyId AND YEAR(i.CreateOn) = '$Whereyear' 
     ORDER BY i.Number";
         $sql_resultIssue =  mysqli_query($link,$sql_getIssue);
         while($row = mysqli_fetch_assoc($sql_resultIssue))
@@ -43,15 +50,16 @@ include("fun_progressive.php");
     }
     $_getId = 0;
     if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 || $_SESSION["nonUse"] == 1){ 
-    if(isset($_GET['id']) && isset($_GET['year']))
+    if(isset($_GET['id']))
     {
+        $Whereyear = 0;
         if(isset($_GET['year'])){
-        $year = ((int)$_GET['year']-543);
+        $Whereyear = ((int)$_GET['year']-543);
         }
         $_getId = $_GET['id'];  
         $sql_getIssue = "SELECT i.*,k.Name as Agencyname,k.AgencyID as K_AgencyID,k.IsActive as K_IsActive From km_issue i
         INNER JOIN km_agency k on k.AgencyID = i.AgencyID
-        Where i.IsActive = 1 AND k.IsActive = 1 AND i.AgencyID = $_getId AND YEAR(i.CreateOn) = '$year' 
+        Where i.IsActive = 1 AND k.IsActive = 1 AND i.AgencyID = $_getId AND YEAR(i.CreateOn) = '$Whereyear' 
         ORDER BY i.Number ";
             $sql_resultIssue =  mysqli_query($link,$sql_getIssue);
             while($row = mysqli_fetch_assoc($sql_resultIssue))
@@ -245,8 +253,9 @@ include("fun_progressive.php");
                                 <!--begin::Nav-->
                                 <ul class="menu-nav">
                                     <li class="menu-item menu-item-active" aria-haspopup="true">
+
                                     <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 || $_SESSION["nonUse"] == true){ ?>
-                                        <a href="<?php echo "issue.php?id=".$_getId?>" class="menu-link">
+                                        <a href="<?php echo "issue.php?id=".$_getId."&year=".$year ?>" class="menu-link">
                                         <?php }else { ?>
                                             <a href="issue.php"class="menu-link">
                                         <?php } ?>
@@ -258,7 +267,7 @@ include("fun_progressive.php");
                                     <li class="menu-item " aria-haspopup="true">
 
                                     <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 || $_SESSION["nonUse"] == true){ ?>
-                                        <a href="<?php echo "purpose.php?id=".$_getId?>" class="menu-link">
+                                        <a href="<?php echo "purpose.php?id=".$_getId."&year=".$year ?>" class="menu-link">
                                         <?php }else { ?>
                                             <a href="purpose.php" class="menu-link">
                                         <?php } ?>
@@ -269,7 +278,7 @@ include("fun_progressive.php");
                                 <ul class="menu-nav">
                                     <li class="menu-item" aria-haspopup="true">
                                     <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 || $_SESSION["nonUse"] == true){ ?>
-                                        <a href="<?php echo "indicator.php?id=".$_getId?>" class="menu-link">
+                                        <a href="<?php echo "indicator.php?id=".$_getId."&year=".$year ?>" class="menu-link">
                                         <?php }else { ?>
                                         <a href="indicator.php" class="menu-link">
                                         <?php } ?>
@@ -280,7 +289,7 @@ include("fun_progressive.php");
                                 <ul class="menu-nav">
                                     <li class="menu-item " aria-haspopup="true">
                                     <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 || $_SESSION["nonUse"] == true){ ?>
-                                        <a href="<?php echo "strategy.php?id=".$_getId?>" class="menu-link">
+                                        <a href="<?php echo "strategy.php?id=".$_getId."&year=".$year ?>" class="menu-link">
                                         <?php }else { ?>
                                         <a href="strategy.php" class="menu-link">
                                         <?php } ?>
@@ -291,7 +300,7 @@ include("fun_progressive.php");
                                 <ul class="menu-nav">
                                     <li class="menu-item " aria-haspopup="true">
                                     <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 || $_SESSION["nonUse"] == true){ ?>
-                                        <a href="<?php echo "project.php?id=".$_getId?>" class="menu-link">
+                                        <a href="<?php echo "project.php?id=".$_getId."&year=".$year ?>" class="menu-link">
                                         <?php }else { ?>
                                         <a href="project.php" class="menu-link">
                                         <?php } ?>
@@ -302,7 +311,7 @@ include("fun_progressive.php");
                                 <ul class="menu-nav">
                                     <li class="menu-item " aria-haspopup="true">
                                     <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 || $_SESSION["nonUse"] == true){ ?>
-                                        <a href="<?php echo "sunit.php?id=".$_getId?>" class="menu-link">
+                                        <a href="<?php echo "sunit.php?id=".$_getId."&year=".$year ?>" class="menu-link">
                                         <?php }else{ ?>
                                         <a href="sunit.php" class="menu-link">
                                         <?php } ?>

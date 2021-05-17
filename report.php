@@ -8,8 +8,15 @@ $sql_resultyear =  mysqli_query($link,$sql_year);
 $allyear = array();
 while($row = mysqli_fetch_assoc($sql_resultyear))
     {
-            $allyear[] = $row;
+        $allyear[] = $row;
     } 
+
+    $year = "";
+    if(isset($_GET['year'])){
+        $year = $_GET['year'];
+    }else{
+        $year = $allyear[0]['YearName'];
+    }
 
 ?>
 
@@ -59,7 +66,7 @@ while($row = mysqli_fetch_assoc($sql_resultyear))
                         <?php } ?>
                         <!--end::Item-->
                         <!--begin::Item-->
-                        <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 ){ ?>
+                        <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 || $_SESSION["nonUse"] == 1){ ?>
                         <li class="nav-item mr-3">
                         <a href="report.php" class="nav-link py-4 px-6 active" >Reports</a>
                         </li>
@@ -364,7 +371,8 @@ while($row = mysqli_fetch_assoc($sql_resultyear))
         function selectsearch() {
         var e = document.getElementById("selectAllAgency");
         var value = e.value;
-        window.location.href = 'issue.php?id='+value;
+        var year = $( "#selectyear option:selected").text();
+        window.location.href = 'issue.php?id='+value+'&year='+year;
         }
     </script>
     </body>

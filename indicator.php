@@ -16,24 +16,42 @@ include("fun_progressive.php");
 //get list purpose
 //get list indicator
 
-    $agencyId = $_SESSION["AgencyID"];
 
+$sql_year = "select * from km_year Where km_year.IsActive = 1 order by  km_year.YearName";
+$sql_resultyear =  mysqli_query($link,$sql_year);
+$allyear = array();
+while($row = mysqli_fetch_assoc($sql_resultyear))
+    {
+        $allyear[] = $row;
+    } 
+
+    $year = "";
+    if(isset($_GET['year'])){
+        $year = $_GET['year'];
+    }else{
+        $year = $allyear[0]['YearName'];
+    }
+
+
+    $agencyId = $_SESSION["AgencyID"];
     $sql_getindicator = "";
     $indicator = array();
     $sql_listpurpose = "";
     $list_purpose = array();
     if($_SESSION["IsManager"] == 0 &&  $_SESSION["nonUse"] != true){
+    $Whereyear = 0;
+    $Whereyear = ((int)$year-543);
     $sql_getindicator = "SELECT i.*,a.Name as Agencyname,a.AgencyID as a_AgencyID,a.IsActive as a_IsActive From km_indicator i
     INNER JOIN  km_agency a on i.AgencyID = a.AgencyID
     INNER JOIN  km_purpose p on p.PurposeID = i.PurposeID 
-    Where i.IsActive = 1 AND a.IsActive = 1 AND i.AgencyID = $agencyId AND p.IsActive = 1";
+    Where i.IsActive = 1 AND a.IsActive = 1 AND i.AgencyID = $agencyId AND p.IsActive = 1 AND YEAR(i.CreateOn) = '$Whereyear'";
     $sql_resultindicator =  mysqli_query($link,$sql_getindicator); 
     while($row = mysqli_fetch_assoc($sql_resultindicator))
     {
         $indicator[] = $row;
     }
     //get purpose
-    $sql_listpurpose = "SELECT 	PurposeID,Name,AgencyID FROM km_purpose WHERE IsActive  = 1 AND AgencyID = $agencyId";
+    $sql_listpurpose = "SELECT 	PurposeID,Name,AgencyID FROM km_purpose WHERE IsActive  = 1 AND AgencyID = $agencyId AND YEAR(km_purpose.CreateOn) = '$Whereyear'";
     $result_lispurpose = mysqli_query($link,$sql_listpurpose); 
     while($row = mysqli_fetch_assoc($result_lispurpose))
     {
@@ -44,11 +62,16 @@ include("fun_progressive.php");
     $_getId = 0;
     if(isset($_GET['id']))
     {
+        $Whereyear = 0;
+        if(isset($_GET['year'])){
+            $Whereyear = ((int)$_GET['year']-543);
+        }
+
         $_getId = $_GET['id'];  
         $sql_getindicator = "SELECT i.*,a.Name as Agencyname,a.AgencyID as a_AgencyID,a.IsActive as a_IsActive From km_indicator i
         INNER JOIN  km_agency a on i.AgencyID = a.AgencyID
         INNER JOIN  km_purpose p on p.PurposeID = i.PurposeID 
-        Where i.IsActive = 1 AND a.IsActive = 1 AND i.AgencyID = $_getId AND p.IsActive = 1";
+        Where i.IsActive = 1 AND a.IsActive = 1 AND i.AgencyID = $_getId AND p.IsActive = 1 AND YEAR(i.CreateOn) = '$Whereyear'";
         $sql_resultindicator =  mysqli_query($link,$sql_getindicator); 
         while($row = mysqli_fetch_assoc($sql_resultindicator))
         {
@@ -207,7 +230,7 @@ include("fun_progressive.php");
                                 <ul class="menu-nav">
                                     <li class="menu-item" aria-haspopup="true">
                                     <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 || $_SESSION["nonUse"] == true){ ?>
-                                        <a href="<?php echo "issue.php?id=".$_getId?>" class="menu-link">
+                                        <a href="<?php echo "issue.php?id=".$_getId."&year=".$year ?>" class="menu-link">
                                         <?php }else { ?>
                                             <a href="issue.php"class="menu-link">
                                         <?php } ?>
@@ -219,7 +242,7 @@ include("fun_progressive.php");
                                     <li class="menu-item " aria-haspopup="true">
 
                                     <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 || $_SESSION["nonUse"] == true){ ?>
-                                        <a href="<?php echo "purpose.php?id=".$_getId?>" class="menu-link">
+                                        <a href="<?php echo "purpose.php?id=".$_getId."&year=".$year ?>" class="menu-link">
                                         <?php }else { ?>
                                             <a href="purpose.php" class="menu-link">
                                         <?php } ?>
@@ -230,7 +253,7 @@ include("fun_progressive.php");
                                 <ul class="menu-nav">
                                     <li class="menu-item menu-item-active" aria-haspopup="true">
                                     <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 || $_SESSION["nonUse"] == true){ ?>
-                                        <a href="<?php echo "indicator.php?id=".$_getId?>" class="menu-link">
+                                        <a href="<?php echo "indicator.php?id=".$_getId."&year=".$year ?>" class="menu-link">
                                         <?php }else { ?>
                                         <a href="indicator.php" class="menu-link">
                                         <?php } ?>
@@ -241,7 +264,7 @@ include("fun_progressive.php");
                                 <ul class="menu-nav">
                                     <li class="menu-item " aria-haspopup="true">
                                     <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 || $_SESSION["nonUse"] == true){ ?>
-                                        <a href="<?php echo "strategy.php?id=".$_getId?>" class="menu-link">
+                                        <a href="<?php echo "strategy.php?id=".$_getId."&year=".$year ?>" class="menu-link">
                                         <?php }else { ?>
                                         <a href="strategy.php" class="menu-link">
                                         <?php } ?>
@@ -252,7 +275,7 @@ include("fun_progressive.php");
                                 <ul class="menu-nav">
                                     <li class="menu-item " aria-haspopup="true">
                                     <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 || $_SESSION["nonUse"] == true){ ?>
-                                        <a href="<?php echo "project.php?id=".$_getId?>" class="menu-link">
+                                        <a href="<?php echo "project.php?id=".$_getId."&year=".$year ?>" class="menu-link">
                                         <?php }else { ?>
                                         <a href="project.php" class="menu-link">
                                         <?php } ?>
@@ -263,7 +286,7 @@ include("fun_progressive.php");
                                 <ul class="menu-nav">
                                     <li class="menu-item " aria-haspopup="true">
                                     <?php if($_SESSION["IsManager"] == 1 ||  $_SESSION["IsProgrammer"] == 1 || $_SESSION["nonUse"] == true){ ?>
-                                        <a href="<?php echo "sunit.php?id=".$_getId?>" class="menu-link">
+                                        <a href="<?php echo "sunit.php?id=".$_getId."&year=".$year ?>" class="menu-link">
                                         <?php }else{ ?>
                                         <a href="sunit.php" class="menu-link">
                                         <?php } ?>
@@ -360,7 +383,17 @@ include("fun_progressive.php");
                                             <?php } ?>
                                             <?php } ?>
                                         </select>                                  
-                                            <br>
+                                        <br>
+                                        <label for="cars">ค้นหาปี : </label>
+                                        <?php  $numyear = 1; ?>
+                                        <select id="selectyear" class="form-control col-md-2" onchange="selectyear()">
+                                        <?php foreach ($allyear as $value) { ?>
+                                            <?php if($year == $value['YearName']){ ?>
+                                            <option value="<?php echo $value['YearID'] ?>" selected><?php echo $value['YearName'] ?></option>
+                                            <?php }else ?>
+                                            <option value="<?php echo $value['YearID'] ?>"><?php echo $value['YearName'] ?></option>
+                                            <?php } ?>
+                                        </select>                                                                    
                                             <br>
                                       <?php }  ?>
                                     <table class="table table-separate table-head-custom" id="tbI">
@@ -600,10 +633,20 @@ include("fun_progressive.php");
             });
 
         });
+
         function selectsearch() {
+        var year = $( "#selectyear option:selected" ).text();
+        //alert(year);
         var e = document.getElementById("selectAllAgency");
         var value = e.value;
-        window.location.href = 'indicator.php?id='+value;
+        window.location.href = 'indicator.php?id='+value+'&year='+year;
+        }
+
+        function selectyear(){
+            var year = $( "#selectyear option:selected" ).text();
+            var e = document.getElementById("selectAllAgency");
+            var value = e.value;
+            window.location.href = 'indicator.php?id='+value+'&year='+year;
         }
 
         function deleteIndicator(id,payload) {
