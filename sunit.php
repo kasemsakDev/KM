@@ -484,9 +484,8 @@ if(isset($_GET['id']))
 													<td><?php echo  $totalProgressive.'%' ?></td>						
                                                     <td><?php  echo $master['Name'] ?></td>     		
                                                     <td><?php echo DateThai($master['UpdateOn']) ?></td> 	
-
-                                                    <?php if($_SESSION["nonUse"] != true){ ?> 
                                                     <td>
+                                                    <?php if($_SESSION["nonUse"] != true){ ?>                                             
                                                     <?php if($_SESSION["IsAdmin"] == 1 ||  $_SESSION["IsProgrammer"] == 1 ){ ?>
                                                     <?php if($totalProgressive != 100){ ?>
                                                     <button type="button" class="btn btn-primary" data-toggle="modal"                                                    
@@ -514,9 +513,10 @@ if(isset($_GET['id']))
                                                     <td><?php echo subsplit($master['AgencyList'],$link);   ?></td>
 													<td><?php  echo $detail['Progressive']."%" ?></td>			
                                                     <td><?php  echo $detail['Name'] ?></td>
-                                                    <td><?php  echo DateThai($detail['UpdateOn']) ?></td>     
+                                                    <td><?php  echo DateThai($detail['UpdateOn']) ?></td>   
+                                                    <td>  
                                                     <?php if($_SESSION["IsManager"] == 0 &&  $_SESSION["nonUse"] != true){ ?>																																		
-                                                    <td><button  class="btn btn-danger" onclick="deleteItem(<?php echo $detail['SunitDetailID']; ?>,<?php echo $master['SunitID'];  ?> )">Delete</button></td>
+                                                    <button  class="btn btn-danger" onclick="deleteItem(<?php echo $detail['SunitDetailID']; ?>,<?php echo $master['SunitID'];  ?> )">Delete</button></td>
                                                     <?php } ?>                
 												</tr>
                                                 <?php } ?>

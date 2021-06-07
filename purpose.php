@@ -407,16 +407,10 @@ if(isset($_GET['id']))
                                                     <th> Date</th>
                                                     <?php if($_SESSION["IsManager"] == 0 && $_SESSION["nonUse"] != true){ ?>
                                                     <th>Action</th>
-                                                    <?php } ?>
-                                                 
-                                                   
+                                                    <?php } ?>                                              
 												</tr>
 											</thead>
 											<tbody>
-
-                                            <?php
-                                                $num = 1;
-                                            ?>
                                                 <?php foreach($list_purpose as $row){ ?>
 												<tr>
 													<td><?php echo $row['Number']  ?></td>

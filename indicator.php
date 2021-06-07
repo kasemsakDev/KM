@@ -425,8 +425,9 @@ while($row = mysqli_fetch_assoc($sql_resultyear))
 											
 													<td><?php echo $row['Agencyname'] ?></td>
                                                     <td><?php echo DateThai($row['UpdateOn']) ?></td>
+                                                    <td>
                                                     <?php if($_SESSION["IsManager"] == 0 && $_SESSION["nonUse"] != true){ ?>
-                                                    <td><button type="button" class="btn btn-primary" 
+                                                    <button type="button" class="btn btn-primary" 
                                                     data-toggle="modal" data-target="#exampleModal" 
                                                     onClick="onclick_Edit(<?php echo $row['IndicatorID'];  ?>)">
                                                     Edit

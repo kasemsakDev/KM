@@ -56,7 +56,7 @@ include("fun_progressive.php");
         $Whereyear = ((int)$_GET['year']-543);
         }
         $_getId = $_GET['id'];  
-        $sql_getIssue = "SELECT i.*,k.Name as Agencyname,k.AgencyID as K_AgencyID,k.IsActive as K_IsActive From km_issue i
+        $sql_getIssue = "SELECT i.*,k.Name as agency_name,k.AgencyID as K_AgencyID,k.IsActive as K_IsActive From km_issue i
         INNER JOIN km_agency k on k.AgencyID = i.AgencyID
         Where i.IsActive = 1 AND k.IsActive = 1 AND i.AgencyID = $_getId AND YEAR(i.CreateOn) = '$Whereyear' 
         ORDER BY i.Number ";
@@ -422,38 +422,35 @@ include("fun_progressive.php");
                                             <br>
                                             <?php }  ?>
                                       <?php }  ?>
-                                        <table class="table table-separate table-head-custom" id="tbI">
-											<thead>
+                                      <table class="table table-separate table-head-custom" id="tbI">
+                                      <thead>
 												<tr>
 													<th>Number</th>
 													<th>ประเด็นยุทธศาสตร์</th>
 													<th>Progressive</th>			
 													<th>Agency</th>
-                                                    <th>Date</th>
-                                                    <?php if($_SESSION["IsManager"] == 0  && $_SESSION["nonUse"] != true){ ?>
-                                                    <th>Action</th>                          
-                                                    <?php } ?>                                                                      
+                                                    <th> Date</th>
+                                                    <?php if($_SESSION["IsManager"] == 0 && $_SESSION["nonUse"] != true){ ?>
+                                                    <th>Action</th>
+                                                    <?php } ?>                                              
 												</tr>
 											</thead>
-											<tbody>
-                                        
+											<tbody>                        
                                             <?php foreach($issues as $row){ ?>
-                                           
 												<tr>
 													<td><?php  echo $row['Number']  ?></td>
 													<td><?php echo $row['Name'] ?></td>
-                                                    <td><?php echo _progressiveIssue($row['IssueID'],$link).'%'; ?></td>															
-											
-													<td><?php echo $row['Agencyname'] ?></td>                                    
-                                                <td><?php echo DateThai($row['UpdateOn']);?></td>
-                                                <?php if($_SESSION["IsManager"] == 0 && $_SESSION["nonUse"] != true){ ?>
+                                                    <td><?php echo _progressivePurpose($row['IssueID'],$link).'%'; ?></td>																										
+                                                    <td><?php echo $row['agency_name'] ?></td>                                   
+                                                <td><?php echo DateThai($row['UpdateOn']) ?></td>
                                                 <td>
+                                                <?php if($_SESSION["IsManager"] == 0 && $_SESSION["nonUse"] != true){ ?>
                                                     <button type="button"  class="btn btn-primary" 
                                                     onClick="onclick_issue(<?php echo $row['IssueID'];  ?>)" data-toggle="modal" data-target="#exampleModal" >
                                                         Edit
                                                     </button>
                                                     <button  class="btn btn-danger" onclick="deleteIssue(<?php echo $row['IssueID']; ?>,<?php echo $agencyId ?>)">Delete</button>
-                                                </td>
+                                                    </td>
                                                 <?php } ?>
 												</tr>
                                                 <?php  } ?>
